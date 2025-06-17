@@ -1,0 +1,59 @@
+You said:
+I want to create a 1-2 pages website for my local business of sweets, initially I have only 2 to 4 products . users can add products to cart and buy also , if user is adding items in cart it should not require any login / signup . after adding items , user can buy items with quanties , for ordering any product it should also have input fields like current location (fetch by any api) and also ask from user , make a prompt /description for making a mern+tailwind project , the ui design should be loke the webpage veeba sauces : "https://veeba.in/collections/sauces?srsltid=AfmBOoqNbdbG1byU7IaD9pHa0Fx4Rfuuh3yXjN4jF1ZMhnywde0HGpUm "
+
+1. user model :
+    name
+    mobile
+    email
+    location
+    cart :[products id]
+    faveroutes
+    note
+    isadmin
+    
+2. products :
+    const mongoose = require('mongoose');
+    const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    weight: {
+        type: String, // e.g., "300G"
+        required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
+    originalPrice: {
+        type: Number, // used if there's a discount
+    },
+    discountPercent: {
+        type: Number, // e.g., 8 for "8% OFF"
+        default: 0,
+    },
+    imageUrl: {
+        type: String,
+        required: true,
+    },
+    bgGradient: {
+        type: String,
+        required: true,
+        default: "from-[#fce3d8] to-[#fddfc9]", // tailwind style (admin controlled)
+    },
+    showHeart: {
+        type: Boolean,
+        default: true,
+    },
+    inStock: {
+        type: Boolean,
+        default: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
+    });
+
+    module.exports = mongoose.model('Product', productSchema);
