@@ -1,10 +1,14 @@
+// src/components/header.jsx
 import { useState } from "react"
-// import Link from "next/link"
-import { Menu, X, ShoppingBag, Heart } from "lucide-react"
+import { Menu, X, ShoppingBag, Heart, User, LogIn } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+import { useCart } from "../context/CartContext"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { user, logout } = useAuth()
+  const { cartCount } = useCart()
 
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-lg sticky top-0 z-50">
@@ -21,7 +25,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Home
             </Link>
@@ -34,10 +38,42 @@ export default function Header() {
             <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Contact
             </Link>
-            <button className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2">
-              <ShoppingBag className="h-4 w-4" />
-              <span>Order Now</span>
-            </button>
+            
+            {/* Conditional auth links */}
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <Link to="/dashboard" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
+                  <User className="h-5 w-5 mr-1" />
+                  Account
+                </Link>
+                <button 
+                  onClick={logout}
+                  className="text-gray-700 hover:text-pink-600 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link to="/login" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
+                  <LogIn className="h-5 w-5 mr-1" />
+                  Login
+                </Link>
+                <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
+                  Sign Up
+                </Link>
+              </div>
+            )}
+            
+            {/* Cart */}
+            <Link to="/cart" className="relative flex items-center text-gray-700 hover:text-pink-600 transition-colors">
+              <ShoppingBag className="h-6 w-6" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -62,10 +98,35 @@ export default function Header() {
               <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 Contact
               </Link>
-              <button className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 w-full">
-                <ShoppingBag className="h-4 w-4" />
-                <span>Order Now</span>
-              </button>
+              
+              {/* Conditional auth links */}
+              {user ? (
+                <>
+                  <Link to="/dashboard" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                    My Account
+                  </Link>
+                  <button 
+                    onClick={logout}
+                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                    Login
+                  </Link>
+                  <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+              
+              <Link to="/cart" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                <ShoppingBag className="h-5 w-5 mr-2" />
+                Cart {cartCount > 0 && `(${cartCount})`}
+              </Link>
             </nav>
           </div>
         )}
