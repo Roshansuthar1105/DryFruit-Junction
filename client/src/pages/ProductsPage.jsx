@@ -68,7 +68,24 @@ export default function ProductsPage() {
   })
   const [sortOption, setSortOption] = useState('featured')
   const [showFilters, setShowFilters] = useState(false)
-
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/products', {
+          params: {
+            ...filters,
+            sort: sortOption,
+            search: searchTerm,
+          },
+        });
+        setProducts(response.data.data);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    };
+  
+    fetchProducts();
+  }, [searchTerm, filters, sortOption]);
   // Filter and sort products
   useEffect(() => {
     let result = [...allProducts]
