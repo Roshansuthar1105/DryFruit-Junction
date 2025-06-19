@@ -389,8 +389,8 @@ export default function CheckoutPage() {
                 <div key={item._id} className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={item?.images[0]?.url}
+                      alt={item?.images[0]?.alt}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div>

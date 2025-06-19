@@ -55,7 +55,7 @@ export default function ProductCard({ product }) {
 
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-            {product.price}
+            ₹{product.price}
           </span>
           <button
             onClick={() => addToCart(product)}

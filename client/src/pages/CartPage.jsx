@@ -64,7 +64,7 @@ export default function CartPage() {
                             </button>
                           </div>
                           <span className="text-lg font-bold text-gray-800">
-                            ${(parseFloat(typeof item.price === 'string'
+                          ₹{(parseFloat(typeof item.price === 'string'
                               ? parseFloat(item.price.replace(/[^0-9.-]/g, ''))
                               : item.price) * item.quantity)}
                           </span>
@@ -88,7 +88,7 @@ export default function CartPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="text-gray-800">${cartTotal.toFixed(2)}</span>
+                    <span className="text-gray-800">₹{cartTotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
@@ -96,7 +96,7 @@ export default function CartPage() {
                   </div>
                   <div className="border-t border-gray-200 pt-4 flex justify-between">
                     <span className="text-lg font-bold text-gray-800">Total</span>
-                    <span className="text-lg font-bold text-gray-800">${cartTotal.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-gray-800">₹{cartTotal.toFixed(2)}</span>
                   </div>
                 </div>
                 <Link
