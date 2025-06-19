@@ -5,7 +5,7 @@ import axios from 'axios';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user,BACKEND_API } = useAuth();
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem('sweetDelightsCart');
     return saved ? JSON.parse(saved) : [];
@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
 
       if (user && token) {
         try {
-          const response = await axios.get('http://localhost:5000/api/cart', {
+          const response = await axios.get(`${BACKEND_API}/api/cart`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -61,7 +61,7 @@ export const CartProvider = ({ children }) => {
 
     if (user) {
       try {
-        await axios.post('http://localhost:5000/api/cart', {
+        await axios.post(`${BACKEND_API}/api/cart`, {
           productId: product._id,
           quantity,
         }, {
@@ -85,7 +85,7 @@ export const CartProvider = ({ children }) => {
       const item = cart.find(i => i._id === productId);
       if (!item?.itemId) return;
       try {
-        await axios.put(`http://localhost:5000/api/cart/${item.itemId}`, {
+        await axios.put(`${BACKEND_API}/api/cart/${item.itemId}`, {
           quantity: newQuantity,
         }, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -102,7 +102,7 @@ export const CartProvider = ({ children }) => {
 
     if (user && item?.itemId) {
       try {
-        await axios.delete(`http://localhost:5000/api/cart/${item.itemId}`, {
+        await axios.delete(`${BACKEND_API}/api/cart/${item.itemId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
       } catch (err) {
@@ -117,7 +117,7 @@ export const CartProvider = ({ children }) => {
 
     if (user) {
       try {
-        await axios.delete('http://localhost:5000/api/cart', {
+        await axios.delete(`${BACKEND_API}/api/cart`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
       } catch (err) {

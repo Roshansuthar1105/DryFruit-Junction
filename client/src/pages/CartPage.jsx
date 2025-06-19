@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, cartTotal, cartCount, clearCart } = useCart();
   const { user } = useAuth();
-  console.log(cart)
   return (
     <>
       <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
