@@ -5,7 +5,7 @@ import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
 
 export default function UserDashboard() {
-  const { user, logout } = useAuth()
+  const { user, logout,BACKEND_API } = useAuth()
   const { favorites } = useFavorites()
   const [activeTab, setActiveTab] = useState('orders')
   const [orders, setOrders] = useState([])
@@ -15,7 +15,7 @@ export default function UserDashboard() {
   useEffect(() => {
     const fetchOrders = async () => {
       setLoadingOrders(true)
-      const VITE_API_BASE_URL=import.meta.env.VITE_API_BASE_URL;
+      const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       try {
         const token = localStorage.getItem('token')
         const { data } = await axios.get(`${VITE_API_BASE_URL}/api/orders/myorders`, {
@@ -36,7 +36,72 @@ export default function UserDashboard() {
 
     fetchOrders()
   }, [])
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  // Add these functions inside the component
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const updatePassword = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `${BACKEND_API}/api/auth/password`,
+        {
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      setPasswordSuccess('Password updated successfully');
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error) {
+      setPasswordError(error.response?.data?.message || 'Failed to update password');
+      console.log(error)
+    }
+  };
+
+  const deleteAccount = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${VITE_API_BASE_URL}/api/auth/account`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      logout();
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+      alert('Failed to delete account');
+    }
+  };
   return (
     <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,33 +123,30 @@ export default function UserDashboard() {
             <nav className="space-y-2">
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === 'orders'
+                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <ShoppingBag className="h-5 w-5" />
                 <span>My Orders</span>
               </button>
               <button
                 onClick={() => setActiveTab('favorites')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === 'favorites'
+                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'favorites'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <Heart className="h-5 w-5" />
                 <span>Favorites ({favorites.length})</span>
               </button>
               <button
                 onClick={() => setActiveTab('account')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === 'account'
+                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'account'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <User className="h-5 w-5" />
                 <span>Account Settings</span>
@@ -123,11 +185,10 @@ export default function UserDashboard() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <span
-                              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                order.orderStatus === 'delivered'
+                              className={`px-3 py-1 rounded-full text-sm font-medium ${order.orderStatus === 'delivered'
                                   ? 'bg-green-100 text-green-800'
                                   : 'bg-yellow-100 text-yellow-800'
-                              }`}
+                                }`}
                             >
                               {order.orderStatus || 'Processing'}
                             </span>
@@ -194,64 +255,109 @@ export default function UserDashboard() {
             )}
 
             {activeTab === 'account' && (
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Account Settings</h2>
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-2xl shadow-lg p-6 space-y-8">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-6">Profile Information</h3>
+                  <form className="space-y-6">
+                    {/* ... existing profile form ... */}
+                  </form>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-6">Change Password</h3>
+                  <form onSubmit={updatePassword} className="space-y-4">
+                    {passwordError && (
+                      <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm">
+                        {passwordError}
+                      </div>
+                    )}
+                    {passwordSuccess && (
+                      <div className="p-3 bg-green-100 text-green-700 rounded-md text-sm">
+                        {passwordSuccess}
+                      </div>
+                    )}
                     <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                        First Name
+                      <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                        Current Password
                       </label>
                       <input
-                        type="text"
-                        id="firstName"
-                        defaultValue={user?.firstName}
+                        type="password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        value={passwordForm.currentPassword}
+                        onChange={handlePasswordChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        required
                       />
                     </div>
                     <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                        Last Name
+                      <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                        New Password
                       </label>
                       <input
-                        type="text"
-                        id="lastName"
-                        defaultValue={user?.lastName}
+                        type="password"
+                        id="newPassword"
+                        name="newPassword"
+                        value={passwordForm.newPassword}
+                        onChange={handlePasswordChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        required
+                        minLength="6"
                       />
                     </div>
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      defaultValue={user?.email}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                      disabled
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div className="pt-4">
+                    <div>
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm New Password
+                      </label>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={passwordForm.confirmPassword}
+                        onChange={handlePasswordChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        required
+                        minLength="6"
+                      />
+                    </div>
                     <button
                       type="submit"
                       className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:shadow-md transition-all"
                     >
-                      Save Changes
+                      Update Password
                     </button>
-                  </div>
-                </form>
+                  </form>
+                </div>
+
+                <div className="border-t border-gray-200 pt-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Account Actions</h3>
+                  <button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="text-red-600 hover:text-red-800 font-medium"
+                  >
+                    Delete My Account
+                  </button>
+
+                  {showDeleteConfirm && (
+                    <div className="mt-4 p-4 bg-red-50 rounded-lg">
+                      <p className="text-red-800 mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
+                      <div className="flex space-x-4">
+                        <button
+                          onClick={deleteAccount}
+                          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                        >
+                          Yes, Delete Account
+                        </button>
+                        <button
+                          onClick={() => setShowDeleteConfirm(false)}
+                          className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

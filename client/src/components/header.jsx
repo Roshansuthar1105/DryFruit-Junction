@@ -37,20 +37,30 @@ export default function Header() {
             <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Contact
             </Link> */}
-            
+            {user?.role === 'admin' && (
+              <Link to="/admin" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                Admin
+              </Link>
+            )}
+            {user?.role === 'delivery' && (
+              <Link to="/delivery" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                Delivery
+              </Link>
+            )}
             {/* Conditional auth links */}
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link to="/dashboard" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
                   <User className="h-5 w-5 mr-1" />
-                 {user ? user.firstName : "Account"}
+                  {user ? user.firstName : "Account"}
                 </Link>
-                <button 
+                <button
                   onClick={logout}
                   className="cursor-pointer text-gray-700 hover:text-pink-600 transition-colors"
                 >
                   Logout
                 </button>
+
               </div>
             ) : (
               <div className="flex items-center space-x-4">
@@ -63,7 +73,7 @@ export default function Header() {
                 </Link> */}
               </div>
             )}
-            
+
             {/* Cart */}
             <Link to="/cart" className="relative flex items-center text-gray-700 hover:text-pink-600 transition-colors">
               <ShoppingBag className="h-6 w-6" />
@@ -91,20 +101,30 @@ export default function Header() {
               <Link to="/products" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 Products
               </Link>
-              <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+              {/* <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 About
               </Link>
               <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 Contact
-              </Link>
-              
+              </Link> */}
+
               {/* Conditional auth links */}
+              {user?.role === 'admin' && (
+                <Link to="/admin" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                  Admin
+                </Link>
+              )}
+              {user?.role === 'delivery' && (
+                <Link to="/delivery" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                  Delivery
+                </Link>
+              )}
               {user ? (
                 <>
                   <Link to="/dashboard" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                     My Account
                   </Link>
-                  <button 
+                  <button
                     onClick={logout}
                     className="text-gray-700 hover:text-pink-600 transition-colors font-medium text-left"
                   >
@@ -121,7 +141,7 @@ export default function Header() {
                   </Link>
                 </>
               )}
-              
+
               <Link to="/cart" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 Cart {cartCount > 0 && `(${cartCount})`}

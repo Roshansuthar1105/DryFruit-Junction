@@ -115,6 +115,17 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     throw new Error('Order not found');
   }
 });
+const updateOrderStatus = async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.orderStatus = req.body.status || order.orderStatus;
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404).json({ message: 'Order not found' });
+  }
+};
 
 module.exports = {
   createOrder,
@@ -122,4 +133,5 @@ module.exports = {
   getMyOrders,
   getOrders,
   updateOrderToDelivered,
+  updateOrderStatus
 };

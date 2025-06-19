@@ -41,5 +41,12 @@ const admin = (req, res, next) => {
     throw new Error('Not authorized as an admin');
   }
 };
-
-module.exports = { protect, admin };
+const delivery = (req, res, next) => {
+  if (req.user && req.user.role === 'delivery') {
+    next();
+  } else {
+    res.status(401);
+    throw new Error('Not authorized as a delivery partner');
+  }
+};
+module.exports = { protect, admin,delivery };
