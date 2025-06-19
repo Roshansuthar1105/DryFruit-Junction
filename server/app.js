@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
 
 // Route files
+const contactRoutes = require('./routes/contactRoutes');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -34,7 +35,10 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/contact', contactRoutes);
+// Add to app.js after other route imports
 
+// Mount routers (add this after other router mounts)
 // Error handler middleware
 // app.use(errorHandler);
 

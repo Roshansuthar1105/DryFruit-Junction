@@ -31,6 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
           email: user.email,
           phone: user.phone,
           address: user.address,
+          role: user.role
         },
         token: generateToken(user._id),
     });
@@ -55,6 +56,7 @@ const loginUser = asyncHandler(async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        role: user.role
       },
       token: generateToken(user._id),
     });
@@ -78,6 +80,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       phone: user.phone,
+      role: user.role,
       address: user.address,
     });
     
@@ -99,7 +102,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
     user.address = req.body.address || user.address;
-
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -120,10 +122,47 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 });
+const updatePassword = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('+password');
+  const { currentPassword, newPassword } = req.body;
+
+  if (!(await user.comparePassword(currentPassword))) {
+    res.status(401);
+    throw new Error('Current password is incorrect');
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  res.json({
+    success: true,
+    message: 'Password updated successfully'
+  });
+});
+
+// @desc    Delete user account
+// @route   DELETE /api/auth/account
+// @access  Private
+const deleteAccount = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  // Delete associated data (carts, orders, etc.)
+  await Cart.deleteOne({ user: user._id });
+  await Order.deleteMany({ user: user._id });
+
+  await user.remove();
+
+  res.json({
+    success: true,
+    message: 'Account deleted successfully'
+  });
+});
 
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
   updateUserProfile,
+  deleteAccount,
+  updatePassword
 };

@@ -18,6 +18,8 @@ import CheckoutPage from './pages/CheckoutPage'
 import ProductsPage from './pages/ProductsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import ProductPage from './pages/ProductPage'
+import AdminDashboard from './pages/AdminDashboard'
+import DeliveryDashboard from './pages/DeliveryDashboard'
 
 function App() {
   return (
@@ -37,13 +39,27 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route 
-                  path="/dashboard" 
+                <Route path="/admin"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/delivery"
+                  element={
+                    <ProtectedRoute allowedRoles={['delivery']}>
+                      <DeliveryDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute allowedRoles={['delivery','user','admin']}>
                       <UserDashboard />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
               </Routes>
               <Footer />
