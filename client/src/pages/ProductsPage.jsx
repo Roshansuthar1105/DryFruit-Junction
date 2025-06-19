@@ -5,6 +5,7 @@ import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 
 // Mock product data (replace with API fetch in real app)
 const allProducts = [
@@ -67,12 +68,13 @@ export default function ProductsPage() {
     maxPrice: '',
     rating: ''
   })
+  const {BACKEND_API}=useAuth();
   const [sortOption, setSortOption] = useState('featured')
   const [showFilters, setShowFilters] = useState(false)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products', {
+        const response = await axios.get(`${BACKEND_API}/api/products`, {
           // params: {
           //   ...filters,
           //   sort: sortOption,

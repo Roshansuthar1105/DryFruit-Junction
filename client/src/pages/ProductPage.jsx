@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, Heart, ShoppingCart, ArrowLeft, Clock } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 
 const ProductPage = () => {
@@ -13,11 +14,12 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const {BACKEND_API}=useAuth();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`${BACKEND_API}/api/products/${id}`);
         setProduct(response.data);
         setLoading(false);
       } catch (err) {

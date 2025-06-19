@@ -12,7 +12,7 @@ import ProductCard from "./ProductCard"
 export default function FeaturedProducts() {
   const { addToCart } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
-  const { user } = useAuth();
+  const { user,BACKEND_API } = useAuth();
   const [products,setProducts]=useState([]);
   // const products = [
   //   {
@@ -67,7 +67,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${BACKEND_API}/api/products`);
         setProducts(res.data.data.slice(0, 3)); // Show only first 2 products
       } catch (err) {
         console.error("❌ Failed to load products", err);

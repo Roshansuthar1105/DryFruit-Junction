@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-
+  const BACKEND_API=import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const response = await axios.post(`${BACKEND_API}/api/auth/login`, { email, password });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
   
   const register = async (userData) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+      const response = await axios.post(`${BACKEND_API}/api/auth/register`, userData);
       console.log(response,response.data.token,response.data.user)
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        BACKEND_API,
         loading,
         login,
         register,
