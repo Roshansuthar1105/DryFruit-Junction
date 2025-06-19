@@ -59,7 +59,7 @@ export default function Hero() {
           <div className="relative">
             <div className="relative z-10">
               <img
-                src="https://picsum.photos/id/11/2500/1667"
+                src="https://images.unsplash.com/photo-1695568181747-f54dff1d4654?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW5kaWFuJTIwc3dlZXRzfGVufDB8fDB8fHww"
                 alt="Delicious handcrafted sweets and confections"
                 width={500}
                 height={600}

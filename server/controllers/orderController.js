@@ -11,9 +11,9 @@ const createOrder = asyncHandler(async (req, res) => {
   // Get user's cart
   const cart = await Cart.findOne({ user: req.user._id }).populate(
     'items.product',
-    'name price'
+    'name price images'
   );
-
+  console.log("item in pop : ",cart.items[0].product)
   if (!cart || cart.items.length === 0) {
     res.status(400);
     throw new Error('No items in cart');
@@ -25,6 +25,7 @@ const createOrder = asyncHandler(async (req, res) => {
     name: item.product.name,
     quantity: item.quantity,
     price: item.product.price,
+    images: item.product.images,
   }));
 
   // Calculate prices
@@ -48,7 +49,6 @@ const createOrder = asyncHandler(async (req, res) => {
     totalPrice,
   });
   const createdOrder = await order.save();
-
   // Clear the cart
   cart.items = [];
   await cart.save();

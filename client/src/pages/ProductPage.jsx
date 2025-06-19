@@ -111,7 +111,7 @@ const ProductPage = () => {
             <div className="relative">
               <div className="relative z-10 bg-white p-6 rounded-3xl shadow-lg">
                 <img
-                  src={product.image}
+                  src={product.images[0].url}
                   alt={product.name}
                   className="w-full h-auto rounded-2xl object-cover"
                 />

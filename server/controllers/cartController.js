@@ -8,7 +8,7 @@ const asyncHandler = require('express-async-handler');
 const getCart = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate(
     'items.product',
-    'name price image description stock category'
+    'name price image images description stock category'
   );
   if (!cart) {
     return res.json({ items: [] });

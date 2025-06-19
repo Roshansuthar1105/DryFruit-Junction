@@ -21,6 +21,12 @@ const orderItemSchema = new mongoose.Schema({
     min: [1, "Quantity must be at least 1"],
   },
   price: { type: Number, required: true },
+  images: [
+    {
+      url: { type: String, required: true },
+      alt: { type: String },
+    },
+  ],
 });
 
 const shippingInfoSchema = new mongoose.Schema({

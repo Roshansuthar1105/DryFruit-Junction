@@ -23,8 +23,8 @@ export default function UserDashboard() {
             Authorization: `Bearer ${token}`
           }
         })
-        console.log("daat",data)
         setOrders(data.reverse()) // show latest first
+        console.log(data.reverse())
       } catch (error) {
         console.log(error)
         setErrorOrders(

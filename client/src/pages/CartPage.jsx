@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, cartTotal, cartCount, clearCart } = useCart();
   const { user } = useAuth();
+  console.log(cart)
   return (
     <>
       <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
@@ -30,8 +31,8 @@ export default function CartPage() {
                     <div key={item._id} className="py-6 flex flex-col sm:flex-row">
                       <div className="flex-shrink-0">
                         <img
-                          src={item.image}
-                          alt={item.name}
+                          src={item?.images?.[0]?.url}
+                          alt={item?.images?.[0]?.alt}
                           className="w-32 h-32 object-cover rounded-lg"
                         />
                       </div>
