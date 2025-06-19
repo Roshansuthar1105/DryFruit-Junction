@@ -4,16 +4,19 @@ import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
   const { user } = useAuth()
-
+  useEffect(()=>{
+    console.log(product._id)
+  },[])
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
       <div className="relative overflow-hidden">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/products/${product._id}`}>
           <img
             src={product.image}
             alt={product.name}

@@ -4,6 +4,7 @@ import { Filter, Search, Star, ChevronDown, ChevronUp } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
+import axios from 'axios'
 
 // Mock product data (replace with API fetch in real app)
 const allProducts = [
@@ -58,7 +59,7 @@ const allProducts = [
   ]
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(allProducts)
+  const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState({
     category: '',
@@ -72,12 +73,13 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/products', {
-          params: {
-            ...filters,
-            sort: sortOption,
-            search: searchTerm,
-          },
+          // params: {
+          //   ...filters,
+          //   sort: sortOption,
+          //   search: searchTerm,
+          // },
         });
+        console.log("Cart data : ",response.data.data);
         setProducts(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);
@@ -282,7 +284,7 @@ export default function ProductsPage() {
         {products.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
         ) : (

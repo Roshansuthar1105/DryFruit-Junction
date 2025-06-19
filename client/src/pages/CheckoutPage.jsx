@@ -247,7 +247,9 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <span className="text-gray-800 font-medium">
-                    ${(parseFloat(item.price.replace('$', '')) * item.quantity)}
+                    ${(parseFloat(typeof item.price === 'string' 
+        ? parseFloat(item.price.replace(/[^0-9.-]/g, '')) 
+        : item.price) * item.quantity)}
                   </span>
                 </div>
               ))}

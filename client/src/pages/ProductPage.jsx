@@ -1,39 +1,29 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Star, Heart, ShoppingCart, ArrowLeft, Clock } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const {addToCart}=useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-
   useEffect(() => {
-    // Simulate API call to fetch product data
+    console.log("id=>",id)
     const fetchProduct = async () => {
       try {
-        // In a real app, you would fetch from your API
-        // const response = await fetch(`/api/products/${id}`);
-        // const data = await response.json();
-        
-        // Mock data for demonstration
-        const mockProduct = {
-          _id: id,
-          name: 'Artisan Dark Chocolate Truffles',
-          description: 'Handcrafted dark chocolate truffles with a velvety smooth ganache center, dusted with premium cocoa powder. Made with single-origin 70% dark chocolate for a rich, complex flavor profile with notes of red fruit and a hint of spice.',
-          price: 24.99,
-          category: 'Chocolates',
-          image: 'https://picsum.photos/id/20/500/500',
-          rating: 4.7,
-          stock: 8,
-          createdAt: new Date().toISOString()
-        };
-        
-        setProduct(mockProduct);
+        setLoading(true);
+        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        setProduct(response.data);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError(err.response?.data?.message || 'Failed to fetch product');
         setLoading(false);
       }
     };
@@ -41,9 +31,22 @@ const ProductPage = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    // Add to cart logic here
-    console.log(`Added ${quantity} ${product.name} to cart`);
+  const handleAddToCart = async () => {
+    try {
+      for(let i=0;i<quantity;i++)addToCart(product);
+      // await axios.post('http://localhost:5000/api/cart', {
+      //   productId: product._id,
+      //   quantity,
+      //   name: product.name,
+      //   price: product.price,
+      //   image: product.image
+      // });
+      // alert(`${quantity} ${product.name} added to cart successfully!`);
+      // // Optionally navigate to cart or refresh cart data
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert(err.response?.data?.message || 'Failed to add to cart');
+    }
   };
 
   const renderStars = (rating) => {
@@ -74,7 +77,21 @@ const ProductPage = () => {
   if (!product) {
     return <div className="flex justify-center items-center h-screen">Product not found</div>;
   }
-
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+        <button 
+          onClick={() => navigate(-1)} 
+          className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
   return (
     <>
       <section className="relative py-12 overflow-hidden bg-gradient-to-br from-pink-50 to-orange-50">

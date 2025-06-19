@@ -62,7 +62,9 @@ export default function CartPage() {
                           </button>
                         </div>
                         <span className="text-lg font-bold text-gray-800">
-                          ${(parseFloat(item.price.replace('$', '')) * item.quantity)}
+                          ${(parseFloat(typeof item.price === 'string' 
+        ? parseFloat(item.price.replace(/[^0-9.-]/g, '')) 
+        : item.price) * item.quantity)}
                         </span>
                       </div>
                     </div>
