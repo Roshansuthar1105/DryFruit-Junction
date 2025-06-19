@@ -1,53 +1,172 @@
 // src/pages/CheckoutPage.jsx
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart()
   const { user } = useAuth()
+  const [orderData, setOrderData] = useState(null);
   const [formData, setFormData] = useState({
-    name: user?.displayName || '',
+    name: '',
     email: user?.email || '',
     phone: '',
+    pincode:'',
     address: '',
+    apiAddress:{
+      address:'',
+      latitude:'',
+      longitude:''
+    },
     notes: '',
     paymentMethod: 'cod',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLocationFetched, setIsLocationFetched] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(false)
-
+  useEffect(()=>{
+    fetchLocation();
+  },[]);
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: `${user.firstName} ${user.lastName}`,
+        email: user.email
+      }));
+    }
+  }, [user]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    // Simulate API call
+    e.preventDefault();
+    setIsSubmitting(true);
+  
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      setOrderSuccess(true)
-      clearCart()
+      const token = localStorage.getItem('token'); // Or however you're storing the JWT
+  
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/orders`,
+        {
+          shippingInfo: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            pincode: formData.pincode,
+            address: formData.address,
+            city: formData.city,
+            location: formData.apiAddress, // includes lat/lng + display address
+            notes: formData.notes,
+          },
+          paymentMethod: formData.paymentMethod,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.status === 201) {
+        console.log(response);
+        setOrderData(response.data); // Save full response
+        setOrderSuccess(true);
+        clearCart();
+      }
     } catch (error) {
-      console.error('Order submission failed:', error)
+      console.error('❌ Order submission failed:', error.response?.data?.message || error.message);
+      alert('Order submission failed');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
+  
 
   const fetchLocation = () => {
-    // This would use the browser's geolocation API in a real implementation
-    setFormData(prev => ({
-      ...prev,
-      address: '123 Sweet Street, Confectionery District, Sweet City, SC 12345'
-    }))
-  }
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+  
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        try {
+          const response = await axios.get('https://nominatim.openstreetmap.org/reverse', {
+            params: {
+              lat: latitude,
+              lon: longitude,
+              format: 'json',
+            },
+            headers: {
+              'User-Agent': 'sweet-store-frontend', // Required by Nominatim
+              'Accept-Language': 'en',
+            },
+          });
+  
+          const apiAddress ={
+            address: response.data.display_name || 'Unknown location',
+            latitude:latitude,
+            longitude:longitude
+          };
+          setFormData((prev) => ({
+            ...prev,
+            apiAddress,
+          }));
+          setIsLocationFetched(true);
+        } catch (error) {
+          console.error('❌ Nominatim failed:', error);
+          alert('Failed to fetch address');
+        }
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        alert('Failed to retrieve your location');
+      }
+    );
+  };
+  
 
   if (orderSuccess) {
+    return(<>
+    {orderSuccess && orderData && (
+      <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Order Confirmed!</h2>
+            <p className="text-gray-600 mb-4">
+              Thank you for your order. We’ve received it and will start preparing your sweet treats shortly.
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Order ID:</strong>{orderData._id}
+            </p>
+            <p className="text-gray-600 mb-6">
+              <strong>Status:</strong> {orderData.orderStatus}
+            </p>
+            <Link
+              to="/dashboard"
+              className="inline-block bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:shadow-xl transition-all duration-300"
+              >
+              View Order Details
+            </Link>
+          </div>
+        </div>
+      </section>
+    )}
+    </>)
+    
     return (
       <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -134,7 +253,36 @@ export default function CheckoutPage() {
                   required
                 />
               </div>
-
+              <div >
+                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
+                  Pincode
+                </label>
+                <input
+                  type="number"
+                  id="pincode"
+                  name="pincode"
+                  value={formData.pincode}
+                  maxLength={6}
+                  minLength={6}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+                </div>
+                <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
                   Delivery Address
@@ -149,14 +297,18 @@ export default function CheckoutPage() {
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                     required
                   />
-                  <button
+                  {/* <button
                     type="button"
                     onClick={fetchLocation}
                     className="bg-gray-100 hover:bg-gray-200 px-4 rounded-xl text-sm font-medium transition-colors"
                   >
                     Use My Location
-                  </button>
+                  </button> */}
                 </div>
+                
+                {formData.apiAddress.address && 
+                <p className='text-xs' >Current Address : {formData.apiAddress.address}x</p>
+                }
               </div>
 
               <div>
@@ -211,7 +363,7 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                disabled={isSubmitting || cart.length === 0}
+                disabled={isSubmitting || cart.length === 0 }
                 className="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isSubmitting ? (

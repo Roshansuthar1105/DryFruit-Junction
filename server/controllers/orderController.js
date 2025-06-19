@@ -47,7 +47,6 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   });
-
   const createdOrder = await order.save();
 
   // Clear the cart
