@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
+  const {login}=useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,21 +16,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password
-      });
-
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+  
+    const result = await login(email, password); // ✅ use context method
+  
+    if (result.success) {
+      navigate('/'); // ✅ reactivity ensured via context
+    } else {
+      setError(result.message); // ✅ error from context
     }
+  
+    setLoading(false);
   };
 
   return (

@@ -50,7 +50,7 @@ export default function About() {
           <div className="relative">
             <div className="relative z-10">
               <img
-                src="https://picsum.photos/id/11/2500/1667"
+                src="https://img.freepik.com/free-photo/various-cakes-supermarket-shelves-sale_627829-7332.jpg?ga=GA1.1.1303647263.1750324999&semt=ais_hybrid&w=740"
                 alt="Our confectionery kitchen and artisans at work"
                 width={600}
                 height={500}

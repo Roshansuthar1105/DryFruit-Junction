@@ -7,7 +7,7 @@ const asyncHandler = require('express-async-handler');
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-
+  console.log("signup------> email and pass",firstName, lastName, email, password);
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -24,11 +24,15 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      token: generateToken(user._id),
+        user: {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        },
+        token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -41,17 +45,20 @@ const registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("email and pass",email,password);
   const user = await User.findOne({ email }).select('+password');
 
   if (user && (await user.comparePassword(password))) {
-    res.json({
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
+    res.status(201).json({
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
       token: generateToken(user._id),
     });
+    
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -73,6 +80,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       phone: user.phone,
       address: user.address,
     });
+    
   } else {
     res.status(404);
     throw new Error('User not found');

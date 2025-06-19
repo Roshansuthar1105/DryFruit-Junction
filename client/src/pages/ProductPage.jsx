@@ -1,39 +1,28 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Star, Heart, ShoppingCart, ArrowLeft, Clock } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-
   useEffect(() => {
-    // Simulate API call to fetch product data
     const fetchProduct = async () => {
       try {
-        // In a real app, you would fetch from your API
-        // const response = await fetch(`/api/products/${id}`);
-        // const data = await response.json();
-        
-        // Mock data for demonstration
-        const mockProduct = {
-          _id: id,
-          name: 'Artisan Dark Chocolate Truffles',
-          description: 'Handcrafted dark chocolate truffles with a velvety smooth ganache center, dusted with premium cocoa powder. Made with single-origin 70% dark chocolate for a rich, complex flavor profile with notes of red fruit and a hint of spice.',
-          price: 24.99,
-          category: 'Chocolates',
-          image: 'https://picsum.photos/id/20/500/500',
-          rating: 4.7,
-          stock: 8,
-          createdAt: new Date().toISOString()
-        };
-        
-        setProduct(mockProduct);
+        setLoading(true);
+        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        setProduct(response.data);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError(err.response?.data?.message || 'Failed to fetch product');
         setLoading(false);
       }
     };
@@ -41,9 +30,13 @@ const ProductPage = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    // Add to cart logic here
-    console.log(`Added ${quantity} ${product.name} to cart`);
+  const handleAddToCart = async () => {
+    try {
+      addToCart(product,quantity);
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert(err.response?.data?.message || 'Failed to add to cart');
+    }
   };
 
   const renderStars = (rating) => {
@@ -74,34 +67,49 @@ const ProductPage = () => {
   if (!product) {
     return <div className="flex justify-center items-center h-screen">Product not found</div>;
   }
-
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
   return (
     <>
       <section className="relative py-12 overflow-hidden bg-gradient-to-br from-pink-50 to-orange-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-pink-600 mb-8 transition-colors duration-200"
+            onClick={() => {
+              navigate(-1);
+            }}
+            className="group mb-8 flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-pink-600"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to shop
+            <ArrowLeft className="w-5 h-5 group-hover:text-pink-600" />
+            <span>Back to Hello Shop</span>
           </button>
-
+  
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Product Image */}
             <div className="relative">
               <div className="relative z-10 bg-white p-6 rounded-3xl shadow-lg">
                 <img
-                  src={product.image}
+                  src={product.images[0].url}
                   alt={product.name}
                   className="w-full h-auto rounded-2xl object-cover"
                 />
               </div>
-              {/* Decorative elements */}
               <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-r from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
               <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
             </div>
-
+  
             {/* Product Details */}
             <div className="space-y-6">
               <div>
@@ -112,21 +120,24 @@ const ProductPage = () => {
                   {product.name}
                 </h1>
                 <div className="flex items-center mt-3">
-                  <div className="flex mr-2">
-                    {renderStars(product.rating)}
-                  </div>
-                  <span className="text-gray-600">({product.rating.toFixed(1)})</span>
+                  <div className="flex mr-2">{renderStars(product.rating)}</div>
+                  <span className="text-gray-600">
+                    ({product.rating.toFixed(1)})
+                  </span>
                 </div>
               </div>
-
+  
               <div className="text-3xl font-bold text-gray-800">
-                ${product.price.toFixed(2)}
+                ₹{product.price.toFixed(2)}{' '}
+                <span className="ml-3 text-xl line-through text-gray-400">
+                  ₹{product.originalPrice.toFixed(2)}
+                </span>
               </div>
-
+  
               <div className="text-lg text-gray-600 leading-relaxed">
                 <p>{product.description}</p>
               </div>
-
+  
               <div className="flex items-center space-x-4">
                 <div className="flex items-center border border-gray-300 rounded-full">
                   <button
@@ -143,11 +154,17 @@ const ProductPage = () => {
                     +
                   </button>
                 </div>
-                <span className={`text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                <span
+                  className={`text-sm font-medium ${
+                    product.stock > 0 ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {product.stock > 0
+                    ? `${product.stock} in stock`
+                    : 'Out of stock'}
                 </span>
               </div>
-
+  
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <button
                   onClick={handleAddToCart}
@@ -165,7 +182,7 @@ const ProductPage = () => {
                   Wishlist
                 </button>
               </div>
-
+  
               <div className="pt-6 border-t border-gray-200">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
@@ -178,15 +195,69 @@ const ProductPage = () => {
                     <div className="bg-green-100 p-2 rounded-full">
                       <Heart className="h-5 w-5 text-green-600" />
                     </div>
-                    <span className="text-gray-700">100% Natural Ingredients</span>
+                    <span className="text-gray-700">
+                      100% Natural Ingredients
+                    </span>
                   </div>
+                </div>
+              </div>
+  
+              {/* Additional Product Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 text-gray-700">
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Weight:</h4>
+                  <p>{product.weight}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Shelf Life:</h4>
+                  <p>{product.shelfLife}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Storage Instructions:</h4>
+                  <p>{product.storageInstructions}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Preparation Time:</h4>
+                  <p>{product.preparationTime}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Allergens:</h4>
+                  <p>{product.allergens?.join(', ') || 'None'}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Tags:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {product.tags?.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Ingredients:</h4>
+                  <ul className="list-disc list-inside text-sm">
+                    {product.ingredients?.map((ing, i) => (
+                      <li key={i}>{ing}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Dietary Info:</h4>
+                  <p>
+                    {product.isVegan ? 'Vegan' : 'Contains Animal Products'} •{' '}
+                    {product.isGlutenFree ? 'Gluten Free' : 'Contains Gluten'}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
+  
       {/* Related Products Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -198,9 +269,11 @@ const ProductPage = () => {
             collection
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* These would be actual related products in a real app */}
             {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div
+                key={item}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              >
                 <div className="p-4">
                   <img
                     src={`https://picsum.photos/id/${100 + item}/500/300`}
@@ -211,14 +284,18 @@ const ProductPage = () => {
                 <div className="p-6">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-800">Premium {product.category.slice(0, -1)} {item}</h3>
-                      <p className="text-gray-600 mt-1">Delicious artisan creation</p>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Premium {product.category.slice(0, -1)} {item}
+                      </h3>
+                      <p className="text-gray-600 mt-1">
+                        Delicious artisan creation
+                      </p>
                     </div>
                     <span className="inline-block px-2 py-1 text-xs font-medium bg-pink-100 text-pink-800 rounded-full">
-                      ${(product.price + item * 2).toFixed(2)}
+                      ₹{(product.price + item * 2).toFixed(2)}
                     </span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => navigate(`/product/${100 + item}`)}
                     className="mt-4 w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium hover:opacity-90 transition-opacity"
                   >
@@ -232,6 +309,7 @@ const ProductPage = () => {
       </section>
     </>
   );
+  
 };
 
 export default ProductPage;

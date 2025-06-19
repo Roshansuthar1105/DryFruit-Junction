@@ -9,7 +9,6 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, logout } = useAuth()
   const { cartCount } = useCart()
-
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,23 +31,23 @@ export default function Header() {
             <Link to="/products" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Products
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+            {/* <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               About
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Contact
-            </Link>
+            </Link> */}
             
             {/* Conditional auth links */}
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link to="/dashboard" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
                   <User className="h-5 w-5 mr-1" />
-                  Account
+                 {user ? user.firstName : "Account"}
                 </Link>
                 <button 
                   onClick={logout}
-                  className="text-gray-700 hover:text-pink-600 transition-colors"
+                  className="cursor-pointer text-gray-700 hover:text-pink-600 transition-colors"
                 >
                   Logout
                 </button>
@@ -59,9 +58,9 @@ export default function Header() {
                   <LogIn className="h-5 w-5 mr-1" />
                   Login
                 </Link>
-                <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
+                {/* <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
                   Sign Up
-                </Link>
+                </Link> */}
               </div>
             )}
             

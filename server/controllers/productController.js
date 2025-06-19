@@ -38,19 +38,38 @@ const getProductById = asyncHandler(async (req, res) => {
 // @desc    Create a product
 // @route   POST /api/products
 // @access  Private/Admin
+
 const createProduct = asyncHandler(async (req, res) => {
+  const { 
+    name, 
+    description, 
+    price, 
+    category, 
+    image, 
+    rating, 
+    stock 
+  } = req.body;
+
+  // Create a new product instance using the Product model
   const product = new Product({
-    name: 'Sample name',
-    price: 0,
-    user: req.user._id,
-    image: '/images/sample.jpg',
-    category: 'Sample category',
-    description: 'Sample description',
+    name,
+    description,
+    price,
+    category,
+    image,
+    rating: rating || 4.5, // Use default value if not provided
+    stock: stock || 10,    // Use default value if not provided
   });
 
+  // Save the product to the database
   const createdProduct = await product.save();
+  
   res.status(201).json(createdProduct);
 });
+
+module.exports = {
+  createProduct
+};
 
 // @desc    Update a product
 // @route   PUT /api/products/:id

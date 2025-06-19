@@ -29,9 +29,9 @@ export const FavoritesProvider = ({ children }) => {
 
   const toggleFavorite = product => {
     setFavorites(prevFavorites => {
-      const isFavorite = prevFavorites.some(fav => fav.id === product.id)
+      const isFavorite = prevFavorites.some(fav => fav.id === product._id)
       if (isFavorite) {
-        return prevFavorites.filter(fav => fav.id !== product.id)
+        return prevFavorites.filter(fav => fav.id !== product._id)
       } else {
         return [...prevFavorites, product]
       }
