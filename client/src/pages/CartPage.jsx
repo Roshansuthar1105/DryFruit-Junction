@@ -2,10 +2,11 @@
 import { ShoppingCart, X, Plus, Minus } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useCart } from "../context/CartContext"
+import { useEffect } from "react";
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, cartTotal, cartCount, clearCart } = useCart();
-
+  
   return (
     <>
     <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
@@ -26,7 +27,7 @@ export default function CartPage() {
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
               <div className="divide-y divide-gray-200">
                 {cart.map(item => (
-                  <div key={item.id} className="py-6 flex flex-col sm:flex-row">
+                  <div key={item._id} className="py-6 flex flex-col sm:flex-row">
                     <div className="flex-shrink-0">
                       <img
                         src={item.image}
@@ -38,7 +39,7 @@ export default function CartPage() {
                       <div className="flex justify-between">
                         <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
                         <button 
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => removeFromCart(item._id)}
                           className="text-gray-400 hover:text-pink-600"
                           >
                           <X className="h-5 w-5" />
@@ -48,14 +49,14 @@ export default function CartPage() {
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center border border-gray-300 rounded-lg">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item._id, item.quantity - 1)}
                             className="px-3 py-1 text-gray-600 hover:bg-gray-100"
                             >
                             <Minus className="h-4 w-4" />
                           </button>
                           <span className="px-4 py-1 text-gray-800">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
                             className="px-3 py-1 text-gray-600 hover:bg-gray-100"
                             >
                             <Plus className="h-4 w-4" />

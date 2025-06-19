@@ -144,7 +144,7 @@ export default function UserDashboard() {
                 {favorites.length > 0 ? (
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {favorites.map(product => (
-                      <div key={product.id} className="border border-gray-200 rounded-lg p-4">
+                      <div key={product._id} className="border border-gray-200 rounded-lg p-4">
                         <div className="bg-gray-100 h-40 rounded-lg mb-4"></div>
                         <h3 className="font-bold text-gray-800">{product.name}</h3>
                         <p className="text-gray-600 text-sm mt-1">{product.description}</p>

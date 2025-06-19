@@ -1,115 +1,153 @@
-// src/context/CartContext.jsx
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
 
-const CartContext = createContext()
+const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([])
   const { user } = useAuth();
-  // Load cart from localStorage on initial render
+  const [cart, setCart] = useState(() => {
+    const saved = localStorage.getItem('sweetDelightsCart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // 💾 Always save to localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('sweetDelightsCart')
-    if (savedCart) {
-      setCart(JSON.parse(savedCart))
-    }
-  }, [])
+    localStorage.setItem('sweetDelightsCart', JSON.stringify(cart));
+  }, [cart]);
+
+  // 🔄 Load cart on login/logout
   useEffect(() => {
     const fetchCart = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/cart', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        setCart(response.data.items || []);
-      } catch (error) {
-        console.error('Failed to fetch cart:', error);
+      const token = localStorage.getItem('token');
+
+      if (user && token) {
+        try {
+          const response = await axios.get('http://localhost:5000/api/cart', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const serverCart = (response.data.items || []).map(item => ({
+            ...item.product,
+            quantity: item.quantity,
+            _id: item.product._id,
+            itemId: item._id,
+          }));
+
+          setCart(serverCart);
+          localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
+        } catch (err) {
+          console.error('❌ Fetching cart failed:', err);
+        }
+      } else {
+        const guestCart = localStorage.getItem('sweetDelightsCart');
+        setCart(guestCart ? JSON.parse(guestCart) : []);
       }
     };
-  
-    if (user) {
-      fetchCart();
-    } else {
-      // Load from localStorage for guest users
-      const savedCart = localStorage.getItem('sweetDelightsCart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
-      }
-    }
+
+    fetchCart();
   }, [user]);
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('sweetDelightsCart', JSON.stringify(cart))
-  }, [cart])
 
   const addToCart = async (product, quantity = 1) => {
-    if (user) {
-      try {
-        await axios.post('http://localhost:5000/api/cart', { productId: product.id, quantity });
-      } catch (error) {
-        console.error('Failed to add to cart:', error);
-      }
-    }
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === product.id)
-      if (existingItem) {
-        return prevCart.map(item =>
-          item.id === product.id
+    const updatedCart = cart.some(item => item._id === product._id)
+      ? cart.map(item =>
+          item._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         )
+      : [...cart, { ...product, quantity }];
+
+    setCart(updatedCart);
+
+    if (user) {
+      try {
+        await axios.post('http://localhost:5000/api/cart', {
+          productId: product._id,
+          quantity,
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      } catch (err) {
+        console.error('❌ Failed to sync addToCart:', err);
       }
-      return [...prevCart, { ...product, quantity }]
-    })
-  }
-
-  const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) {
-      removeFromCart(productId)
-      return
     }
-    setCart(prevCart =>
-      prevCart.map(item =>
-        item.id === productId ? { ...item, quantity: newQuantity } : item
-      )
-    )
-  }
+  };
 
-  const removeFromCart = productId => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId))
-  }
+  const updateQuantity = async (productId, newQuantity) => {
+    if (newQuantity < 1) return;
 
-  const clearCart = () => {
-    setCart([])
-  }
+    const updated = cart.map(item =>
+      item._id === productId ? { ...item, quantity: newQuantity } : item
+    );
+    setCart(updated);
 
-  const cartTotal = cart.reduce(
-    (total, item) => {
-      const price = typeof item.price === 'string' 
-        ? parseFloat(item.price.replace(/[^0-9.-]/g, '')) 
-        : item.price;
-      return total + (price * item.quantity);
-    },
-    0
-  );
+    if (user) {
+      const item = cart.find(i => i._id === productId);
+      if (!item?.itemId) return;
+      try {
+        await axios.put(`http://localhost:5000/api/cart/${item.itemId}`, {
+          quantity: newQuantity,
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      } catch (err) {
+        console.error('❌ Failed to update quantity:', err);
+      }
+    }
+  };
+
+  const removeFromCart = async (productId) => {
+    const item = cart.find(i => i._id === productId);
+    setCart(prev => prev.filter(item => item._id !== productId));
+
+    if (user && item?.itemId) {
+      try {
+        await axios.delete(`http://localhost:5000/api/cart/${item.itemId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      } catch (err) {
+        console.error('❌ Failed to remove item:', err);
+      }
+    }
+  };
+
+  const clearCart = async () => {
+    setCart([]);
+    localStorage.removeItem('sweetDelightsCart');
+
+    if (user) {
+      try {
+        await axios.delete('http://localhost:5000/api/cart', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      } catch (err) {
+        console.error('❌ Failed to clear cart:', err);
+      }
+    }
+  };
+
+  const cartTotal = cart.reduce((sum, item) => {
+    const price = typeof item.price === 'string'
+      ? parseFloat(item.price.replace(/[^0-9.-]/g, ''))
+      : item.price;
+    return sum + (price * item.quantity);
+  }, 0);
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        updateQuantity,
-        removeFromCart,
-        clearCart,
-        cartTotal,
-        cartCount: cart.reduce((count, item) => count + item.quantity, 0),
-      }}
-    >
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      updateQuantity,
+      removeFromCart,
+      clearCart,
+      cartTotal,
+      cartCount
+    }}>
       {children}
     </CartContext.Provider>
-  )
-}
+  );
+};
 
-export const useCart = () => useContext(CartContext)
+export const useCart = () => useContext(CartContext);

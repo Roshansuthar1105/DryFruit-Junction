@@ -61,7 +61,7 @@ export default function ProductCard({ product }) {
           </span>
           <button 
             onClick={() => addToCart(product)}
-            className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
+            className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
           >
             <ShoppingCart className="h-4 w-4" />
             <span>Add to Cart</span>

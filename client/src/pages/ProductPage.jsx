@@ -32,16 +32,7 @@ const ProductPage = () => {
 
   const handleAddToCart = async () => {
     try {
-      for (let i = 0; i < quantity; i++)addToCart(product);
-      // await axios.post('http://localhost:5000/api/cart', {
-      //   productId: product._id,
-      //   quantity,
-      //   name: product.name,
-      //   price: product.price,
-      //   image: product.image
-      // });
-      // alert(`${quantity} ${product.name} added to cart successfully!`);
-      // // Optionally navigate to cart or refresh cart data
+      addToCart(product,quantity);
     } catch (err) {
       console.error('Error adding to cart:', err);
       alert(err.response?.data?.message || 'Failed to add to cart');
