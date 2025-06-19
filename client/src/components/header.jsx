@@ -32,12 +32,12 @@ export default function Header() {
             <Link to="/products" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Products
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+            {/* <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               About
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Contact
-            </Link>
+            </Link> */}
             
             {/* Conditional auth links */}
             {user ? (
@@ -59,9 +59,9 @@ export default function Header() {
                   <LogIn className="h-5 w-5 mr-1" />
                   Login
                 </Link>
-                <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
+                {/* <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
                   Sign Up
-                </Link>
+                </Link> */}
               </div>
             )}
             

@@ -79,7 +79,6 @@ export default function ProductsPage() {
           //   search: searchTerm,
           // },
         });
-        console.log("Cart data : ",response.data.data);
         setProducts(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);

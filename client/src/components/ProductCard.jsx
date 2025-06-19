@@ -10,9 +10,6 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
   const { user } = useAuth()
-  useEffect(()=>{
-    console.log(product._id)
-  },[])
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
       <div className="relative overflow-hidden">
@@ -37,21 +34,21 @@ export default function ProductCard({ product }) {
             }
           }}
           className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
-            isFavorite(product.id) 
+            isFavorite(product._id) 
               ? 'bg-pink-100 text-pink-600' 
               : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-pink-50'
           }`}
         >
           <Heart 
             className={`h-5 w-5 ${
-              isFavorite(product.id) ? 'fill-pink-600' : ''
+              isFavorite(product._id) ? 'fill-pink-600' : ''
             }`} 
           />
         </button>
       </div>
 
       <div className="p-6">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/products/${product._id}`}>
           <h3 className="text-xl font-bold text-gray-800 mb-2 hover:text-pink-600 transition-colors">
             {product.name}
           </h3>

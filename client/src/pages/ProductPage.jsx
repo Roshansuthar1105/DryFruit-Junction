@@ -8,13 +8,12 @@ import { useCart } from '../context/CartContext';
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {addToCart}=useCart();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   useEffect(() => {
-    console.log("id=>",id)
     const fetchProduct = async () => {
       try {
         setLoading(true);
@@ -33,7 +32,7 @@ const ProductPage = () => {
 
   const handleAddToCart = async () => {
     try {
-      for(let i=0;i<quantity;i++)addToCart(product);
+      for (let i = 0; i < quantity; i++)addToCart(product);
       // await axios.post('http://localhost:5000/api/cart', {
       //   productId: product._id,
       //   quantity,
@@ -83,8 +82,8 @@ const ProductPage = () => {
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           {error}
         </div>
-        <button 
-          onClick={() => navigate(-1)} 
+        <button
+          onClick={() => navigate(-1)}
           className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
         >
           Go Back
@@ -96,13 +95,25 @@ const ProductPage = () => {
     <>
       <section className="relative py-12 overflow-hidden bg-gradient-to-br from-pink-50 to-orange-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-pink-600 mb-8 transition-colors duration-200"
+          {/* <button
+            onClick={() => {
+              console.log("navigating");
+              navigate(-1);
+            }}
+            className="cursor-pointer flex items-center text-gray-600 hover:text-pink-600 mb-8 transition-colors duration-200"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to shop
-          </button>
+            Back to Shop
+          </button> */}
+          <button
+          onClick={() => {
+            navigate(-1);
+          }}
+          className="group mb-8 flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-pink-600"
+        >
+          <ArrowLeft className="w-5 h-5 group-hover:text-pink-600" />
+          <span>Back to Hello Shop</span>
+        </button>
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Product Image */}
@@ -169,11 +180,10 @@ const ProductPage = () => {
                 <button
                   onClick={handleAddToCart}
                   disabled={product.stock <= 0}
-                  className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${
-                    product.stock > 0
+                  className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${product.stock > 0
                       ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:shadow-xl'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Add to Cart
@@ -235,7 +245,7 @@ const ProductPage = () => {
                       ${(product.price + item * 2).toFixed(2)}
                     </span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => navigate(`/product/${100 + item}`)}
                     className="mt-4 w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium hover:opacity-90 transition-opacity"
                   >
