@@ -1,10 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Users, ShoppingBag, Mail, Settings, Activity, Home } from 'lucide-react';
+import { Users, ShoppingBag, Mail, Settings, Activity, Home,Package } from 'lucide-react';
 
 const navItems = [
   { path: '/admin', icon: Home, label: 'Dashboard' },
   { path: '/admin/activities', icon: Activity, label: 'Activities' },
   { path: '/admin/users', icon: Users, label: 'Users' },
+  { path: '/admin/products', icon: Package, label: 'Products' },
   { path: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
   { path: '/admin/contacts', icon: Mail, label: 'Contacts' },
 ];

@@ -10,7 +10,7 @@ const activitySchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['login', 'signup', 'product_add', 'product_update', 'order_placed', 'order_shipped', 'order_delivered', 'order_cancelled']
+    enum: ['login','product_images_add','product_image_delete', 'signup', 'product_add', 'product_update', 'order_placed', 'order_shipped', 'order_delivered', 'order_cancelled']
   },
   description: String,
   metadata: mongoose.Schema.Types.Mixed,

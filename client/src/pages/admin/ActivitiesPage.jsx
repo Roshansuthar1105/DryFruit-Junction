@@ -14,7 +14,6 @@ export default function ActivitiesPage() {
   const { data: activities, loading, error } = useAdminData('activities');
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-
   const filteredActivities = activities.filter(activity => {
     const matchesType = typeFilter === 'all' || activity.type === typeFilter;
     const matchesSearch = 

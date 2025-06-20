@@ -24,6 +24,11 @@ export function useAdminData(resource) {
           break;
         case 'activities':
           response = await api.fetchActivities();
+          console.log("activity resp: ",response);
+          break;
+        case 'products':
+          response = (await api.getProducts()).data;
+          console.log("prod resp: ",response);
           break;
         default:
           throw new Error('Invalid resource');

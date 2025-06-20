@@ -7,7 +7,18 @@ const useApi = () => {
   const getToken = () => localStorage.getItem('token');
 
   const getHeaders = () => ({
-    headers: { Authorization: `Bearer ${getToken()}` },
+    headers: { 
+      Authorization: `Bearer ${getToken()}`,
+      'Content-Type': 'application/json'
+    },
+  });
+
+  // Special headers for file uploads
+  const getMultipartHeaders = () => ({
+    headers: { 
+      Authorization: `Bearer ${getToken()}`,
+      'Content-Type': 'multipart/form-data'
+    },
   });
 
   return {
@@ -21,6 +32,35 @@ const useApi = () => {
       axios.put(`${BACKEND_API}/api/contact/${contactId}`, { status: newStatus }, getHeaders()),
     updateOrderStatus: (orderId, newStatus) =>
       axios.put(`${BACKEND_API}/api/orders/${orderId}`, { status: newStatus }, getHeaders()),
+    // Product methods
+    getProducts: () => axios.get(`${BACKEND_API}/api/products`, getHeaders()),
+    getProductById: (id) => axios.get(`${BACKEND_API}/api/products/${id}`, getHeaders()),
+    createProduct: (formData) => axios.post(
+      `${BACKEND_API}/api/products`, 
+      formData,
+      {
+        headers: { 
+          Authorization: `Bearer ${getToken()}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    ),
+    updateProduct: (id, data) => axios.put(`${BACKEND_API}/api/products/${id}`, data, getHeaders()),
+    deleteProduct: (id) => axios.delete(`${BACKEND_API}/api/products/${id}`, getHeaders()),
+    
+    // File upload methods - use multipart headers
+    uploadProductImages: (id, formData) => axios.post(
+      `${BACKEND_API}/api/products/${id}/images`, 
+      formData, 
+      getMultipartHeaders()
+    ),
+    deleteProductImage: (id, data) => axios.delete(
+      `${BACKEND_API}/api/products/${id}/images`, 
+      { 
+        data: { public_id: data.public_id }, // Send as public_id
+        ...getHeaders() 
+      }
+    ),
   };
 };
 
