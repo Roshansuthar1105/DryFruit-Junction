@@ -142,8 +142,8 @@ export default function UserDashboard() {
                     setMobileMenuOpen(false)
                   }}
                   className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'orders'
-                      ? 'bg-pink-50 text-pink-600'
-                      : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-pink-50 text-pink-600'
+                    : 'text-gray-700 hover:bg-gray-50'
                     }`}
                 >
                   <ShoppingBag className="h-4 w-4" />
@@ -155,8 +155,8 @@ export default function UserDashboard() {
                     setMobileMenuOpen(false)
                   }}
                   className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'favorites'
-                      ? 'bg-pink-50 text-pink-600'
-                      : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-pink-50 text-pink-600'
+                    : 'text-gray-700 hover:bg-gray-50'
                     }`}
                 >
                   <Heart className="h-4 w-4" />
@@ -168,8 +168,8 @@ export default function UserDashboard() {
                     setMobileMenuOpen(false)
                   }}
                   className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'account'
-                      ? 'bg-pink-50 text-pink-600'
-                      : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-pink-50 text-pink-600'
+                    : 'text-gray-700 hover:bg-gray-50'
                     }`}
                 >
                   <User className="h-4 w-4" />
@@ -204,8 +204,8 @@ export default function UserDashboard() {
               <button
                 onClick={() => setActiveTab('orders')}
                 className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders'
-                    ? 'bg-pink-50 text-pink-600'
-                    : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-pink-50 text-pink-600'
+                  : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <ShoppingBag className="h-5 w-5" />
@@ -214,8 +214,8 @@ export default function UserDashboard() {
               <button
                 onClick={() => setActiveTab('favorites')}
                 className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'favorites'
-                    ? 'bg-pink-50 text-pink-600'
-                    : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-pink-50 text-pink-600'
+                  : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <Heart className="h-5 w-5" />
@@ -224,8 +224,8 @@ export default function UserDashboard() {
               <button
                 onClick={() => setActiveTab('account')}
                 className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'account'
-                    ? 'bg-pink-50 text-pink-600'
-                    : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-pink-50 text-pink-600'
+                  : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <User className="h-5 w-5" />
@@ -264,8 +264,8 @@ export default function UserDashboard() {
                           <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                             <span
                               className={`px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium ${order.orderStatus === 'delivered'
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-yellow-100 text-yellow-800'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-yellow-100 text-yellow-800'
                                 }`}
                             >
                               {order.orderStatus || 'Processing'}
@@ -276,20 +276,34 @@ export default function UserDashboard() {
                           </div>
                         </div>
                         <div className="space-y-2 md:space-y-3">
-                          {order.orderItems.map((item, index) => (
-                            <div key={index} className="flex justify-between items-center">
-                              <div className="flex items-center space-x-3">
-                                <div className="bg-gray-100 w-10 h-10 md:w-12 md:h-12 rounded-lg" />
-                                <div>
-                                  <h4 className="font-medium text-gray-800 text-sm md:text-base">{item.name}</h4>
-                                  <p className="text-xs md:text-sm text-gray-500">Qty: {item.quantity}</p>
-                                </div>
-                              </div>
-                              <span className="text-gray-800 text-sm md:text-base">
-                                ₹{(item.price * item.quantity).toFixed(2)}
-                              </span>
-                            </div>
-                          ))}
+                        {order.orderItems.map((item, index) => {
+  // Find primary image or use first image
+  const displayImage = item.images?.find(img => img.isPrimary) || item.images?.[0];
+  
+  return (
+    <div key={index} className="flex justify-between items-center">
+      <div className="flex items-center space-x-3">
+        {displayImage ? (
+          <img 
+            src={displayImage.url} 
+            alt={displayImage.alt || item.name}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover"
+          />
+        ) : (
+          <div className="bg-gray-100 w-10 h-10 md:w-12 md:h-12 rounded-lg" />
+        )}
+        
+        <div>
+          <h4 className="font-medium text-gray-800 text-sm md:text-base">{item.name}</h4>
+          <p className="text-xs md:text-sm text-gray-500">Qty: {item.quantity}</p>
+        </div>
+      </div>
+      <span className="text-gray-800 text-sm md:text-base">
+        ₹{(item.price * item.quantity).toFixed(2)}
+      </span>
+    </div>
+  );
+})}
                         </div>
                       </div>
                     ))}
