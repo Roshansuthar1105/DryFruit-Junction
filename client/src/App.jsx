@@ -1,26 +1,29 @@
 // src/App.jsx
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
-import { CartProvider } from './context/CartContext'
-import { FavoritesProvider } from './context/FavoritesContext'
-import HomePage from './pages/HomePage'
-import FeaturedProducts from './components/featured-products'
-import About from './components/about'
-import Contact from './components/contact'
-import Header from './components/header'
-import Footer from './components/footer'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import UserDashboard from './pages/UserDashboard'
-import CartPage from './pages/CartPage'
-import CheckoutPage from './pages/CheckoutPage'
-import ProductsPage from './pages/ProductsPage'
-import ProtectedRoute from './components/ProtectedRoute'
-import ProductPage from './pages/ProductPage'
-import AdminDashboard from './pages/AdminDashboard'
-import DeliveryDashboard from './pages/DeliveryDashboard'
-import Toaster from 'react-hot-toast'
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import { FavoritesProvider } from './context/FavoritesContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Loading from './components/Loading';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Lazy load main components
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ProductsPage = lazy(() => import('./pages/ProductsPage'));
+const ProductPage = lazy(() => import('./pages/ProductPage'));
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const About = lazy(() => import('./components/about'));
+const Contact = lazy(() => import('./components/contact'));
+const UserDashboard = lazy(() => import('./pages/UserDashboard'));
+const DeliveryDashboard = lazy(() => import('./pages/DeliveryDashboard'));
+const AdminRoutes = lazy(() => import('./routes/AdminRoutes'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
 function App() {
   return (
     <div className="app">
@@ -29,46 +32,54 @@ function App() {
           <CartProvider>
             <FavoritesProvider>
               <Header />
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/products" element={<ProductsPage />} />
-                <Route path="/products/:id" element={<ProductPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/admin"
-                  element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <AdminDashboard />
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/products" element={<ProductsPage />} />
+                  <Route path="/products/:id" element={<ProductPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+
+                  {/* Protected Routes */}
+                  <Route path="/checkout" element={
+                    <ProtectedRoute allowedRoles={['user', 'admin','delivery']}>
+                      <CheckoutPage />
                     </ProtectedRoute>
-                  }
-                />
-                <Route path="/delivery"
-                  element={
+                  } />
+
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute allowedRoles={['user', 'admin', 'delivery']}>
+                      <UserDashboard />
+                    </ProtectedRoute>
+                  } />
+
+                  <Route path="/delivery" element={
                     <ProtectedRoute allowedRoles={['delivery']}>
                       <DeliveryDashboard />
                     </ProtectedRoute>
-                  }
-                  />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute allowedRoles={['delivery', 'user', 'admin']}>
-                      <UserDashboard />
+                  } />
+
+                  <Route path="/admin/*" element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminRoutes />
                     </ProtectedRoute>
-                  }
-                />
-              </Routes>
+                  } />
+
+                  {/* 404 Page */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
               <Footer />
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
       </Router>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
