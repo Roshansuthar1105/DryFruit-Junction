@@ -20,10 +20,10 @@ import ProtectedRoute from './components/ProtectedRoute'
 import ProductPage from './pages/ProductPage'
 import AdminDashboard from './pages/AdminDashboard'
 import DeliveryDashboard from './pages/DeliveryDashboard'
-
+import Toaster from 'react-hot-toast'
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Router>
         <AuthProvider>
           <CartProvider>
@@ -52,11 +52,11 @@ function App() {
                       <DeliveryDashboard />
                     </ProtectedRoute>
                   }
-                />
+                  />
                 <Route
                   path="/dashboard"
                   element={
-                    <ProtectedRoute allowedRoles={['delivery','user','admin']}>
+                    <ProtectedRoute allowedRoles={['delivery', 'user', 'admin']}>
                       <UserDashboard />
                     </ProtectedRoute>
                   }

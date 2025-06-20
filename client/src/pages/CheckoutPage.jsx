@@ -375,7 +375,7 @@ export default function CheckoutPage() {
                     Processing...
                   </>
                 ) : (
-                  `Place Order ($${cartTotal.toFixed(2)})`
+                  `Place Order (₹${cartTotal.toFixed(2)})`
                 )}
               </button>
             </form>
@@ -399,7 +399,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <span className="text-gray-800 font-medium">
-                    ${(parseFloat(typeof item.price === 'string' 
+                    ₹{(parseFloat(typeof item.price === 'string' 
         ? parseFloat(item.price.replace(/[^0-9.-]/g, '')) 
         : item.price) * item.quantity)}
                   </span>
@@ -410,7 +410,7 @@ export default function CheckoutPage() {
             <div className="border-t border-gray-200 mt-6 pt-6 space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="text-gray-800">${cartTotal.toFixed(2)}</span>
+                <span className="text-gray-800">₹{cartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Shipping</span>
@@ -418,7 +418,7 @@ export default function CheckoutPage() {
               </div>
               <div className="border-t border-gray-200 pt-4 flex justify-between">
                 <span className="text-lg font-bold text-gray-800">Total</span>
-                <span className="text-lg font-bold text-gray-800">${cartTotal.toFixed(2)}</span>
+                <span className="text-lg font-bold text-gray-800">₹{cartTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

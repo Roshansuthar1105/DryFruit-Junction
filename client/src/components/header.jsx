@@ -1,6 +1,6 @@
 // src/components/header.jsx
 import { useState } from "react"
-import { Menu, X, ShoppingBag, Heart, User, LogIn } from "lucide-react"
+import { Menu, X, ShoppingBag, Heart, User, LogIn, Home, Box, Truck, Settings } from "lucide-react";
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { useCart } from "../context/CartContext"
@@ -9,8 +9,11 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, logout } = useAuth()
   const { cartCount } = useCart()
+
+  const closeMenu = () => setIsMenuOpen(false)
+
   return (
-    <header className="bg-white/90 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <header className="bg-white/90 backdrop-blur-md shadow-lg sticky w-full left-0 top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
@@ -25,18 +28,12 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-              Home
+            <Link to="/" className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center">
+            Home
             </Link>
             <Link to="/products" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
               Products
             </Link>
-            {/* <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-              About
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-              Contact
-            </Link> */}
             {user?.role === 'admin' && (
               <Link to="/admin" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
                 Admin
@@ -60,7 +57,6 @@ export default function Header() {
                 >
                   Logout
                 </button>
-
               </div>
             ) : (
               <div className="flex items-center space-x-4">
@@ -68,9 +64,6 @@ export default function Header() {
                   <LogIn className="h-5 w-5 mr-1" />
                   Login
                 </Link>
-                {/* <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors">
-                  Sign Up
-                </Link> */}
               </div>
             )}
 
@@ -85,67 +78,115 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Mobile menu button */}
-          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          {/* Mobile Navigation Icons (Cart + Menu) */}
+          <div className="flex items-center space-x-4 md:hidden">
+            {/* Cart */}
+            <Link 
+              to="/cart" 
+              className="relative flex items-center text-gray-700 hover:text-pink-600 transition-colors"
+              onClick={closeMenu}
+            >
+              <ShoppingBag className="h-6 w-6" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+            
+            {/* Mobile menu button */}
+            <button 
+              className="p-2" 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col space-y-4">
-              <Link to="/" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                Home
+              <Link 
+                to="/" 
+                className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center "
+                onClick={closeMenu}
+              >
+                <Home className="h-5 w-5 mr-3" />
+            Home
               </Link>
-              <Link to="/products" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+              <Link 
+                to="/products" 
+                className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                onClick={closeMenu}
+              >
+                <Box className="h-5 w-5 mr-3" />
                 Products
               </Link>
-              {/* <Link to="/about" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                Contact
-              </Link> */}
 
               {/* Conditional auth links */}
               {user?.role === 'admin' && (
-                <Link to="/admin" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                  Admin
+                <Link 
+                  to="/admin" 
+                  className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                  onClick={closeMenu}
+                >
+                  <Settings className="h-5 w-5 mr-3" />
+                  Admin Pannel
                 </Link>
               )}
               {user?.role === 'delivery' && (
-                <Link to="/delivery" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                  Delivery
+                <Link 
+                  to="/delivery" 
+                  className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                  onClick={closeMenu}
+                >
+                  <Truck className="h-5 w-5 mr-3" />
+                  Delivery Pannel
                 </Link>
               )}
               {user ? (
                 <>
-                  <Link to="/dashboard" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                  <Link 
+                    to="/dashboard" 
+                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                    onClick={closeMenu}
+                  >
+                    <User className="h-5 w-5 mr-3"/>
                     My Account
                   </Link>
                   <button
-                    onClick={logout}
-                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium text-left"
+                    onClick={() => {
+                      logout()
+                      closeMenu()
+                    }}
+                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center text-left"
                   >
+                    <LogIn className="h-5 w-5 mr-3" />
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                  <Link 
+                    to="/login" 
+                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                    onClick={closeMenu}
+                  ><LogIn className="h-5 w-5 mr-3" />
                     Login
                   </Link>
-                  <Link to="/signup" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                  <Link 
+                    to="/signup" 
+                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center"
+                    onClick={closeMenu}
+                  >
+                    <User className="h-5 w-5 mr-3" />
                     Sign Up
                   </Link>
                 </>
               )}
-
-              <Link to="/cart" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                <ShoppingBag className="h-5 w-5 mr-2" />
-                Cart {cartCount > 0 && `(${cartCount})`}
-              </Link>
             </nav>
           </div>
         )}

@@ -1,13 +1,14 @@
 const User = require('../models/User');
 const generateToken = require('../config/jwt');
 const asyncHandler = require('express-async-handler');
+// In authController.js
+const { logActivity } = require('./activityController');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-  console.log("signup------> email and pass",firstName, lastName, email, password);
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -23,6 +24,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
+    // Add to registerUser after successful registration
+  await logActivity('signup', user._id, 'New user registered');
     res.status(201).json({
         user: {
           _id: user._id,
@@ -50,6 +53,9 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email }).select('+password');
 
   if (user && (await user.comparePassword(password))) {
+    
+// Add to loginUser after successful login
+await logActivity('login', user._id, 'User logged in');
     res.status(201).json({
       user: {
         _id: user._id,

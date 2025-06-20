@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className="relative py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
             <div className="space-y-4">
@@ -57,13 +57,13 @@ export default function Hero() {
 
           {/* Right Content - Hero Image */}
           <div className="relative">
-            <div className="relative z-10">
+            <div className="relative z-10 px-5">
               <img
                 src="https://images.unsplash.com/photo-1695568181747-f54dff1d4654?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW5kaWFuJTIwc3dlZXRzfGVufDB8fDB8fHww"
                 alt="Delicious handcrafted sweets and confections"
                 width={500}
                 height={600}
-                className="rounded-3xl shadow-2xl"
+                className="rounded-3xl shadow-2xl w-full"
               />
             </div>
             {/* Decorative elements */}

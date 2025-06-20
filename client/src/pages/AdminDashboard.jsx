@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, ShoppingBag, Mail, Settings } from 'lucide-react';
+import { Users, ShoppingBag, Mail, Settings, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -10,10 +10,12 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [activities,setActivities] = useState([]);
   const [loading, setLoading] = useState({
     users: false,
     orders: false,
-    contacts: false
+    contacts: false,
+    activities:false,
   });
   const [error, setError] = useState('');
 
@@ -24,6 +26,8 @@ export default function AdminDashboard() {
       fetchOrders();
     } else if (activeTab === 'contacts') {
       fetchContacts();
+    } else if (activeTab === 'activities') {
+      fetchActivities();
     }
   }, [activeTab]);
 
@@ -75,6 +79,22 @@ export default function AdminDashboard() {
       setLoading(prev => ({ ...prev, contacts: false }));
     }
   };
+  const fetchActivities = async () => {
+    setLoading(prev => ({ ...prev, activities: true }));
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BACKEND_API}/api/activities`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("resp",response)
+      setActivities(response.data);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch contacts');
+    } finally {
+      setLoading(prev => ({ ...prev, activities: false }));
+    }
+  };
 
   const updateUserRole = async (userId, newRole) => {
     try {
@@ -104,28 +124,23 @@ export default function AdminDashboard() {
     }
   };
 
+  // Update the updateOrderStatus function
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-
-      if (newStatus === 'delivered') {
-        await axios.put(
-          `${BACKEND_API}/api/orders/${orderId}/deliver`,
-          {}, // No body required
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        fetchOrders(); // Refresh list
-      } else {
-        alert("Only 'delivered' status can be updated from admin panel.");
-      }
+      await axios.put(
+        `${BACKEND_API}/api/orders/${orderId}`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      fetchOrders(); // Refresh list
     } catch (err) {
       console.error("❌ Order status update failed", err);
       setError(err.response?.data?.message || 'Failed to update order status');
     }
   };
-
 
   return (
     <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
@@ -134,9 +149,9 @@ export default function AdminDashboard() {
           {/* Sidebar */}
           <div className="bg-white/90 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-md p-6 h-fit sticky top-6 transition-all">
             <div className="flex items-center space-x-4 mb-8">
-            <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-12 h-12 rounded-full flex items-center justify-center">
-  <Settings className="h-6 w-6 text-white" />
-</div>
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-12 h-12 rounded-full flex items-center justify-center">
+                <Settings className="h-6 w-6 text-white" />
+              </div>
               <div>
                 <h3 className="font-bold text-gray-800">Admin Dashboard</h3>
                 <p className="text-sm text-gray-500">{user?.email}</p>
@@ -144,6 +159,14 @@ export default function AdminDashboard() {
             </div>
 
             <nav className="space-y-2">
+              <button
+                onClick={() => setActiveTab('activities')}
+                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'activities' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+              >
+                <Activity className="h-5 w-5" />
+                <span>Recent Activities</span>
+              </button>
               <button
                 onClick={() => setActiveTab('users')}
                 className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'users' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
@@ -211,8 +234,8 @@ export default function AdminDashboard() {
                             <td className="px-6 py-4 whitespace-nowrap text-gray-500">{user.email}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                                  user.role === 'delivery' ? 'bg-blue-100 text-blue-800' :
-                                    'bg-gray-100 text-gray-800'
+                                user.role === 'delivery' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-800'
                                 }`}>
                                 {user.role}
                               </span>
@@ -251,8 +274,8 @@ export default function AdminDashboard() {
                           <div className="mb-2">
                             <span className="text-gray-500 text-xs">Role:</span>
                             <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                                user.role === 'delivery' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-gray-100 text-gray-800'
+                              user.role === 'delivery' ? 'bg-blue-100 text-blue-800' :
+                                'bg-gray-100 text-gray-800'
                               }`}>
                               {user.role}
                             </span>
@@ -364,6 +387,37 @@ export default function AdminDashboard() {
                         </div>
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <p className="text-gray-800">{contact.message}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {activeTab === 'activities' && (
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-3xl font-extrabold text-gray-800 mb-8 border-b pb-4 border-gray-200">
+                  Recent Activities
+                </h2>
+                {loading.activities ? (
+                  <p className="text-gray-500">Loading activities...</p>
+                ) : (
+                  <div className="space-y-4">
+                    {activities.map((activity) => (
+                      <div key={activity._id} className="border-b border-gray-100 pb-4 last:border-0">
+                        <div className="flex justify-between">
+                          <div>
+                            <p className="font-medium">
+                              {activity.user ? `${activity.user.firstName} ${activity.user.lastName}` : 'System'}
+                            </p>
+                            <p className="text-sm text-gray-600">{activity.description}</p>
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {new Date(activity.createdAt).toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-500">
+                          {activity.type.replace('_', ' ')}
                         </div>
                       </div>
                     ))}

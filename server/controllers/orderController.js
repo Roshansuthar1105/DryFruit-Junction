@@ -115,17 +115,33 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     throw new Error('Order not found');
   }
 });
-const updateOrderStatus = async (req, res) => {
-  const order = await Order.findById(req.params.id);
-
-  if (order) {
-    order.orderStatus = req.body.status || order.orderStatus;
-    const updatedOrder = await order.save();
-    res.json(updatedOrder);
-  } else {
-    res.status(404).json({ message: 'Order not found' });
+// Update the updateOrderStatus function
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  const validStatuses = ['processing', 'shipped', 'delivered', 'cancelled'];
+  
+  if (!validStatuses.includes(status)) {
+    res.status(400);
+    throw new Error('Invalid status value');
   }
-};
+
+  const order = await Order.findById(req.params.id);
+  
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  // Additional business logic checks if needed
+  if (status === 'delivered') {
+    order.deliveredAt = Date.now();
+  }
+
+  order.orderStatus = status;
+  const updatedOrder = await order.save();
+  
+  res.json(updatedOrder);
+});
 
 module.exports = {
   createOrder,
