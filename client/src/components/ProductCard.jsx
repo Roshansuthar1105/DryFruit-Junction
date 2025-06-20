@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
           <img
             src={product?.images?.[0]?.url}
             alt={product?.images?.[0]?.alt || product.name}
-            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-300"
           />
         </Link>
         <div className="absolute top-4 left-4">

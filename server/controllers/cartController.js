@@ -5,11 +5,17 @@ const asyncHandler = require('express-async-handler');
 // @desc    Get user cart
 // @route   GET /api/cart
 // @access  Private
+// Update the getCart controller to properly populate images
 const getCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user._id }).populate(
-    'items.product',
-    'name price image images description stock category'
-  );
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'items.product',
+    select: 'name price images description stock category',
+    populate: {
+      path: 'images',
+      select: 'url alt'
+    }
+  });
+  
   if (!cart) {
     return res.json({ items: [] });
   }

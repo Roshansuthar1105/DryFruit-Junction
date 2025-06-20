@@ -17,33 +17,31 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   // 🔄 Load cart on login/logout
+  // Update the fetchCart function to properly handle images
+const fetchCart = async () => {
+  const token = localStorage.getItem('token');
+  if (user && token) {
+    try {
+      const response = await axios.get(`${BACKEND_API}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const serverCart = (response.data.items || []).map(item => ({
+        ...item.product,
+        images: item.product.images, // Ensure images are included
+        quantity: item.quantity,
+        _id: item.product._id,
+        itemId: item._id,
+      }));
+
+      setCart(serverCart);
+      localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
+    } catch (err) {
+      console.error('❌ Fetching cart failed:', err);
+    }
+  }
+};
   useEffect(() => {
-    const fetchCart = async () => {
-      const token = localStorage.getItem('token');
-
-      if (user && token) {
-        try {
-          const response = await axios.get(`${BACKEND_API}/api/cart`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          const serverCart = (response.data.items || []).map(item => ({
-            ...item.product,
-            quantity: item.quantity,
-            _id: item.product._id,
-            itemId: item._id,
-          }));
-
-          setCart(serverCart);
-          localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
-        } catch (err) {
-          console.error('❌ Fetching cart failed:', err);
-        }
-      } else {
-        const guestCart = localStorage.getItem('sweetDelightsCart');
-        setCart(guestCart ? JSON.parse(guestCart) : []);
-      }
-    };
 
     fetchCart();
   }, [user]);

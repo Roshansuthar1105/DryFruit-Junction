@@ -1,11 +1,11 @@
 // src/components/contact.jsx
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react";
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 export default function Contact() {
-  const { BACKEND_API } = useAuth();
+  const { BACKEND_API,user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,7 +15,11 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState('');
-
+  useEffect(()=>{
+    if(user){
+      setFormData(prev => ({ ...prev, name:`${user?.firstName} ${user?.lastName}`,email:user?.email }));  
+    }
+  },[user]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -167,6 +171,7 @@ export default function Contact() {
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                       placeholder="Your name"
+                      disabled={user?.firstName}
                       required
                     />
                   </div>
@@ -183,6 +188,7 @@ export default function Contact() {
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                       placeholder="your.email@example.com"
                       required
+                      disabled={user?.email}
                     />
                   </div>
                 </div>

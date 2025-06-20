@@ -12,7 +12,7 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const userRoutes = require('./routes/userRoutes');
-
+const activityRoutes = require('./routes/activityRoutes');
 // Connect to database
 connectDB();
 
@@ -36,8 +36,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
-// Add to app.js after other route imports
-
+app.use('/api/activities', activityRoutes);
 // Mount routers (add this after other router mounts)
 // Error handler middleware
 // app.use(errorHandler);

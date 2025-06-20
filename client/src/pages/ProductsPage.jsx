@@ -179,10 +179,10 @@ export default function ProductsPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-
+            <div className='flex flex-row gap-4 w-full md:w-fit justify-between' >
             {/* Sort */}
             <div className="flex items-center space-x-2">
-              <label htmlFor="sort" className="text-sm font-medium text-gray-700">
+              <label htmlFor="sort" className="text-sm font-medium text-gray-700" >
                 Sort by:
               </label>
               <select
@@ -198,11 +198,11 @@ export default function ProductsPage() {
                 <option value="name">Name</option>
               </select>
             </div>
-
+  
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center space-x-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition-colors"
+              className="flex items-center justify-end space-x-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition-colors"
             >
               <Filter className="h-5 w-5" />
               <span>Filters</span>
@@ -212,6 +212,7 @@ export default function ProductsPage() {
                 <ChevronDown className="h-5 w-5" />
               )}
             </button>
+            </div>
           </div>
 
           {/* Expanded Filters */}

@@ -1,8 +1,9 @@
 // src/pages/Login.jsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const {login}=useAuth();
@@ -11,7 +12,6 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -20,8 +20,10 @@ const Login = () => {
     const result = await login(email, password); // ✅ use context method
   
     if (result.success) {
+      toast.success("Loggend In Successfully");
       navigate('/'); // ✅ reactivity ensured via context
     } else {
+      toast.error("Error : ",result.message);
       setError(result.message); // ✅ error from context
     }
   
