@@ -17,10 +17,15 @@ export default function DashboardPage() {
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
+      <div className="sticky top-0 z-10 bg-white pt-4 pb-4 -mt-6 -mx-6 px-6 border-b border-gray-200">
+
       <h2 className="text-3xl font-extrabold text-gray-800 mb-8 border-b pb-4 border-gray-200">
         Admin Dashboard
       </h2>
       
+      </div>
+      <div className='mt-6' >
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
           <DataCard
@@ -40,6 +45,7 @@ export default function DashboardPage() {
       </div>
       
       {/* Add more dashboard components here */}
+    </div>
     </div>
   );
 }

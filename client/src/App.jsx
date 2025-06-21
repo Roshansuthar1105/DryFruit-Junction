@@ -1,6 +1,5 @@
-// src/App.jsx
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
@@ -24,6 +23,21 @@ const DeliveryDashboard = lazy(() => import('./pages/DeliveryDashboard'));
 const AdminRoutes = lazy(() => import('./routes/AdminRoutes'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
+// Create a wrapper component to handle layout
+const LayoutWrapper = ({ children }) => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isDeliveryRoute = location.pathname.startsWith('/delivery');
+
+  return (
+    <>
+      {!isAdminRoute && !isDeliveryRoute && <Header />}
+      {children}
+      {!isAdminRoute && !isDeliveryRoute && <Footer />}
+    </>
+  );
+};
+
 function App() {
   return (
     <div className="app">
@@ -31,30 +45,63 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Header />
               <Suspense fallback={<Loading />}>
                 <Routes>
                   {/* Public Routes */}
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/products" element={<ProductsPage />} />
-                  <Route path="/products/:id" element={<ProductPage />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/" element={
+                    <LayoutWrapper>
+                      <HomePage />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/products" element={
+                    <LayoutWrapper>
+                      <ProductsPage />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/products/:id" element={
+                    <LayoutWrapper>
+                      <ProductPage />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/login" element={
+                    <LayoutWrapper>
+                      <Login />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/signup" element={
+                    <LayoutWrapper>
+                      <Signup />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/cart" element={
+                    <LayoutWrapper>
+                      <CartPage />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/about" element={
+                    <LayoutWrapper>
+                      <About />
+                    </LayoutWrapper>
+                  } />
+                  <Route path="/contact" element={
+                    <LayoutWrapper>
+                      <Contact />
+                    </LayoutWrapper>
+                  } />
 
                   {/* Protected Routes */}
                   <Route path="/checkout" element={
-                    <ProtectedRoute allowedRoles={['user', 'admin','delivery']}>
-                      <CheckoutPage />
-                    </ProtectedRoute>
+                    <LayoutWrapper>
+                      <ProtectedRoute allowedRoles={['user', 'admin', 'delivery']}>
+                        <CheckoutPage />
+                      </ProtectedRoute>
+                    </LayoutWrapper>
                   } />
 
                   <Route path="/dashboard" element={
-                    <ProtectedRoute allowedRoles={['user', 'admin', 'delivery']}>
+                    <LayoutWrapper>
                       <UserDashboard />
-                    </ProtectedRoute>
+                    </LayoutWrapper>
                   } />
 
                   <Route path="/delivery" element={
@@ -70,10 +117,13 @@ function App() {
                   } />
 
                   {/* 404 Page */}
-                  <Route path="*" element={<NotFound />} />
+                  <Route path="*" element={
+                    <LayoutWrapper>
+                      <NotFound />
+                    </LayoutWrapper>
+                  } />
                 </Routes>
               </Suspense>
-              <Footer />
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

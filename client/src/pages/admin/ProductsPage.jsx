@@ -139,7 +139,8 @@ export default function ProductsPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
+    <div className="bg-white rounded-2xl shadow-lg p-6 min-h-screen">
+      <div className="sticky top-0 z-10 bg-white pt-4 pb-4 -mt-6 -mx-6 px-6 border-b border-gray-200">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b pb-4 border-gray-200 gap-4">
         <h2 className="text-3xl font-extrabold text-gray-800">Product Management</h2>
         <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
@@ -172,7 +173,8 @@ export default function ProductsPage() {
           </button>
         </div>
       </div>
-
+      </div>
+      <div className="mt-6">
       {error && <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
 
       {loading ? (
@@ -232,6 +234,7 @@ export default function ProductsPage() {
           </div>
         </>
       )}
+      </div>
 
       <ProductFormModal
         isOpen={isFormOpen}

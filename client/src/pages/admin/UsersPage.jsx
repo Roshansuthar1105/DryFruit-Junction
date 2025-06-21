@@ -47,7 +47,8 @@ export default function UsersPage() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
+    <div className="bg-white rounded-2xl shadow-lg p-6 min-h-screen">
+      <div className="sticky top-0 z-10 bg-white pt-4 pb-4 -mt-6 -mx-6 px-6 border-b border-gray-200">
       <div className="flex justify-between items-center mb-8 border-b pb-4 border-gray-200 sm:flex-row flex-col">
         <h2 className="text-3xl font-extrabold text-gray-800 mb-5 sm:mb-0">User Management</h2>
         <input
@@ -58,6 +59,8 @@ export default function UsersPage() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+      </div>
+    <div className='mt-6'>
 
       {error && <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
       
@@ -97,6 +100,8 @@ export default function UsersPage() {
           </div>
         </>
       )}
+    </div>
+
     </div>
   );
 }
