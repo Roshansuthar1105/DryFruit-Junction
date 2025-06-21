@@ -1,7 +1,7 @@
-import Hero from "../components/hero"
-import FeaturedProducts from "../components/featured-products"
-import About from "../components/about"
-import Contact from "../components/contact"
+import Hero from "../components/Hero"
+import FeaturedProducts from "../components/Featured-products"
+import About from "../components/About"
+import Contact from "../components/Contact"
 import ProductsPage from "./ProductsPage"
 
 export default function HomePage() {
