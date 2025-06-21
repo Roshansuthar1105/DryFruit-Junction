@@ -1,6 +1,6 @@
 import { Star, Award, Clock } from "lucide-react"
-// import Image from "next/image"
-
+import { Link } from "react-router-dom";
+// Update Hero.jsx
 export default function Hero() {
   return (
     <section className="relative py-20 overflow-hidden">
@@ -10,15 +10,15 @@ export default function Hero() {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-pink-600 to-pink-800 bg-clip-text text-transparent">
                   Handcrafted
                 </span>
                 <br />
-                <span className="text-gray-800">Sweet Delights</span>
+                <span className="text-gray-800">Dry Fruit Delights</span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Indulge in our artisan-made confections, crafted with premium ingredients and generations of family
-                recipes. Every bite tells a story of passion and tradition.
+                Indulge in our artisan-made dry fruit sweets, crafted with premium ingredients and generations of family
+                recipes from Jodhpur. Every bite tells a story of passion and tradition.
               </p>
             </div>
 
@@ -28,30 +28,30 @@ export default function Hero() {
                 <div className="bg-pink-100 p-2 rounded-full">
                   <Award className="h-5 w-5 text-pink-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Award Winning</span>
+                <span className="text-gray-700 font-medium">Premium Quality</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-orange-100 p-2 rounded-full">
-                  <Star className="h-5 w-5 text-orange-600" />
+                <div className="bg-pink-100 p-2 rounded-full">
+                  <Star className="h-5 w-5 text-pink-600" />
                 </div>
-                <span className="text-gray-700 font-medium">5-Star Rated</span>
+                <span className="text-gray-700 font-medium">100% Natural</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-green-100 p-2 rounded-full">
-                  <Clock className="h-5 w-5 text-green-600" />
+                <div className="bg-pink-100 p-2 rounded-full">
+                  <Clock className="h-5 w-5 text-pink-600" />
                 </div>
-                <span className="text-gray-700 font-medium">Fresh Daily</span>
+                <span className="text-gray-700 font-medium">Made Fresh</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <Link to="/products" className="bg-gradient-to-r from-pink-500 to-pink-700 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
                 Shop Our Sweets
-              </button>
-              <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
-                View Menu
-              </button>
+              </Link>
+              <Link to="/about" className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-pink-500 hover:text-pink-600 transition-all duration-300 text-center">
+                Our Story
+              </Link>
             </div>
           </div>
 
@@ -59,16 +59,16 @@ export default function Hero() {
           <div className="relative">
             <div className="relative z-10 px-5">
               <img
-                src="https://images.unsplash.com/photo-1695568181747-f54dff1d4654?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW5kaWFuJTIwc3dlZXRzfGVufDB8fDB8fHww"
-                alt="Delicious handcrafted sweets and confections"
+                src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJ5JTIwZnJ1aXQlMjBzd2VldHN8ZW58MHx8MHx8fDA%3D"
+                alt="Premium dry fruit sweets from DryFruit Junction"
                 width={500}
                 height={600}
                 className="rounded-3xl shadow-2xl w-full"
               />
             </div>
             {/* Decorative elements */}
-            <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-r from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
-            <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-r from-pink-200 to-pink-300 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-gradient-to-r from-pink-100 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
           </div>
         </div>
       </div>

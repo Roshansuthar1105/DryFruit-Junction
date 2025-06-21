@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 export default function Contact() {
-  const { BACKEND_API,user } = useAuth();
+  const { BACKEND_API, user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,11 +15,11 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState('');
-  useEffect(()=>{
-    if(user){
-      setFormData(prev => ({ ...prev, name:`${user?.firstName} ${user?.lastName}`,email:user?.email }));  
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({ ...prev, name: `${user?.firstName} ${user?.lastName}`, email: user?.email }));
     }
-  },[user]);
+  }, [user]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -58,14 +58,13 @@ export default function Contact() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-            Visit Our{" "}
-            <span className="bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-              Sweet Shop
+            Contact{" "}
+            <span className="bg-gradient-to-r from-pink-600 to-pink-800 bg-clip-text text-transparent">
+              DryFruit Junction
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Come experience our confections in person, or get in touch to place a custom order for your special
-            occasion.
+            Have questions about our dry fruit sweets or want to place a custom order? Get in touch with our team in Jodhpur.
           </p>
         </div>
 
@@ -78,13 +77,13 @@ export default function Contact() {
                   <MapPin className="h-6 w-6 text-pink-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Visit Our Store</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Our Kitchen</h3>
                   <p className="text-gray-600">
-                    123 Sweet Street
+                  Family Kitchen
                     <br />
-                    Confectionery District
+                    Jodhpur, Rajasthan
                     <br />
-                    Sweet City, SC 12345
+                    India
                   </p>
                 </div>
               </div>
@@ -133,7 +132,7 @@ export default function Contact() {
             </div>
           </div>
           {/* Contact Form */}
-          <div className="bg-gradient-to-br from-pink-50 to-orange-50 p-8 rounded-3xl">
+          <div className="bg-gradient-to-br from-pink-50/20 to-orange-50/20 p-8 rounded-3xl">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h3>
 
             {submitSuccess ? (
@@ -237,8 +236,8 @@ export default function Contact() {
               </form>
             )}
           </div>
-          </div>
         </div>
+      </div>
     </section>
   )
 }

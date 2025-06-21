@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const {login}=useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,59 +16,59 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-  
+
     const result = await login(email, password); // ✅ use context method
-  
+
     if (result.success) {
       toast.success("Loggend In Successfully");
       navigate('/'); // ✅ reactivity ensured via context
     } else {
-      toast.error("Error : ",result.message);
+      toast.error("Error : ", result.message);
       setError(result.message); // ✅ error from context
     }
-  
+
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-pink-50 flex items-center justify-center p-8">
       <div className="max-w-4xl w-full bg-white rounded-lg shadow-md overflow-hidden">
         <div className="md:flex">
           {/* Left side - Brand Story */}
-          <div className="md:w-1/2 bg-gradient-to-b from-amber-100 to-amber-50 p-12 flex flex-col justify-center">
-            <h1 className="text-3xl font-serif font-bold text-amber-900 mb-6">Our Sweet Story</h1>
-            <p className="text-amber-800 mb-6 leading-relaxed">
-              For over three generations, our family has been crafting exceptional
-              confections that bring joy to every celebration. What started as a small
-              kitchen operation has grown into a beloved local institution.
+          <div className="md:w-1/2 bg-gradient-to-b from-orange-50 to-pink-50 p-12 flex flex-col justify-center">
+            <h1 className="text-3xl font-serif font-bold text-pink-900 mb-6">Our Journey</h1>
+            <p className="text-pink-800 mb-6 leading-relaxed">
+              From a small family kitchen in Jodhpur to serving dry fruit sweets across India,
+              our journey has been about bringing back the authentic taste of traditional mithai
+              with premium ingredients and no compromises.
             </p>
-            
+
             <div className="flex justify-between mt-8">
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-700">10,000+</p>
-                <p className="text-amber-600">Happy Customers</p>
+                <p className="text-4xl font-bold text-pink-700">100%</p>
+                <p className="text-pink-600">Natural Ingredients</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-700">25+</p>
-                <p className="text-amber-600">Awards Won</p>
+                <p className="text-4xl font-bold text-pink-700">7 Days</p>
+                <p className="text-pink-600">Pan-India Delivery</p>
               </div>
             </div>
           </div>
-          
+
           {/* Right side - Login Form */}
           <div className="md:w-1/2 p-12">
-            <h2 className="text-2xl font-serif font-bold text-amber-900 mb-2">Welcome Back</h2>
-            <p className="text-amber-600 mb-8">Sign in to your sweet account</p>
-            
+            <h2 className="text-2xl font-serif font-bold text-pink-900 mb-2">Welcome Back</h2>
+            <p className="text-pink-600 mb-8">Sign in to your sweet account</p>
+
             {error && (
               <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">
                 {error}
               </div>
             )}
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-amber-800 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-pink-800 mb-1">
                   Email Address
                 </label>
                 <input
@@ -76,13 +76,13 @@ const Login = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-amber-800 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-pink-800 mb-1">
                   Password
                 </label>
                 <input
@@ -90,35 +90,35 @@ const Login = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                   required
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-amber-300 rounded"
+                    className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-amber-700">
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-pink-700">
                     Remember me
                   </label>
                 </div>
-                
+
                 <div className="text-sm">
-                  <Link to="/forgot-password" className="font-medium text-amber-600 hover:text-amber-500">
+                  <Link to="/forgot-password" className="font-medium text-pink-600 hover:text-pink-500">
                     Forgot password?
                   </Link>
                 </div>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-70"
+                className="w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -131,11 +131,11 @@ const Login = () => {
                 ) : 'Sign In'}
               </button>
             </form>
-            
+
             <div className="mt-8 text-center">
-              <p className="text-sm text-amber-700">
+              <p className="text-sm text-pink-700">
                 Don't have an account?{' '}
-                <Link to="/signup" className="font-medium text-amber-600 hover:text-amber-500">
+                <Link to="/signup" className="font-medium text-pink-600 hover:text-pink-500">
                   Sign up
                 </Link>
               </p>

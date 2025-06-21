@@ -3,7 +3,7 @@ import Header from "../components/header"
 import Footer from "../components/footer"
 
 export const metadata = {
-  title: "Sweet Delights - Local Artisan Sweets",
+  title: "DryFruit Junction - Local Artisan Sweets",
   description: "Handcrafted sweets and confections made with love in your local community",
     generator: 'v0.dev'
 }

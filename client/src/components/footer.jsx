@@ -2,6 +2,7 @@
 import { Heart, Facebook, Instagram, Twitter, Mail } from "lucide-react"
 import { Link } from "react-router-dom"
 
+// Footer.jsx
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
@@ -10,15 +11,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-to-r from-pink-500 to-orange-500 p-2 rounded-full">
+              <div className="bg-gradient-to-r from-pink-500 to-pink-700 p-2 rounded-full">
                 <Heart className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent">
-                Sweet Delights
+              <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">
+                DryFruit Junction
               </span>
             </Link>
             <p className="text-gray-400 leading-relaxed">
-              Crafting exceptional confections with love and tradition for over three generations.
+              Crafting exceptional dry fruit sweets with love and tradition from the heart of Rajasthan.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-pink-600 transition-colors">
@@ -60,11 +61,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/catering" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Catering
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -73,27 +69,27 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Our Sweets</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/chocolates" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Chocolates
+                <Link to="/products/6856ca7e1e56cf367abff549" className="text-gray-400 hover:text-pink-400 transition-colors">
+                  Kaju Katli
                 </Link>
               </li>
               <li>
-                <Link to="/macarons" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Macarons
+                <Link to="/products/6856c9511e56cf367abff535" className="text-gray-400 hover:text-pink-400 transition-colors">
+                  Mango Kaju Katli
                 </Link>
               </li>
               <li>
-                <Link to="/fudge" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Fudge
+                <Link to="/products/6856c4911e56cf367abff3f1" className="text-gray-400 hover:text-pink-400 transition-colors">
+                  Strawberry Kaju Katli
                 </Link>
               </li>
               <li>
-                <Link to="/bonbons" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Bonbons
+                <Link to="/products/6856cbb11e56cf367abff555" className="text-gray-400 hover:text-pink-400 transition-colors">
+                  Panch Mewa Burfi
                 </Link>
               </li>
               <li>
-                <Link to="/custom" className="text-gray-400 hover:text-pink-400 transition-colors">
+                <Link to="/contact" className="text-gray-400 hover:text-pink-400 transition-colors">
                   Custom Orders
                 </Link>
               </li>
@@ -104,17 +100,16 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-2 text-gray-400">
-              <p>123 Sweet Street</p>
-              <p>Sweet City, SC 12345</p>
-              <p>(555) 123-SWEET</p>
-              <p>hello@sweetdelights.com</p>
+              <p>Family Kitchen, Jodhpur</p>
+              <p>Rajasthan, India</p>
+              <p>+91 XXXXX XXXXX</p>
+              <p>hello@dryfruitjunction.com</p>
             </div>
             <div className="mt-4">
-              <h4 className="font-semibold text-white mb-2">Store Hours</h4>
+              <h4 className="font-semibold text-white mb-2">Order Hours</h4>
               <div className="text-sm text-gray-400 space-y-1">
-                <p>Mon-Fri: 8AM - 8PM</p>
-                <p>Sat: 9AM - 9PM</p>
-                <p>Sun: 10AM - 6PM</p>
+                <p>Mon-Sun: 8AM - 8PM</p>
+                <p>Fresh sweets made after every order</p>
               </div>
             </div>
           </div>
@@ -122,16 +117,13 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Sweet Delights. All rights reserved.</p>
+          <p className="text-gray-400 text-sm">© {new Date().getFullYear()} DryFruit Junction. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-gray-400 hover:text-pink-400 text-sm transition-colors">
               Privacy Policy
             </Link>
             <Link to="/terms" className="text-gray-400 hover:text-pink-400 text-sm transition-colors">
               Terms of Service
-            </Link>
-            <Link to="/cookies" className="text-gray-400 hover:text-pink-400 text-sm transition-colors">
-              Cookie Policy
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import {  Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
@@ -7,6 +7,7 @@ import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import Loading from './components/Loading.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ScrollToTopButton from './components/ScrollToTopButton.jsx';
 
 // Lazy load main components
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -39,13 +40,23 @@ const LayoutWrapper = ({ children }) => {
 };
 
 function App() {
+  const location = useLocation();
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: adds smooth scrolling animation
+    });
+  }, [location.pathname]); // Trigger effect when pathname changes
+
   return (
     <div className="app">
-      <Router>
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
               <Suspense fallback={<Loading />}>
+              <ScrollToTopButton/>
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={
@@ -127,7 +138,6 @@ function App() {
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
-      </Router>
     </div>
   );
 }

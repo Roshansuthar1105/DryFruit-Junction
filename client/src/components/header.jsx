@@ -22,7 +22,7 @@ export default function Header() {
               <Heart className="h-6 w-6 text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-              Sweet Delights
+              DryFruit Junction
             </span>
           </Link>
 

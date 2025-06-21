@@ -29,70 +29,69 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-  
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
-  
+
     const result = await register({
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       password: formData.password
     });
-  
+
     if (result.success) {
       navigate('/');
     } else {
       setError(result.message);
     }
-  
+
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-pink-50 flex items-center justify-center p-8">
       <div className="max-w-4xl w-full bg-white rounded-lg shadow-md overflow-hidden">
         <div className="md:flex">
           {/* Left side - Brand Story */}
-          <div className="md:w-1/2 bg-gradient-to-b from-amber-100 to-amber-50 p-12 flex flex-col justify-center">
-            <h1 className="text-3xl font-serif font-bold text-amber-900 mb-6">Our Sweet Story</h1>
-            <p className="text-amber-800 mb-6 leading-relaxed">
-              Every sweet we create is made with premium ingredients sourced from
-              trusted suppliers, combined with time-honored techniques passed down
-              through our family. We believe that the best confections come from the
-              heart, and that's exactly what you'll taste in every bite.
+          <div className="md:w-1/2 bg-gradient-to-b from-orange-50 to-pink-50 p-12 flex flex-col justify-center">
+            <h1 className="text-3xl font-serif font-bold text-pink-900 mb-6">Our Journey</h1>
+            <p className="text-pink-800 mb-6 leading-relaxed">
+              From a small family kitchen in Jodhpur to serving dry fruit sweets across India,
+              our journey has been about bringing back the authentic taste of traditional mithai
+              with premium ingredients and no compromises.
             </p>
-            
+
             <div className="flex justify-between mt-8">
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-700">10,000+</p>
-                <p className="text-amber-600">Happy Customers</p>
+                <p className="text-4xl font-bold text-pink-700">100%</p>
+                <p className="text-pink-600">Natural Ingredients</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-700">25+</p>
-                <p className="text-amber-600">Awards Won</p>
+                <p className="text-4xl font-bold text-pink-700">7 Days</p>
+                <p className="text-pink-600">Pan-India Delivery</p>
               </div>
             </div>
           </div>
-          
+
           {/* Right side - Signup Form */}
           <div className="md:w-1/2 p-12">
-            <h2 className="text-2xl font-serif font-bold text-amber-900 mb-2">Join Our Family</h2>
-            <p className="text-amber-600 mb-8">Create your sweet account</p>
-            
+            <h2 className="text-2xl font-serif font-bold text-pink-900 mb-2">Join Our Family</h2>
+            <p className="text-pink-600 mb-8">Create your sweet account</p>
+
             {error && (
               <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">
                 {error}
               </div>
             )}
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-amber-800 mb-1">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-pink-800 mb-1">
                     First Name
                   </label>
                   <input
@@ -101,13 +100,13 @@ const Signup = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                     required
                   />
                 </div>
-                
+
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-amber-800 mb-1">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-pink-800 mb-1">
                     Last Name
                   </label>
                   <input
@@ -116,14 +115,14 @@ const Signup = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                     required
                   />
                 </div>
               </div>
-              
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-amber-800 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-pink-800 mb-1">
                   Email Address
                 </label>
                 <input
@@ -132,13 +131,13 @@ const Signup = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-amber-800 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-pink-800 mb-1">
                   Password
                 </label>
                 <input
@@ -147,14 +146,14 @@ const Signup = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                   required
                   minLength="6"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-amber-800 mb-1">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-pink-800 mb-1">
                   Confirm Password
                 </label>
                 <input
@@ -163,29 +162,29 @@ const Signup = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-amber-200 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-4 py-2 border border-pink-200 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                   required
                   minLength="6"
                 />
               </div>
-              
+
               <div className="flex items-center">
                 <input
                   id="terms"
                   name="terms"
                   type="checkbox"
-                  className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-amber-300 rounded"
+                  className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
                   required
                 />
-                <label htmlFor="terms" className="ml-2 block text-sm text-amber-700">
-                  I agree to the <Link to="/terms" className="text-amber-600 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-amber-600 hover:underline">Privacy Policy</Link>
+                <label htmlFor="terms" className="ml-2 block text-sm text-pink-700">
+                  I agree to the <Link to="/terms" className="text-pink-600 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-pink-600 hover:underline">Privacy Policy</Link>
                 </label>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-6 bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-70"
+                className="w-full mt-6 bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -198,11 +197,11 @@ const Signup = () => {
                 ) : 'Create Account'}
               </button>
             </form>
-            
+
             <div className="mt-6 text-center">
-              <p className="text-sm text-amber-700">
+              <p className="text-sm text-pink-700">
                 Already have an account?{' '}
-                <Link to="/login" className="font-medium text-amber-600 hover:text-amber-500">
+                <Link to="/login" className="font-medium text-pink-600 hover:text-pink-500">
                   Sign in
                 </Link>
               </p>

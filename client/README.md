@@ -1,7 +1,7 @@
 
-# 🍬 Sweet Delights Admin Dashboard
+# 🍬 DryFruit Junction Admin Dashboard
 
-A modern, responsive admin dashboard built with **React**, **Tailwind CSS**, and **Vite**, designed to manage users, orders, and contact submissions for the Sweet Delights sweets e-commerce platform.
+A modern, responsive admin dashboard built with **React**, **Tailwind CSS**, and **Vite**, designed to manage users, orders, and contact submissions for the DryFruit Junction sweets e-commerce platform.
 
 ## 🚀 Features
 
@@ -75,4 +75,4 @@ MIT
 
 ---
 
-Crafted with 💖 by the Sweet Delights Team
+Crafted with 💖 by the DryFruit Junction Team

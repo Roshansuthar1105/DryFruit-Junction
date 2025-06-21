@@ -7,57 +7,6 @@ import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 
-// Mock product data (replace with API fetch in real app)
-const allProducts = [
-    {
-      id: 1,
-      name: "Chocolate Truffles",
-      description: "Rich, velvety chocolate truffles dusted with cocoa powder",
-      price: "$24.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Chocolates",
-    },
-    {
-      id: 2,
-      name: "Artisan Macarons",
-      description: "Delicate French macarons in assorted flavors",
-      price: "$18.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Macarons",
-    },
-    {
-      id: 3,
-      name: "Gourmet Fudge",
-      description: "Creamy homemade fudge with premium ingredients",
-      price: "$16.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Fudge",
-    },
-    {
-      id: 4,
-      name: "Caramel Bonbons",
-      description: "Smooth caramel centers wrapped in fine chocolate",
-      price: "$22.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Bonbons",
-    },
-    {
-      id: 5,
-      name: "Fruit Jellies",
-      description: "Natural fruit jellies bursting with real fruit flavors",
-      price: "$14.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Jellies",
-    },
-    {
-      id: 6,
-      name: "Praline Collection",
-      description: "Assorted pralines with nuts and caramel",
-      price: "$26.99",
-      image: "https://picsum.photos/id/11/2500/1667",
-      category: "Pralines",
-    },
-  ]
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([])
@@ -82,6 +31,7 @@ export default function ProductsPage() {
           // },
         });
         setProducts(response.data.data);
+        console.log(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);
       }
@@ -91,7 +41,7 @@ export default function ProductsPage() {
   }, [searchTerm, filters, sortOption]);
   // Filter and sort products
   useEffect(() => {
-    let result = [...allProducts]
+    let result = [...products]
     
     // Apply search
     if (searchTerm) {
@@ -164,9 +114,8 @@ export default function ProductsPage() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="mb-8 bg-white rounded-2xl shadow-lg p-4">
+        {/* <div className="mb-8 bg-white rounded-2xl shadow-lg p-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Search */}
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400" />
@@ -180,7 +129,6 @@ export default function ProductsPage() {
               />
             </div>
             <div className='flex flex-row gap-4 w-full md:w-fit justify-between' >
-            {/* Sort */}
             <div className="flex items-center space-x-2">
               <label htmlFor="sort" className="text-sm font-medium text-gray-700" >
                 Sort by:
@@ -199,7 +147,6 @@ export default function ProductsPage() {
               </select>
             </div>
   
-            {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center justify-end space-x-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition-colors"
@@ -215,10 +162,8 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Expanded Filters */}
           {showFilters && (
             <div className="mt-6 pt-6 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Category Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <select
@@ -234,7 +179,6 @@ export default function ProductsPage() {
                 </select>
               </div>
 
-              {/* Price Range */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
                 <div className="flex space-x-2">
@@ -255,7 +199,6 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Rating */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Rating</label>
                 <select
@@ -269,7 +212,6 @@ export default function ProductsPage() {
                 </select>
               </div>
 
-              {/* Reset Button */}
               <div className="flex items-end">
                 <button
                   onClick={resetFilters}
@@ -280,7 +222,7 @@ export default function ProductsPage() {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Products Grid */}
         {products.length > 0 ? (
