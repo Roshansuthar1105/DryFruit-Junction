@@ -12,10 +12,12 @@ const {
   deleteProductImage
 } = require('../controllers/productController');
 
+// router.route('/')
+//   .get(getProducts)
+//   .post(protect, admin, upload.array('productImages', 5), createProduct); // Changed field name to 'productImages'
 router.route('/')
   .get(getProducts)
-  .post(protect, admin, upload.array('productImages', 5), createProduct); // Changed field name to 'productImages'
-
+  .post(protect, admin, createProduct); // Remove the upload middleware here
 router.route('/:id')
   .get(getProductById)
   .put(protect, admin, updateProduct)

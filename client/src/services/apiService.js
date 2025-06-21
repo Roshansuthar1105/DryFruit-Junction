@@ -35,15 +35,10 @@ const useApi = () => {
     // Product methods
     getProducts: () => axios.get(`${BACKEND_API}/api/products`, getHeaders()),
     getProductById: (id) => axios.get(`${BACKEND_API}/api/products/${id}`, getHeaders()),
-    createProduct: (formData) => axios.post(
+    createProduct: (data) => axios.post(
       `${BACKEND_API}/api/products`, 
-      formData,
-      {
-        headers: { 
-          Authorization: `Bearer ${getToken()}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }
+      data,
+      getHeaders() // Not multipart since we're not sending files
     ),
     updateProduct: (id, data) => axios.put(`${BACKEND_API}/api/products/${id}`, data, getHeaders()),
     deleteProduct: (id) => axios.delete(`${BACKEND_API}/api/products/${id}`, getHeaders()),

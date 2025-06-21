@@ -154,48 +154,104 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     setImagePreviews(newPreviews);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setError('');
 
-    try {
-      // Validate at least one image exists
-      if (imagePreviews.length === 0) {
-        throw new Error('At least one image is required');
-      }
+  //   try {
+  //     // Validate at least one image exists
+  //     if (imagePreviews.length === 0) {
+  //       throw new Error('At least one image is required');
+  //     }
 
-      const formData = new FormData();
+  //     const formData = new FormData();
       
-      // Add all files to upload
-      filesToUpload.forEach(file => {
-        formData.append('productImages', file);
-      });
+  //     // Add all files to upload
+  //     filesToUpload.forEach(file => {
+  //       formData.append('productImages', file);
+  //     });
 
-      // Add product data as JSON
-      const productJson = {
-        name: formData.name,
-        description: formData.description,
-        shortDescription: formData.shortDescription,
-        price: formData.price,
-        originalPrice: formData.originalPrice,
-        category: formData.category,
-        weight: formData.weight,
-        ingredients: formData.ingredients,
-        stock: formData.stock,
-        lowStockThreshold: formData.lowStockThreshold,
-        isActive: formData.isActive,
-        featured: formData.featured,
-        tags: formData.tags,
-        rating: formData.rating,
-        shelfLife: formData.shelfLife,
-        storageInstructions: formData.storageInstructions,
-        allergens: formData.allergens,
-        isVegan: formData.isVegan,
-        isGlutenFree: formData.isGlutenFree,
-        preparationTime: formData.preparationTime,
-        slug: formData.slug || 'formData.name.toLowerCase().replace(/\s+/g, '-')',
-        // slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-'),
+  //     // Add product data as JSON
+  //     const productJson = {
+  //       name: formData.name,
+  //       description: formData.description,
+  //       shortDescription: formData.shortDescription,
+  //       price: formData.price,
+  //       originalPrice: formData.originalPrice,
+  //       category: formData.category,
+  //       weight: formData.weight,
+  //       ingredients: formData.ingredients,
+  //       stock: formData.stock,
+  //       lowStockThreshold: formData.lowStockThreshold,
+  //       isActive: formData.isActive,
+  //       featured: formData.featured,
+  //       tags: formData.tags,
+  //       rating: formData.rating,
+  //       shelfLife: formData.shelfLife,
+  //       storageInstructions: formData.storageInstructions,
+  //       allergens: formData.allergens,
+  //       isVegan: formData.isVegan,
+  //       isGlutenFree: formData.isGlutenFree,
+  //       preparationTime: formData.preparationTime,
+  //       slug: formData.slug || 'formData.name.toLowerCase().replace(/\s+/g, '-')',
+  //       // slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-'),
+  //       images: imagePreviews
+  //         .filter(img => !img.isNew) // existing images
+  //         .map(img => ({
+  //           url: img.url,
+  //           public_id: img.public_id,
+  //           alt: img.alt || ''
+  //         }))
+  //     };
+
+  //     formData.append('data', JSON.stringify(productJson));
+
+  //     await api.createProduct(formData);
+  //     onSuccess();
+  //     onClose();
+  //   } catch (err) {
+  //     console.log(formData,error);
+  //     setError(err.response?.data?.message || err.message || 'Something went wrong');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // Modify the handleSubmit function to not include images in the initial creation
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+
+  try {
+    const productData = {
+      name: formData.name,
+      description: formData.description,
+      shortDescription: formData.shortDescription,
+      price: formData.price,
+      originalPrice: formData.originalPrice,
+      category: formData.category,
+      weight: formData.weight,
+      ingredients: formData.ingredients,
+      stock: formData.stock,
+      lowStockThreshold: formData.lowStockThreshold,
+      isActive: formData.isActive,
+      featured: formData.featured,
+      tags: formData.tags,
+      rating: formData.rating,
+      shelfLife: formData.shelfLife,
+      storageInstructions: formData.storageInstructions,
+      allergens: formData.allergens,
+      isVegan: formData.isVegan,
+      isGlutenFree: formData.isGlutenFree,
+      preparationTime: formData.preparationTime,
+      slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-')
+    };
+
+    if (product) {
+      // For update, include images if they exist
+      await api.updateProduct(product._id, {
+        ...productData,
         images: imagePreviews
           .filter(img => !img.isNew) // existing images
           .map(img => ({
@@ -203,21 +259,20 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             public_id: img.public_id,
             alt: img.alt || ''
           }))
-      };
-
-      formData.append('data', JSON.stringify(productJson));
-
-      await api.createProduct(formData);
-      onSuccess();
-      onClose();
-    } catch (err) {
-      console.log(formData,error);
-      setError(err.response?.data?.message || err.message || 'Something went wrong');
-    } finally {
-      setLoading(false);
+      });
+    } else {
+      // For create, don't include images
+      await api.createProduct(productData);
     }
-  };
 
+    onSuccess();
+    onClose();
+  } catch (err) {
+    setError(err.response?.data?.message || err.message || 'Something went wrong');
+  } finally {
+    setLoading(false);
+  }
+};
   if (!isOpen) return null;
 
   return (

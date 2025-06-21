@@ -38,53 +38,13 @@ const getProductById = asyncHandler(async (req, res) => {
     throw new Error('Product not found');
   }
 });
+// In createProduct controller, remove the image requirement check
 const createProduct = asyncHandler(async (req, res) => {
   try {
-    // First handle file uploads if they exist
-    let uploadedImages = [];
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const { path } = file;
-        const result = await uploader(path, 'sweet-delights/products');
-        uploadedImages.push({
-          url: result.secure_url,
-          public_id: result.public_id,
-          alt: file.originalname
-        });
-        // Clean up the temp file
-        // fs.unlinkSync(path);
-      }
-      console.log("images",uploadProductImages)
-    }
     // Parse the JSON data from the form
     let productData;
     try {
-      // productData = JSON.parse(req.body.data);
-      productData={
-        "name": "course-1",
-        "description": "description description description ",
-        "shortDescription": "description",
-        "price": "6778",
-        "originalPrice": "67576",
-        "category": "Macarons",
-        "weight": "",
-        "ingredients": [],
-        "stock": 10,
-        "lowStockThreshold": 10,
-        "isActive": true,
-        "featured": false,
-        "tags": [],
-        "rating": 4.5,
-        "shelfLife": "",
-        "storageInstructions": "",
-        "allergens": [],
-        "isVegan": false,
-        "isGlutenFree": false,
-        "preparationTime": "",
-        "slug": "soan-papdi-traditional-250g-dummy---dummy",
-        "images": []
-    }
-      console.log("productData",productData,req.body.data)
+      productData = req.body; // No need for JSON.parse since we're not mixing files and JSON
     } catch (err) {
       res.status(400);
       throw new Error('Invalid product data format');
@@ -111,17 +71,8 @@ const createProduct = asyncHandler(async (req, res) => {
       isVegan,
       isGlutenFree,
       preparationTime,
-      slug,
-      images 
+      slug
     } = productData;
-
-    // Combine uploaded images with any existing image URLs
-    const allImages = [...uploadedImages, ...(images || [])];
-
-    if (allImages.length === 0) {
-      res.status(400);
-      throw new Error('At least one image is required');
-    }
 
     const product = new Product({
       name,
@@ -145,11 +96,10 @@ const createProduct = asyncHandler(async (req, res) => {
       isVegan: isVegan || false,
       isGlutenFree: isGlutenFree || false,
       preparationTime: preparationTime || '',
-      slug: slug || 'name.toLowerCase().replace(/\s+/g, '-')',
-      // slug: slug || name.toLowerCase().replace(/\s+/g, '-'),
-      images: allImages
+      slug: slug || name.toLowerCase().replace(/\s+/g, '-'),
+      images: [] // Start with empty images array
     });
-    console.log("final=----------->",product)
+
     const createdProduct = await product.save();
     await logActivity('product_add', req.user._id, 'Product added', { productId: createdProduct._id });
     
@@ -230,23 +180,34 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:id
 // @access  Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-
-  if (product) {
-    // Delete images from cloudinary if they exist
-    if (product.images && product.images.length > 0) {
-      for (const image of product.images) {
-        await cloudinary.uploader.destroy(image._id);
-      }
-    }
+  try {
+    const product = await Product.findById(req.params.id);
     
-    await product.remove();
+    if (!product) {
+      res.status(404);
+      throw new Error('Product not found');
+    }
+
+    // Delete images from Cloudinary
+    if (product.images?.length > 0) {
+      await Promise.all(
+        product.images.map(image => 
+          destroy(image.public_id).catch(e => {
+            console.error(`Failed to delete image ${image.public_id}:`, e);
+          })
+        )
+      );
+    }
+
+    await Product.deleteOne({ _id: product._id });
     await logActivity('product_delete', req.user._id, 'Product deleted', { productId: product._id });
     
-    res.json({ message: 'Product removed' });
-  } else {
-    res.status(404);
-    throw new Error('Product not found');
+    res.json({ message: 'Product removed successfully' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({
+      message: error.message || 'Failed to delete product'
+    });
   }
 });
 
@@ -302,7 +263,6 @@ const deleteProductImage = asyncHandler(async (req, res) => {
   // Find the image to verify it exists
   // const imageExists = product.images.some(img => img._id === public_id || img._id==`ObjectId('${public_id}')`);
   const imageExists = product.images.filter(img => img._id.toString() === public_id);
-  console.log("match found ",imageExists)
   // console.log("public id : ",public_id)
   // // product.images.map((img)=>{
   // //   console.log("ids :",,public_id,img._id )

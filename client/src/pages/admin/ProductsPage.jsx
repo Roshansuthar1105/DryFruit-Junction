@@ -22,6 +22,7 @@ const categoryOptions = [
 export default function ProductsPage() {
   const { data: products, loading, error, fetchData } = useAdminData('products');
   const api = useApi();
+  const [newProductId, setNewProductId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -226,22 +227,36 @@ export default function ProductsPage() {
         </>
       )}
 
-      <ProductFormModal
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        product={selectedProduct}
-        onSuccess={fetchData}
-        categories={categoryOptions}
-      />
+<ProductFormModal
+  isOpen={isFormOpen}
+  onClose={() => {
+    setIsFormOpen(false);
+    setNewProductId(null);
+  }}
+  product={selectedProduct}
+  onSuccess={(createdProduct) => {
+    fetchData();
+    if (!selectedProduct && createdProduct) {
+      // If it was a new product creation
+      setNewProductId(createdProduct._id);
+      setSelectedProduct(createdProduct);
+      setIsImageUploadOpen(true);
+    }
+  }}
+  categories={categoryOptions}
+/>
 
       {selectedProduct && (
         <>
           <ImageUploadModal
-            isOpen={isImageUploadOpen}
-            onClose={() => setIsImageUploadOpen(false)}
-            product={selectedProduct}
-            onSuccess={fetchData}
-          />
+  isOpen={isImageUploadOpen}
+  onClose={() => setIsImageUploadOpen(false)}
+  product={selectedProduct || { _id: newProductId }} // Handle case for newly created product
+  onSuccess={() => {
+    fetchData();
+    setNewProductId(null);
+  }}
+/>
 
           <ConfirmModal
             isOpen={isDeleteModalOpen}

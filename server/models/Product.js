@@ -57,13 +57,13 @@ const productSchema = new mongoose.Schema({
   },
   images: {
     type: [imageSchema],
-    required: [true, 'Product images are required'],
-    validate: {
-      validator: function(v) {
-        return v.length > 0;
-      },
-      message: 'At least one image is required'
-    }
+    // required: [true, 'Product images are required'],
+    // validate: {
+    //   validator: function(v) {
+    //     return v.length > 0;
+    //   },
+    //   message: 'At least one image is required'
+    // }
   },
   stock: {
     type: Number,
