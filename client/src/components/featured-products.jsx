@@ -1,4 +1,3 @@
-
 import { Heart, ShoppingCart } from "lucide-react"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
@@ -8,74 +7,63 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import ProductCard from "./ProductCard"
 
-
 export default function FeaturedProducts() {
   const { addToCart } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
-  const { user,BACKEND_API } = useAuth();
-  const [products,setProducts]=useState([]);
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: "Chocolate Truffles",
-  //     description: "Rich, velvety chocolate truffles dusted with cocoa powder",
-  //     price: "$24.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Chocolates",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Artisan Macarons",
-  //     description: "Delicate French macarons in assorted flavors",
-  //     price: "$18.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Macarons",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Gourmet Fudge",
-  //     description: "Creamy homemade fudge with premium ingredients",
-  //     price: "$16.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Fudge",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Caramel Bonbons",
-  //     description: "Smooth caramel centers wrapped in fine chocolate",
-  //     price: "$22.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Bonbons",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Fruit Jellies",
-  //     description: "Natural fruit jellies bursting with real fruit flavors",
-  //     price: "$14.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Jellies",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Praline Collection",
-  //     description: "Assorted pralines with nuts and caramel",
-  //     price: "$26.99",
-  //     image: "https://picsum.photos/id/11/2500/1667",
-  //     category: "Pralines",
-  //   },
-  // ]
+  const { user, BACKEND_API } = useAuth();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`${BACKEND_API}/api/products`);
-        setProducts(res.data.data.slice(0, 3)); // Show only first 2 products
+        setProducts(res.data.data.slice(0, 3)); // Show only first 3 products
       } catch (err) {
         console.error("❌ Failed to load products", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
+
+  // Skeleton loader component that matches ProductCard
+  const ProductSkeleton = () => (
+    <div className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-pulse">
+      {/* Image placeholder */}
+      <div className="w-full h-80 bg-gray-200"></div>
+      
+      {/* Category badge placeholder */}
+      <div className="absolute top-4 left-4">
+        <div className="h-6 w-20 bg-gray-300 rounded-full"></div>
+      </div>
+      
+      {/* Favorite button placeholder */}
+      <div className="absolute top-4 right-4 h-8 w-8 bg-gray-300 rounded-full"></div>
+      
+      <div className="p-6">
+        {/* Product name placeholder */}
+        <div className="h-6 w-3/4 bg-gray-200 rounded mb-3"></div>
+        
+        {/* Description placeholder */}
+        <div className="space-y-2 mb-4">
+          <div className="h-3 w-full bg-gray-200 rounded"></div>
+          <div className="h-3 w-5/6 bg-gray-200 rounded"></div>
+          <div className="h-3 w-4/6 bg-gray-200 rounded"></div>
+        </div>
+        
+        {/* Price and button placeholder */}
+        <div className="flex items-center justify-between">
+          <div className="h-8 w-16 bg-gray-300 rounded-full"></div>
+          <div className="h-10 w-32 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,69 +83,21 @@ export default function FeaturedProducts() {
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((product) => (
-              <ProductCard key={product.name} product={product} />
-            ))}
-          {/* {products.map((product) => (
-            <div
-              key={product._id}
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
-            >
-              <div className="relative overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {product.category}
-                  </span>
-                </div>
-                <button
-                  onClick={() => {
-                    if (user) {
-                      toggleFavorite(product)
-                    } else {
-                      // Optionally show a toast/modal suggesting to login
-                    }
-                  }}
-                  className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${isFavorite(product._id)
-                      ? 'bg-pink-100 text-pink-600'
-                      : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-pink-50'
-                    }`}
-                >
-                  <Heart
-                    className={`h-5 w-5 ${isFavorite(product._id) ? 'fill-pink-600' : ''
-                      }`}
-                  />
-                </button>
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-4">{product.description}</p>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-                    {product.price}
-                  </span>
-                  <button
-                    onClick={() => addToCart(product)}
-                    className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    <span>Add to Cart</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))} */}
-
+          {loading ? (
+            <>
+              <ProductSkeleton />
+              <ProductSkeleton />
+              <ProductSkeleton />
+            </>
+          ) : (
+            products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          )}
         </div>
+
         {/* View All Button */}
         <div className="text-center mt-12">
-
           <Link to="/products">
             <button className="cursor-pointer border-2 border-pink-500 text-pink-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-pink-500 hover:text-white transition-all duration-300">
               View All Products

@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Product category is required'],
-    enum: ['Premium', 'Regular', 'Seasonal','Chocolates','Macarons'], // Add your categories
+    enum: ['Premium', 'Regular', 'Seasonal'], // Add your categories
   },
   weight: {
     type: String,
