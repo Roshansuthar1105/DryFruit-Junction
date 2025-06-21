@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
-import Header from './components/Header.jsx';
-import Footer from './components/Footer.jsx';
+import Header from './components/header.jsx';
+import Footer from './components/footer.jsx';
 import Loading from './components/Loading.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -16,8 +16,8 @@ const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const CartPage = lazy(() => import('./pages/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
-const About = lazy(() => import('./components/About'));
-const Contact = lazy(() => import('./components/Contact'));
+const About = lazy(() => import('./components/about.jsx'));
+const Contact = lazy(() => import('./components/contact.jsx'));
 const UserDashboard = lazy(() => import('./pages/UserDashboard'));
 const DeliveryDashboard = lazy(() => import('./pages/DeliveryDashboard'));
 const AdminRoutes = lazy(() => import('./routes/AdminRoutes'));
