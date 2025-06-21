@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Loading from './components/Loading';
-import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
+import Loading from './components/Loading.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 // Lazy load main components
 const HomePage = lazy(() => import('./pages/HomePage'));
