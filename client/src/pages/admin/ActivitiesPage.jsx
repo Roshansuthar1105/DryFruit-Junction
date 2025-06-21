@@ -4,10 +4,18 @@ import StatusBadge from '../../components/admin/StatusBadge';
 
 const activityTypes = [
   { value: 'all', label: 'All Activities' },
-  { value: 'user_login', label: 'User Logins' },
-  { value: 'order_created', label: 'Order Created' },
-  { value: 'order_updated', label: 'Order Updated' },
-  { value: 'contact_submitted', label: 'Contact Submitted' },
+  { value: 'login', label: 'User Login' },
+  { value: 'signup', label: 'User Signup' },
+  { value: 'product_add', label: 'Product Added' },
+  { value: 'product_update', label: 'Product Updated' },
+  { value: 'product_delete', label: 'Product Deleted' },
+  { value: 'product_images_add', label: 'Product Images Added' },
+  { value: 'product_image_delete', label: 'Product Image Deleted' },
+  { value: 'order_placed', label: 'Order Placed' },
+  { value: 'order_shipped', label: 'Order Shipped' },
+  { value: 'order_delivered', label: 'Order Delivered' },
+  { value: 'order_cancelled', label: 'Order Cancelled' },
+  { value: 'contact_submitted', label: 'Contact Form Submitted' }
 ];
 
 export default function ActivitiesPage() {

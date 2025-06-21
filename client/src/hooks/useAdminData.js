@@ -24,18 +24,20 @@ export function useAdminData(resource) {
           break;
         case 'activities':
           response = await api.fetchActivities();
-          console.log("activity resp: ",response);
           break;
         case 'products':
           response = (await api.getProducts()).data;
-          console.log("prod resp: ",response);
+          // console.log("prod resp: ",response.data);
+          setData(response.data);
           break;
         default:
           throw new Error('Invalid resource');
       }
       setData(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || `Failed to fetch ${resource}`);
+      const errorMsg = err.response?.data?.message || `Failed to fetch ${resource}`;
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

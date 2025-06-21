@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, Upload, Trash2 } from 'lucide-react';
 import useApi from '../../services/apiService';
+import toast from 'react-hot-toast';
 
 export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }) {
   const api = useApi();
@@ -8,6 +9,25 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const modalRef = useRef(null);
+
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
@@ -29,21 +49,22 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (files.length === 0) return;
-
+  
     setLoading(true);
     setError('');
-
+  
     try {
       const formData = new FormData();
-      files.forEach(file => {
-        formData.append('images', file);
-      });
-
+      files.forEach(file => formData.append('images', file));
+  
       await api.uploadProductImages(product._id, formData);
+      toast.success('Images uploaded successfully');
       onSuccess();
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to upload images');
+      const errorMsg = err.response?.data?.message || 'Failed to upload images';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -51,24 +72,32 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
 
   const handleDeleteImage = async (public_id) => {
     try {
-      console.log("id :",public_id)
-      await api.deleteProductImage(product._id, { public_id }); // Send public_id instead of _id
+      await api.deleteProductImage(product._id, { public_id });
+      toast.success('Image deleted successfully');
       onSuccess();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to delete image');
+      const errorMsg = err.response?.data?.message || 'Failed to delete image';
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div 
+        ref={modalRef}
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+      >
         <div className="flex justify-between items-center border-b p-4 sticky top-0 bg-white z-10">
           <h3 className="text-xl font-bold text-gray-800">
             Manage Images for {product.name}
           </h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button 
+            onClick={onClose} 
+            className="text-gray-500 hover:text-gray-700"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -171,6 +200,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
             )}
           </div>
         </div>
+        
       </div>
     </div>
   );

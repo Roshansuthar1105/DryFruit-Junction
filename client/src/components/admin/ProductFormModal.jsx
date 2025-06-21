@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Save, Plus, Minus, Tag, Image as ImageIcon, Trash2, Upload } from 'lucide-react';
 import useApi from '../../services/apiService';
+import toast from 'react-hot-toast';
 
 export default function ProductFormModal({ isOpen, onClose, product, onSuccess, categories }) {
   const api = useApi();
@@ -28,13 +29,28 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     preparationTime: '2 minutes',
     slug: 'organic-matcha-green-tea-powder',
     images: []
-});
+  });
   const [newTag, setNewTag] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [imagePreviews, setImagePreviews] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
+  const modalRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
 
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
   useEffect(() => {
     if (product) {
       setFormData({
@@ -58,7 +74,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
         isVegan: product.isVegan || false,
         isGlutenFree: product.isGlutenFree || false,
         preparationTime: product.preparationTime || '',
-        slug: product.slug ||'product.name.toLowerCase().replace(/\s+/g, '-')',
+        slug: product.slug || 'product.name.toLowerCase().replace(/\s+/g, ' - ')',
         // slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-') ,
         images: product.images || []
       });
@@ -143,14 +159,14 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   const handleRemoveImage = (index) => {
     const newPreviews = [...imagePreviews];
     const removed = newPreviews.splice(index, 1);
-    
+
     // If it was a newly added file, remove from filesToUpload
     if (removed[0].isNew) {
-      setFilesToUpload(filesToUpload.filter(f => 
+      setFilesToUpload(filesToUpload.filter(f =>
         f.name !== removed[0].file.name
       ));
     }
-    
+
     setImagePreviews(newPreviews);
   };
 
@@ -166,7 +182,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   //     }
 
   //     const formData = new FormData();
-      
+
   //     // Add all files to upload
   //     filesToUpload.forEach(file => {
   //       formData.append('productImages', file);
@@ -218,66 +234,71 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   //   }
   // };
   // Modify the handleSubmit function to not include images in the initial creation
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const productData = {
-      name: formData.name,
-      description: formData.description,
-      shortDescription: formData.shortDescription,
-      price: formData.price,
-      originalPrice: formData.originalPrice,
-      category: formData.category,
-      weight: formData.weight,
-      ingredients: formData.ingredients,
-      stock: formData.stock,
-      lowStockThreshold: formData.lowStockThreshold,
-      isActive: formData.isActive,
-      featured: formData.featured,
-      tags: formData.tags,
-      rating: formData.rating,
-      shelfLife: formData.shelfLife,
-      storageInstructions: formData.storageInstructions,
-      allergens: formData.allergens,
-      isVegan: formData.isVegan,
-      isGlutenFree: formData.isGlutenFree,
-      preparationTime: formData.preparationTime,
-      slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-')
-    };
+    try {
+      const productData = {
+        name: formData.name,
+        description: formData.description,
+        shortDescription: formData.shortDescription,
+        price: formData.price,
+        originalPrice: formData.originalPrice,
+        category: formData.category,
+        weight: formData.weight,
+        ingredients: formData.ingredients,
+        stock: formData.stock,
+        lowStockThreshold: formData.lowStockThreshold,
+        isActive: formData.isActive,
+        featured: formData.featured,
+        tags: formData.tags,
+        rating: formData.rating,
+        shelfLife: formData.shelfLife,
+        storageInstructions: formData.storageInstructions,
+        allergens: formData.allergens,
+        isVegan: formData.isVegan,
+        isGlutenFree: formData.isGlutenFree,
+        preparationTime: formData.preparationTime,
+        slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-')
+      };
+      let result;
+      if (product) {
+        // For update, include images if they exist
+        result = await api.updateProduct(product._id, {
+          ...productData,
+          images: imagePreviews
+            .filter(img => !img.isNew) // existing images
+            .map(img => ({
+              url: img.url,
+              public_id: img.public_id,
+              alt: img.alt || ''
+            }))
+        });
+        toast.success('Product updated successfully');
+      } else {
+        // For create, don't include images
+        result = await api.createProduct(productData);
+        toast.success('Product created successfully');
+      }
 
-    if (product) {
-      // For update, include images if they exist
-      await api.updateProduct(product._id, {
-        ...productData,
-        images: imagePreviews
-          .filter(img => !img.isNew) // existing images
-          .map(img => ({
-            url: img.url,
-            public_id: img.public_id,
-            alt: img.alt || ''
-          }))
-      });
-    } else {
-      // For create, don't include images
-      await api.createProduct(productData);
+      onSuccess(result.data);
+      onClose();
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
+      setError(errorMsg);
+      toast.error(errorMsg);
+
+    } finally {
+      setLoading(false);
     }
-
-    onSuccess();
-    onClose();
-  } catch (err) {
-    setError(err.response?.data?.message || err.message || 'Something went wrong');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div ref={modalRef} className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center border-b p-4 sticky top-0 bg-white z-10">
           <h3 className="text-xl font-bold text-gray-800">
             {product ? 'Edit Product' : 'Add New Product'}
@@ -317,7 +338,7 @@ const handleSubmit = async (e) => {
                     </button>
                   </div>
                 ))}
-                <div 
+                <div
                   className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-md flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-700 cursor-pointer"
                   onClick={() => fileInputRef.current.click()}
                 >

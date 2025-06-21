@@ -9,6 +9,7 @@ import ProductFormModal from '../../components/admin/ProductFormModal';
 import ImageUploadModal from '../../components/admin/ImageUploadModal';
 import ConfirmModal from '../../components/admin/ConfirmModal';
 import useApi from '../../services/apiService';
+import toast from 'react-hot-toast';
 
 const categoryOptions = [
   'Chocolates',
@@ -16,7 +17,10 @@ const categoryOptions = [
   'Fudge',
   'Bonbons',
   'Jellies',
-  'Pralines'
+  'Pralines',
+  'Premium', 
+  'Regular', 
+  'Seasonal'
 ];
 
 export default function ProductsPage() {
@@ -30,8 +34,8 @@ export default function ProductsPage() {
   const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
@@ -41,21 +45,23 @@ export default function ProductsPage() {
       await api.deleteProduct(selectedProduct._id);
       fetchData();
       setIsDeleteModalOpen(false);
+      toast.success('Product deleted successfully');
     } catch (err) {
       console.error('Failed to delete product:', err);
+      toast.error(err.response?.data?.message || 'Failed to delete product');
     }
   };
 
   const columns = [
-    { 
-      header: 'Product', 
+    {
+      header: 'Product',
       accessor: product => (
         <div className="flex items-center space-x-4">
           {product.images?.[0]?.url ? (
-            <img 
-              src={product.images[0].url} 
-              alt={product.name} 
-              className="w-12 h-12 object-cover rounded-md" 
+            <img
+              src={product.images[0].url}
+              alt={product.name}
+              className="w-12 h-12 object-cover rounded-md"
             />
           ) : (
             <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
@@ -69,23 +75,23 @@ export default function ProductsPage() {
         </div>
       )
     },
-    { 
-      header: 'Category', 
+    {
+      header: 'Category',
       accessor: product => (
         <span className="capitalize">{product.category}</span>
       )
     },
-    { 
-      header: 'Price', 
+    {
+      header: 'Price',
       accessor: product => (
         <span className="font-medium">₹{product.price}</span>
       )
     },
-    { 
-      header: 'Stock', 
+    {
+      header: 'Stock',
       accessor: product => (
-        <StatusBadge 
-          status={product.stock > 0 ? 'In Stock' : 'Out of Stock'} 
+        <StatusBadge
+          status={product.stock > 0 ? 'In Stock' : 'Out of Stock'}
           variants={{
             'In Stock': 'green',
             'Out of Stock': 'red'
@@ -168,7 +174,7 @@ export default function ProductsPage() {
       </div>
 
       {error && <div className="mb-6 p-3 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
-      
+
       {loading ? (
         <p className="text-gray-500">Loading products...</p>
       ) : (
@@ -227,36 +233,39 @@ export default function ProductsPage() {
         </>
       )}
 
-<ProductFormModal
-  isOpen={isFormOpen}
-  onClose={() => {
-    setIsFormOpen(false);
-    setNewProductId(null);
-  }}
-  product={selectedProduct}
-  onSuccess={(createdProduct) => {
-    fetchData();
-    if (!selectedProduct && createdProduct) {
-      // If it was a new product creation
-      setNewProductId(createdProduct._id);
-      setSelectedProduct(createdProduct);
-      setIsImageUploadOpen(true);
-    }
-  }}
-  categories={categoryOptions}
-/>
+      <ProductFormModal
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setNewProductId(null);
+        }}
+        product={selectedProduct}
+        onSuccess={async (createdProduct) => {
+          await fetchData(); // Wait for data refresh
+          if (!selectedProduct && createdProduct) {
+            setNewProductId(createdProduct._id);
+            setSelectedProduct(createdProduct);
+            setIsImageUploadOpen(true);
+            toast.success('Product created! Now add images');
+          } else {
+            toast.success('Product updated successfully');
+          }
+        }}
+        categories={categoryOptions}
+      />
 
       {selectedProduct && (
         <>
           <ImageUploadModal
-  isOpen={isImageUploadOpen}
-  onClose={() => setIsImageUploadOpen(false)}
-  product={selectedProduct || { _id: newProductId }} // Handle case for newly created product
-  onSuccess={() => {
-    fetchData();
-    setNewProductId(null);
-  }}
-/>
+            isOpen={isImageUploadOpen}
+            onClose={() => setIsImageUploadOpen(false)}
+            product={selectedProduct || { _id: newProductId, name: 'New Product' }}
+            onSuccess={async () => {
+              await fetchData(); // Wait for data refresh
+              setNewProductId(null);
+              toast.success('Images updated successfully');
+            }}
+          />
 
           <ConfirmModal
             isOpen={isDeleteModalOpen}
