@@ -140,7 +140,7 @@ const ProductPage = () => {
 
               {/* Thumbnail Gallery */}
               <div className="grid grid-cols-4 gap-4">
-                {product.images.map((image, index) => (
+                {product.images.length >1 && product.images.map((image, index) => (
                   <button
                     key={image._id}
                     onClick={() => { console.log("image change to ", index, product.images[index], image); setSelectedImageIndex(index) }}

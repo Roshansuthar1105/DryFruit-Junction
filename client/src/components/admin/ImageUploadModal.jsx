@@ -49,22 +49,30 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (files.length === 0) return;
-  
+
     setLoading(true);
     setError('');
-  
+
     try {
       const formData = new FormData();
       files.forEach(file => formData.append('images', file));
-  
-      await api.uploadProductImages(product._id, formData);
-      toast.success('Images uploaded successfully');
+
+      await toast.promise(
+        api.uploadProductImages(product._id, formData),
+        {
+          loading: 'Uploading images...',
+          success: 'Images uploaded successfully',
+          error: (err) => {
+            const errorMsg = err.response?.data?.message || 'Failed to upload images';
+            setError(errorMsg);
+            return errorMsg;
+          }
+        }
+      );
       onSuccess();
       onClose();
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to upload images';
-      setError(errorMsg);
-      toast.error(errorMsg);
+      // Error is already handled by toast.promise
     } finally {
       setLoading(false);
     }
@@ -72,21 +80,28 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
 
   const handleDeleteImage = async (public_id) => {
     try {
-      await api.deleteProductImage(product._id, { public_id });
-      toast.success('Image deleted successfully');
+      await toast.promise(
+        api.deleteProductImage(product._id, { public_id }),
+        {
+          loading: 'Deleting image...',
+          success: 'Image deleted successfully',
+          error: (err) => {
+            const errorMsg = err.response?.data?.message || 'Failed to delete image';
+            setError(errorMsg);
+            return errorMsg;
+          }
+        }
+      );
       onSuccess();
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to delete image';
-      setError(errorMsg);
-      toast.error(errorMsg);
+      // Error is already handled by toast.promise
     }
   };
-
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div 
+      <div
         ref={modalRef}
         className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
       >
@@ -94,8 +109,8 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
           <h3 className="text-xl font-bold text-gray-800">
             Manage Images for {product.name}
           </h3>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
             <X className="h-5 w-5" />
@@ -200,7 +215,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
             )}
           </div>
         </div>
-        
+
       </div>
     </div>
   );
