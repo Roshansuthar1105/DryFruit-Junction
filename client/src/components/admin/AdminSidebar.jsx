@@ -11,7 +11,11 @@ import {
   Cog,
   Shield,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Box,
+  Home,
+  Truck,
+  ShoppingBag
 } from 'lucide-react';
 
 const navItems = [
@@ -29,6 +33,15 @@ const navItems = [
       { path: '/admin/products', icon: Package, label: 'Product Catalog' },
       { path: '/admin/orders', icon: ShoppingCart, label: 'Order Processing' },
       { path: '/admin/contacts', icon: FileText, label: 'Customer Inquiries' },
+    ]
+  },
+  {
+    header: 'General',
+    items: [
+      { path: '/', icon: Home, label: 'Home' },
+      { path: '/cart', icon: ShoppingBag, label: 'Cart' },
+      { path: '/checkout', icon: Truck, label: 'Checkout' },
+      { path: '/products', icon: Box, label: 'Products' },
     ]
   },
   // {
@@ -61,7 +74,7 @@ export default function AdminSidebar({ user, onLinkClick, isCollapsed, toggleCol
       {!isMobile && (
         <button 
           onClick={toggleCollapse}
-          className="flex items-center justify-center p-3 hover:bg-gray-50"
+          className="flex items-center justify-center p-5 hover:bg-gray-50"
         >
           {isCollapsed ? (
             <ChevronRight className="h-5 w-5 text-gray-500" />
