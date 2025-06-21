@@ -12,7 +12,11 @@ const imageSchema = new mongoose.Schema({
   isPrimary: {
     type: Boolean,
     default: false
-  }
+  },
+  public_id: {  // This is the crucial field for Cloudinary operations
+    type: String,
+    required: true
+  },
 }, { _id: true }); // Keep the _id field for images
 
 const productSchema = new mongoose.Schema({
@@ -41,7 +45,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Product category is required'],
-    enum: ['Premium', 'Regular', 'Seasonal'], // Add your categories
+    enum: ['Premium', 'Regular', 'Seasonal','Chocolates','Macarons'], // Add your categories
   },
   weight: {
     type: String,
@@ -53,13 +57,13 @@ const productSchema = new mongoose.Schema({
   },
   images: {
     type: [imageSchema],
-    required: [true, 'Product images are required'],
-    validate: {
-      validator: function(v) {
-        return v.length > 0;
-      },
-      message: 'At least one image is required'
-    }
+    // required: [true, 'Product images are required'],
+    // validate: {
+    //   validator: function(v) {
+    //     return v.length > 0;
+    //   },
+    //   message: 'At least one image is required'
+    // }
   },
   stock: {
     type: Number,

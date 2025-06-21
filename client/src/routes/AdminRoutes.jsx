@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/admin/AdminLayout';
 import Loading from '../components/Loading';
+import ProductsPage from '../pages/admin/ProductsPage';
 
 // Lazy load all admin pages
 const DashboardPage = lazy(() => import('../pages/admin/DashboardPage'));
@@ -21,6 +22,7 @@ export default function AdminRoutes() {
           <Route path="orders" element={<OrdersPage />} />
           <Route path="contacts" element={<ContactsPage />} />
           <Route path="activities" element={<ActivitiesPage />} />
+          <Route path="products" element={<ProductsPage />} />
         </Route>
       </Routes>
     </Suspense>

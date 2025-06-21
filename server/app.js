@@ -1,3 +1,4 @@
+const path = require('path');
 require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
@@ -37,6 +38,8 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/activities', activityRoutes);
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Mount routers (add this after other router mounts)
 // Error handler middleware
 // app.use(errorHandler);
