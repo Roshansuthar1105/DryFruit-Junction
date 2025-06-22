@@ -22,6 +22,7 @@ const Contact = lazy(() => import('./components/contact.jsx'));
 const UserDashboard = lazy(() => import('./pages/UserDashboard'));
 const DeliveryDashboard = lazy(() => import('./pages/DeliveryDashboard'));
 const AdminRoutes = lazy(() => import('./routes/AdminRoutes'));
+const DeliveryRoutes = lazy(() => import('./routes/DeliveryRoutes'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Create a wrapper component to handle layout
@@ -115,12 +116,17 @@ function App() {
                     </LayoutWrapper>
                   } />
 
-                  <Route path="/delivery" element={
+                  {/* <Route path="/delivery" element={
                     <ProtectedRoute allowedRoles={['delivery']}>
                       <DeliveryDashboard />
                     </ProtectedRoute>
-                  } />
+                  } /> */}
 
+                  <Route path="/delivery/*" element={
+                    <ProtectedRoute allowedRoles={['delivery']}>
+                      <DeliveryRoutes />
+                    </ProtectedRoute>
+                  } />
                   <Route path="/admin/*" element={
                     <ProtectedRoute allowedRoles={['admin']}>
                       <AdminRoutes />
