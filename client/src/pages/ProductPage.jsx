@@ -69,7 +69,6 @@ const ProductPage = () => {
     } catch (err) {
       toast.error("Error in adding to cart");
       console.error('Error adding to cart:', err);
-      alert(err.response?.data?.message || 'Failed to add to cart');
     }
   };
 

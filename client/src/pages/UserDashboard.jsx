@@ -102,7 +102,6 @@ export default function UserDashboard() {
     } catch (error) {
       console.error('Failed to delete account:', error);
       toast.error('Failed to delete account:', error);
-      alert('Failed to delete account');
     }
   };
 

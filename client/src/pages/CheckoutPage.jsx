@@ -91,7 +91,7 @@ export default function CheckoutPage() {
 
   const fetchLocation = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
+      toast.error('Geolocation is not supported by your browser');
       return;
     }
   
@@ -124,12 +124,12 @@ export default function CheckoutPage() {
           setIsLocationFetched(true);
         } catch (error) {
           console.error('❌ Nominatim failed:', error);
-          alert('Failed to fetch address');
+          toast.error('Failed to fetch address');
         }
       },
       (error) => {
         console.error('Geolocation error:', error);
-        alert('Failed to retrieve your location');
+        toast.error('Failed to retrieve your location');
       }
     );
   };
