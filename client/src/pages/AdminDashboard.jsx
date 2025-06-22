@@ -3,6 +3,7 @@ import { Users, ShoppingBag, Mail, Settings, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 export default function AdminDashboard() {
   const { user, BACKEND_API } = useAuth();
@@ -42,6 +43,7 @@ export default function AdminDashboard() {
       setUsers(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch users');
+      toast.error('Failed to fetch users');
     } finally {
       setLoading(prev => ({ ...prev, users: false }));
     }
@@ -58,6 +60,7 @@ export default function AdminDashboard() {
       setOrders(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch orders');
+      toast.error('Failed to fetch orders');
     } finally {
       setLoading(prev => ({ ...prev, orders: false }));
     }
@@ -74,6 +77,7 @@ export default function AdminDashboard() {
       setContacts(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch contacts');
+      toast.error('Failed to fetch contacts');
     } finally {
       setLoading(prev => ({ ...prev, contacts: false }));
     }
@@ -89,6 +93,7 @@ export default function AdminDashboard() {
       setActivities(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch contacts');
+      toast.error('Failed to fetch contacts');
     } finally {
       setLoading(prev => ({ ...prev, activities: false }));
     }
@@ -102,9 +107,11 @@ export default function AdminDashboard() {
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      toast.success("Role Updated");
       fetchUsers();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update user role');
+      toast.error('Failed to update user role');
     }
   };
 
@@ -116,9 +123,11 @@ export default function AdminDashboard() {
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      toast.success("Contact status updated");
       fetchContacts();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update contact status');
+      toast.error('Failed to update contact status');
     }
   };
 
@@ -133,10 +142,12 @@ export default function AdminDashboard() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      toast.success("Status updated");
       fetchOrders(); // Refresh list
     } catch (err) {
       console.error("❌ Order status update failed", err);
       setError(err.response?.data?.message || 'Failed to update order status');
+      toast.error('Failed to update order status');
     }
   };
 

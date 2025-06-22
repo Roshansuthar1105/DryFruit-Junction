@@ -23,7 +23,7 @@ const Login = () => {
       toast.success("Loggend In Successfully");
       navigate('/'); // ✅ reactivity ensured via context
     } else {
-      toast.error("Error : ", result.message);
+      toast.error("Error in logging In ", result.message);
       setError(result.message); // ✅ error from context
     }
 

@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
-
+import {toast}from 'react-hot-toast';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([])
@@ -33,6 +33,7 @@ export default function ProductsPage() {
         setProducts(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);
+        toast.error('Failed to fetch products:', error);
       }
     };
   

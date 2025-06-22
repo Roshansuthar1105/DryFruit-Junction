@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import useApi from '../services/apiService';
-
+import { toast } from "react-hot-toast";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -34,6 +34,7 @@ const ProductPage = () => {
         }
       } catch (err) {
         console.error('Error fetching product:', err);
+        toast.error('Error fetching product');
         setError(err.response?.data?.message || 'Failed to fetch product');
         setLoading(false);
       }
@@ -52,6 +53,7 @@ const ProductPage = () => {
         setRelatedProducts(filtered.slice(0, 4));
       } catch (err) {
         console.error('Error fetching related products:', err);
+        toast.error('Error fetching related products:', err);
       } finally {
         setRelatedLoading(false);
       }
@@ -63,7 +65,9 @@ const ProductPage = () => {
   const handleAddToCart = async () => {
     try {
       addToCart(product, quantity);
+      toast.success("Added to cart");
     } catch (err) {
+      toast.error("Error in adding to cart");
       console.error('Error adding to cart:', err);
       alert(err.response?.data?.message || 'Failed to add to cart');
     }

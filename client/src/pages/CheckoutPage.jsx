@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
 export default function CheckoutPage() {
@@ -74,13 +75,14 @@ export default function CheckoutPage() {
         }
       );
       if (response.status === 201) {
+        toast.success("Order Conformed");
         setOrderData(response.data); // Save full response
         setOrderSuccess(true);
         clearCart();
       }
     } catch (error) {
       console.error('❌ Order submission failed:', error.response?.data?.message || error.message);
-      alert('Order submission failed');
+      toast.error("Order submission failed");
     } finally {
       setIsSubmitting(false);
     }

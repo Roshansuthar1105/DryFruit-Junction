@@ -2,6 +2,7 @@ import {  useState } from 'react';
 import { useAdminData } from '../../hooks/useAdminData';
 import StatusBadge from '../../components/admin/StatusBadge';
 import UpdateStatusDropdown from '../../components/admin/UpdateStatusDropdown';
+import {toast}from 'react-hot-toast';
 
 const statusFilters = [
   { value: 'all', label: 'All Orders' },
@@ -75,7 +76,7 @@ export default function OrdersPage() {
                         { value: 'delivered', label: 'Delivered' },
                         { value: 'cancelled', label: 'Cancelled' },
                       ]}
-                      onUpdate={(newStatus) => updateStatus(order._id, newStatus, 'order')}
+                      onUpdate={(newStatus) => {toast.success("Order status updated!");updateStatus(order._id, newStatus, 'order')}}
                     />
                     <StatusBadge
                       status={order.orderStatus}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingBag, MapPin, CheckCircle, Truck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import {toast}from 'react-hot-toast';
 
 export default function DeliveryDashboard() {
   const { user, BACKEND_API } = useAuth();
@@ -24,6 +25,7 @@ export default function DeliveryDashboard() {
       setOrders(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch orders');
+      toast.error('Failed to fetch orders');
     } finally {
       setLoading(false);
     }
@@ -40,6 +42,7 @@ export default function DeliveryDashboard() {
       fetchOrders();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update order status');
+      toast.error('Failed to update order status');
     }
   };
 

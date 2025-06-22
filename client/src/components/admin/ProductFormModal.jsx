@@ -287,7 +287,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
       setError(errorMsg);
-      toast.error(errorMsg);
+      // toast.error(errorMsg);
 
     } finally {
       setLoading(false);

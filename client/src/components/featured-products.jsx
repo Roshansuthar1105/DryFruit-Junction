@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import ProductCard from "./ProductCard"
-
+import toast from 'react-hot-toast';
 export default function FeaturedProducts() {
   const { addToCart } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
@@ -21,6 +21,8 @@ export default function FeaturedProducts() {
         const res = await axios.get(`${BACKEND_API}/api/products`);
         setProducts(res.data.data.slice(0, 3)); // Show only first 3 products
       } catch (err) {
+        
+        toast.error("❌ Failed to load products", err);
         console.error("❌ Failed to load products", err);
       } finally {
         setLoading(false);

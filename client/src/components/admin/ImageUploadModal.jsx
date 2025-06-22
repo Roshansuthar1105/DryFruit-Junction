@@ -65,6 +65,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
           error: (err) => {
             const errorMsg = err.response?.data?.message || 'Failed to upload images';
             setError(errorMsg);
+            toast.error("failed to upload image")
             return errorMsg;
           }
         }
@@ -88,6 +89,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
           error: (err) => {
             const errorMsg = err.response?.data?.message || 'Failed to delete image';
             setError(errorMsg);
+            toast.error("Failed to delete image")
             return errorMsg;
           }
         }

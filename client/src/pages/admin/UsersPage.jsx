@@ -4,6 +4,7 @@ import DataTable from '../../components/admin/DataTable';
 import MobileDataCard from '../../components/admin/MobileDataCard';
 import StatusBadge from '../../components/admin/StatusBadge';
 import UpdateStatusDropdown from '../../components/admin/UpdateStatusDropdown';
+import {toast}from 'react-hot-toast';
 
 export default function UsersPage() {
   const { data: users, loading, error, updateStatus } = useAdminData('users');
@@ -40,7 +41,7 @@ export default function UsersPage() {
             { value: 'admin', label: 'Admin' },
             { value: 'delivery', label: 'Delivery Partner' },
           ]}
-          onUpdate={(newStatus) => updateStatus(user._id, newStatus, 'user')}
+          onUpdate={(newStatus) => {toast.success("User role updated!");updateStatus(user._id, newStatus, 'user')}}
         />
       )
     }

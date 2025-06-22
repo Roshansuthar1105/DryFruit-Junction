@@ -3,6 +3,7 @@ import { Heart, ShoppingBag, User, LogOut, ChevronDown, ChevronUp } from 'lucide
 import { useAuth } from '../context/AuthContext'
 import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
+import {toast}from 'react-hot-toast';
 
 export default function UserDashboard() {
   const { user, logout, BACKEND_API } = useAuth()
@@ -27,9 +28,8 @@ export default function UserDashboard() {
         setOrders(data.reverse()) // show latest first
       } catch (error) {
         console.log(error)
-        setErrorOrders(
-          error.response?.data?.message || 'Failed to load orders'
-        )
+        setErrorOrders(error.response?.data?.message || 'Failed to load orders')
+        toast.error('Failed to load orders')
       }
       setLoadingOrders(false)
     }
@@ -58,6 +58,7 @@ export default function UserDashboard() {
 
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       setPasswordError('New passwords do not match');
+      toast.error('New passwords do not match');
       return;
     }
 
@@ -77,6 +78,7 @@ export default function UserDashboard() {
       );
 
       setPasswordSuccess('Password updated successfully');
+      toast.success('Password updated successfully');
       setPasswordForm({
         currentPassword: '',
         newPassword: '',
@@ -95,9 +97,11 @@ export default function UserDashboard() {
           Authorization: `Bearer ${token}`
         }
       });
+      toast.success("Account deleted !")
       logout();
     } catch (error) {
       console.error('Failed to delete account:', error);
+      toast.error('Failed to delete account:', error);
       alert('Failed to delete account');
     }
   };

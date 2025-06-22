@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { toast } from "react-hot-toast";
 import axios from 'axios';
 
 const CartContext = createContext();
@@ -38,6 +39,7 @@ const fetchCart = async () => {
       localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
     } catch (err) {
       console.error('❌ Fetching cart failed:', err);
+      toast.error('❌ Fetching cart failed:', err);
     }
   }
 };
@@ -56,7 +58,7 @@ const fetchCart = async () => {
       : [...cart, { ...product, quantity }];
 
     setCart(updatedCart);
-
+    toast.success("Item Added to cart");
     if (user) {
       try {
         await axios.post(`${BACKEND_API}/api/cart`, {
@@ -67,6 +69,7 @@ const fetchCart = async () => {
         });
       } catch (err) {
         console.error('❌ Failed to sync addToCart:', err);
+        toast.error('❌ Failed to sync addToCart:', err);
       }
     }
   };
@@ -112,7 +115,7 @@ const fetchCart = async () => {
   const clearCart = async () => {
     setCart([]);
     localStorage.removeItem('sweetDelightsCart');
-
+    toast.success("Cart Cleared")
     if (user) {
       try {
         await axios.delete(`${BACKEND_API}/api/cart`, {

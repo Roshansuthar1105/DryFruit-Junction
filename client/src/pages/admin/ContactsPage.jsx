@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAdminData } from '../../hooks/useAdminData';
 import StatusBadge from '../../components/admin/StatusBadge';
 import UpdateStatusDropdown from '../../components/admin/UpdateStatusDropdown';
+import {toast}from 'react-hot-toast';
 
 const statusFilters = [
   { value: 'all', label: 'All Messages' },
@@ -74,7 +75,7 @@ export default function ContactsPage() {
                       { value: 'responded', label: 'Responded' },
                       { value: 'spam', label: 'Spam' },
                     ]}
-                    onUpdate={(newStatus) => updateStatus(contact._id, newStatus, 'contact')}
+                    onUpdate={(newStatus) => {toast.success("Contact updated");updateStatus(contact._id, newStatus, 'contact')}}
                   />
                   <StatusBadge 
                     status={contact.status} 

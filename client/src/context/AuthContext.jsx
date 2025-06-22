@@ -1,6 +1,7 @@
 // src/context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
 import axios from 'axios'
 
 const AuthContext = createContext()
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('Auth check failed:', error)
+        toast.error('Auth check failed:', error)
       } finally {
         setLoading(false)
       }
@@ -31,11 +33,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(`${BACKEND_API}/api/auth/login`, { email, password });
+      toast.success("Logged In Successfully !")
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
       return { success: true };
     } catch (error) {
+      toast.error(error.response?.data?.message || 'Login failed' )
       return { 
         success: false, 
         message: error.response?.data?.message || 'Login failed' 
@@ -46,11 +50,13 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(`${BACKEND_API}/api/auth/register`, userData);
+      toast.success("Sign In successfully")
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
       return { success: true };
     } catch (error) {
+      toast.error(error.response?.data?.message || 'Registration failed' )
       return { 
         success: false, 
         message: error.response?.data?.message || 'Registration failed' 
@@ -58,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   const logout = () => {
+    toast.success("Logged Out !")
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     localStorage.removeItem('sweetDelightsCart')

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import {toast}from 'react-hot-toast';
 
 const Signup = () => {
   const { register } = useAuth();
@@ -32,6 +33,7 @@ const Signup = () => {
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      toast.error('Passwords do not match');
       setLoading(false);
       return;
     }
@@ -44,9 +46,11 @@ const Signup = () => {
     });
 
     if (result.success) {
+      toast.success("Sign up successfully");
       navigate('/');
     } else {
       setError(result.message);
+      toast.error("Signup failed ",result.message);
     }
 
     setLoading(false);
