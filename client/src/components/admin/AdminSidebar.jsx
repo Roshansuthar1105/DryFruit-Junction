@@ -72,16 +72,18 @@ export default function AdminSidebar({ user, onLinkClick, isCollapsed, toggleCol
     >
       {/* Collapse/Expand button (desktop only) */}
       {!isMobile && (
+        <div className='flex justify-end p-2' >
         <button 
           onClick={toggleCollapse}
-          className="flex items-center justify-center p-5 hover:bg-gray-50"
-        >
+          className="flex items-center justify-center p-3 bg-purple-50 hover:bg-gray-50 rounded-md shadow cursor-pointer "
+          >
           {isCollapsed ? (
             <ChevronRight className="h-5 w-5 text-gray-500" />
           ) : (
             <ChevronLeft className="h-5 w-5 text-gray-500" />
           )}
         </button>
+        </div>
       )}
 
       {/* Profile section - always visible on mobile, conditionally on desktop */}

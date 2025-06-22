@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import useApi from '../services/apiService';
+import toast from 'react-hot-toast';
 
 export function useAdminData(resource) {
   const [data, setData] = useState([]);
