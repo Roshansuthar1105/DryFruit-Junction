@@ -69,18 +69,14 @@ export default function RecentDeliveries() {
   //   })) || [];
 
   // Filter deliveries based on search term
-  const filteredDeliveries = deliveries.filter(delivery =>
-    `${delivery.user.firstName} ${delivery.user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    delivery.orderNumber?.toString().includes(searchTerm) ||
-    delivery._id.includes(searchTerm)
-  );
+  const filteredDeliveries = deliveries.sort((a, b) => new Date(b.deliveredAt) - new Date(a.deliveredAt));;
 
   return (
     <div className="bg-white rounded-xl shadow p-4">
       <h2 className="text-lg font-semibold mb-4">Recent Deliveries</h2>
       <div className="space-y-3">
         {filteredDeliveries.map(delivery => (
-          <div key={delivery._id} className="border p-4 rounded-lg">
+          <div key={delivery._id} className="shadow p-4 rounded-lg">
             <div className="flex justify-between">
               <h3 className="font-bold">Order #{delivery.orderNumber}</h3>
               <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
