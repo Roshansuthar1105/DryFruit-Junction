@@ -40,24 +40,24 @@ export default function CartPage() {
                           <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
                           <button
                             onClick={() => removeFromCart(item._id)}
-                            className="text-gray-400 hover:text-pink-600"
+                            className="cursor-pointer text-gray-400 hover:text-pink-600 hover:bg-pink-200 size-8 p-1 rounded-full"
                           >
-                            <X className="h-5 w-5" />
+                            <X className="size-6" />
                           </button>
                         </div>
-                        <p className="mt-1 text-gray-600">{item.description}</p>
+                        <p className="mt-1 text-gray-600 text-justify">{item.description}</p>
                         <div className="mt-4 flex items-center justify-between">
                           <div className="flex items-center border border-gray-300 rounded-lg">
                             <button
                               onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                              className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                              className="cursor-pointer px-3 py-1 text-gray-600 hover:bg-gray-100"
                             >
                               <Minus className="h-4 w-4" />
                             </button>
                             <span className="px-4 py-1 text-gray-800">{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                              className="px-3 py-1 text-gray-600 hover:bg-gray-100"
+                              className="cursor-pointer px-3 py-1 text-gray-600 hover:bg-gray-100"
                             >
                               <Plus className="h-4 w-4" />
                             </button>
@@ -75,7 +75,7 @@ export default function CartPage() {
                 <div className="mt-6 flex justify-end">
                   <button
                     onClick={clearCart}
-                    className="text-pink-600 hover:text-pink-800 font-medium"
+                    className="cursor-pointer text-pink-600 hover:text-pink-800 font-medium"
                   >
                     Clear Cart
                   </button>

@@ -39,7 +39,6 @@ export default function AdminDashboard() {
       const response = await axios.get(`${BACKEND_API}/api/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log("users", response.data)
       setUsers(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch users');
@@ -87,7 +86,6 @@ export default function AdminDashboard() {
       const response = await axios.get(`${BACKEND_API}/api/activities`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log("resp",response)
       setActivities(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch contacts');
@@ -161,7 +159,7 @@ export default function AdminDashboard() {
             <nav className="space-y-2">
               <button
                 onClick={() => setActiveTab('activities')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'activities' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'activities' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <Activity className="h-5 w-5" />
@@ -169,7 +167,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('users')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'users' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'users' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <Users className="h-5 w-5" />
@@ -177,7 +175,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <ShoppingBag className="h-5 w-5" />
@@ -185,7 +183,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('contacts')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'contacts' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'contacts' ? 'bg-purple-50 text-purple-600' : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <Mail className="h-5 w-5" />
@@ -244,7 +242,7 @@ export default function AdminDashboard() {
                               <select
                                 value={user.role}
                                 onChange={(e) => updateUserRole(user._id, e.target.value)}
-                                className="border border-gray-300 rounded-md px-2 py-1"
+                                className="cursor-pointer border border-gray-300 rounded-md px-2 py-1"
                               >
                                 <option value="user">User</option>
                                 <option value="admin">Admin</option>
@@ -281,11 +279,11 @@ export default function AdminDashboard() {
                             </span>
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">Update Role</label>
+                            <label className="block text-xs text-gray-500 mb-1 cursor-pointer">Update Role</label>
                             <select
                               value={user.role}
                               onChange={(e) => updateUserRole(user._id, e.target.value)}
-                              className="w-full border border-gray-300 rounded-md px-2 py-1"
+                              className="cursor-pointer w-full border border-gray-300 rounded-md px-2 py-1"
                             >
                               <option value="user">User</option>
                               <option value="admin">Admin</option>
@@ -321,7 +319,7 @@ export default function AdminDashboard() {
                             <select
                               value={order.orderStatus}
                               onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                              className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+                              className="cursor-pointer border border-gray-300 rounded-md px-2 py-1 text-sm"
                             >
                               <option value="processing">Processing</option>
                               <option value="shipped">Shipped</option>
@@ -377,7 +375,7 @@ export default function AdminDashboard() {
                             <select
                               value={contact.status}
                               onChange={(e) => updateContactStatus(contact._id, e.target.value)}
-                              className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+                              className="cursor-pointer border border-gray-300 rounded-md px-2 py-1 text-sm"
                             >
                               <option value="pending">Pending</option>
                               <option value="responded">Responded</option>

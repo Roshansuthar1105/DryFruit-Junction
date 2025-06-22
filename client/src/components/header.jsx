@@ -97,7 +97,7 @@ export default function Header() {
             
             {/* Mobile menu button */}
             <button 
-              className="p-2" 
+              className="p-2 cursor-pointer hover:text-pink-600" 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -163,7 +163,7 @@ export default function Header() {
                       logout()
                       closeMenu()
                     }}
-                    className="text-gray-700 hover:text-pink-600 transition-colors font-medium flex items-center text-left"
+                    className="text-gray-700 cursor-pointer hover:text-pink-600 transition-colors font-medium flex items-center text-left"
                   >
                     <LogIn className="h-5 w-5 mr-3" />
                     Logout

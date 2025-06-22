@@ -107,7 +107,7 @@ export default function ProductsPage() {
               setSelectedProduct(product);
               setIsFormOpen(true);
             }}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-md"
+            className="cursor-pointer p-2 text-blue-600 hover:bg-blue-50 rounded-md"
             title="Edit"
           >
             <Edit className="h-4 w-4" />
@@ -117,7 +117,7 @@ export default function ProductsPage() {
               setSelectedProduct(product);
               setIsImageUploadOpen(true);
             }}
-            className="p-2 text-purple-600 hover:bg-purple-50 rounded-md"
+            className="cursor-pointer p-2 text-purple-600 hover:bg-purple-50 rounded-md"
             title="Manage Images"
           >
             <ImageIcon className="h-4 w-4" />
@@ -127,7 +127,7 @@ export default function ProductsPage() {
               setSelectedProduct(product);
               setIsDeleteModalOpen(true);
             }}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-md"
+            className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-md"
             title="Delete"
           >
             <Trash2 className="h-4 w-4" />
@@ -146,7 +146,7 @@ export default function ProductsPage() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2"
+              className="cursor-pointer border border-gray-300 rounded-md px-3 py-2"
             >
               <option value="all">All Categories</option>
               {categoryOptions.map(category => (
@@ -165,7 +165,7 @@ export default function ProductsPage() {
                 setSelectedProduct(null);
                 setIsFormOpen(true);
               }}
-              className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-md flex items-center space-x-2"
+              className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-md flex items-center space-x-2"
             >
               <Plus className="h-4 w-4" />
               <span>Add Product</span>
@@ -201,7 +201,7 @@ export default function ProductsPage() {
                           setSelectedProduct(product);
                           setIsFormOpen(true);
                         }}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md"
+                        className="cursor-pointer p-2 text-blue-600 hover:bg-blue-50 rounded-md"
                         title="Edit"
                       >
                         <Edit className="h-4 w-4" />
@@ -211,7 +211,7 @@ export default function ProductsPage() {
                           setSelectedProduct(product);
                           setIsImageUploadOpen(true);
                         }}
-                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-md"
+                        className="cursor-pointer p-2 text-purple-600 hover:bg-purple-50 rounded-md"
                         title="Manage Images"
                       >
                         <ImageIcon className="h-4 w-4" />
@@ -221,7 +221,7 @@ export default function ProductsPage() {
                           setSelectedProduct(product);
                           setIsDeleteModalOpen(true);
                         }}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-md"
+                        className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-md"
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useAdminData } from '../../hooks/useAdminData';
 import StatusBadge from '../../components/admin/StatusBadge';
 import UpdateStatusDropdown from '../../components/admin/UpdateStatusDropdown';
@@ -15,9 +15,6 @@ export default function OrdersPage() {
   const { data: orders, loading, error, updateStatus } = useAdminData('orders');
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  useEffect(() => {
-    console.log(orders);
-  })
   const filteredOrders = orders.filter(order => {
     const matchesStatus = statusFilter === 'all' || order.orderStatus === statusFilter;
     const matchesSearch =
@@ -37,7 +34,7 @@ export default function OrdersPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2"
+              className="cursor-pointer border border-gray-300 rounded-md px-3 py-2"
             >
               {statusFilters.map(filter => (
                 <option key={filter.value} value={filter.value}>{filter.label}</option>

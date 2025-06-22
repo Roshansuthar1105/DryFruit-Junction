@@ -130,7 +130,7 @@ export default function DeliveryDashboard() {
                   {order.orderStatus === 'processing' && (
                     <button
                       onClick={() => updateOrderStatus(order._id, 'shipped')}
-                      className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
+                      className="cursor-pointer flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
                     >
                       <Truck className="h-4 w-4" />
                       <span>Mark as Shipped</span>
@@ -139,7 +139,7 @@ export default function DeliveryDashboard() {
                   {order.orderStatus === 'shipped' && (
                     <button
                       onClick={() => updateOrderStatus(order._id, 'delivered')}
-                      className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2"
+                      className="cursor-pointer flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2"
                     >
                       <CheckCircle className="h-4 w-4" />
                       <span>Mark as Delivered</span>

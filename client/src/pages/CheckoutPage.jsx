@@ -74,7 +74,6 @@ export default function CheckoutPage() {
         }
       );
       if (response.status === 201) {
-        console.log(response);
         setOrderData(response.data); // Save full response
         setOrderSuccess(true);
         clearCart();
@@ -210,7 +209,7 @@ export default function CheckoutPage() {
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Delivery Information</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Full Name
                 </label>
                 <input
@@ -225,7 +224,7 @@ export default function CheckoutPage() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Email Address
                 </label>
                 <input
@@ -240,7 +239,7 @@ export default function CheckoutPage() {
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Phone Number
                 </label>
                 <input
@@ -254,7 +253,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div >
-                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Pincode
                 </label>
                 <input
@@ -270,7 +269,7 @@ export default function CheckoutPage() {
                 />
                 </div>
                 <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   City
                 </label>
                 <input
@@ -284,7 +283,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Delivery Address
                 </label>
                 <div className="flex space-x-2">
@@ -312,7 +311,7 @@ export default function CheckoutPage() {
               </div>
 
               <div>
-                <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   Order Notes (Optional)
                 </label>
                 <textarea
@@ -339,7 +338,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                     />
-                    <label htmlFor="cod" className="ml-3 block text-sm font-medium text-gray-700">
+                    <label htmlFor="cod" className="ml-3 block text-sm font-medium text-gray-700 cursor-pointer">
                       Cash on Delivery
                     </label>
                   </div>
@@ -354,7 +353,7 @@ export default function CheckoutPage() {
                       className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
                       disabled
                     />
-                    <label htmlFor="online" className="ml-3 block text-sm font-medium text-gray-500">
+                    <label htmlFor="online" className="ml-3 block text-sm font-medium text-gray-500 cursor-pointer">
                       Online Payment (Coming Soon)
                     </label>
                   </div>
@@ -364,7 +363,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isSubmitting || cart.length === 0 }
-                className="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+                className="cursor-pointer w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <>

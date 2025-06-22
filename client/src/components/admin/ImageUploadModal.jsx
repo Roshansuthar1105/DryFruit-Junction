@@ -111,7 +111,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="cursor-pointer text-gray-500 hover:text-gray-700"
           >
             <X className="h-5 w-5" />
           </button>
@@ -159,7 +159,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
                     <button
                       type="button"
                       onClick={() => removePreview(preview.id)}
-                      className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="cursor-pointer absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </button>
@@ -183,7 +183,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
                     <button
                       type="button"
                       onClick={() => handleDeleteImage(image._id)} // Pass public_id
-                      className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="cursor-pointer absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </button>
@@ -197,7 +197,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              className="cursor-pointer px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               disabled={loading}
             >
               Cancel
@@ -206,7 +206,7 @@ export default function ImageUploadModal({ isOpen, onClose, product, onSuccess }
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-md hover:shadow-md flex items-center space-x-2"
+                className="cursor-pointer px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-md hover:shadow-md flex items-center space-x-2"
                 disabled={loading}
               >
                 <Upload className="h-4 w-4" />

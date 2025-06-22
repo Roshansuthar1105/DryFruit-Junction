@@ -109,7 +109,7 @@ export default function UserDashboard() {
         <div className="md:hidden mb-6">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-full flex justify-between items-center bg-white p-4 rounded-xl shadow-md"
+            className="cursor-pointer w-full flex justify-between items-center bg-white p-4 rounded-xl shadow-md"
           >
             <div className="flex items-center space-x-3">
               <User className="h-5 w-5 text-pink-600" />
@@ -141,7 +141,7 @@ export default function UserDashboard() {
                     setActiveTab('orders')
                     setMobileMenuOpen(false)
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'orders'
+                  className={`cursor-pointer w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'orders'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
                     }`}
@@ -154,7 +154,7 @@ export default function UserDashboard() {
                     setActiveTab('favorites')
                     setMobileMenuOpen(false)
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'favorites'
+                  className={`cursor-pointer w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'favorites'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
                     }`}
@@ -167,7 +167,7 @@ export default function UserDashboard() {
                     setActiveTab('account')
                     setMobileMenuOpen(false)
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'account'
+                  className={`cursor-pointer w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm ${activeTab === 'account'
                     ? 'bg-pink-50 text-pink-600'
                     : 'text-gray-700 hover:bg-gray-50'
                     }`}
@@ -177,7 +177,7 @@ export default function UserDashboard() {
                 </button>
                 <button
                   onClick={logout}
-                  className="w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm text-gray-700 hover:bg-gray-50"
+                  className="cursor-pointer w-full text-left px-3 py-2 rounded-lg flex items-center space-x-3 text-sm text-gray-700 hover:bg-gray-50"
                 >
                   <LogOut className="h-4 w-4" />
                   <span>Logout</span>
@@ -203,7 +203,7 @@ export default function UserDashboard() {
             <nav className="space-y-2">
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'orders'
                   ? 'bg-pink-50 text-pink-600'
                   : 'text-gray-700 hover:bg-gray-50'
                   }`}
@@ -213,7 +213,7 @@ export default function UserDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('favorites')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'favorites'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'favorites'
                   ? 'bg-pink-50 text-pink-600'
                   : 'text-gray-700 hover:bg-gray-50'
                   }`}
@@ -223,7 +223,7 @@ export default function UserDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('account')}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'account'
+                className={`cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${activeTab === 'account'
                   ? 'bg-pink-50 text-pink-600'
                   : 'text-gray-700 hover:bg-gray-50'
                   }`}
@@ -233,7 +233,7 @@ export default function UserDashboard() {
               </button>
               <button
                 onClick={logout}
-                className="w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 text-gray-700 hover:bg-gray-50"
+                className="cursor-pointer w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 text-gray-700 hover:bg-gray-50"
               >
                 <LogOut className="h-5 w-5" />
                 <span>Logout</span>
@@ -330,7 +330,7 @@ export default function UserDashboard() {
                         <p className="text-gray-600 text-xs md:text-sm mt-1 line-clamp-2">{product.description}</p>
                         <div className="mt-3 md:mt-4 flex justify-between items-center">
                           <span className="font-bold text-pink-600 text-sm md:text-base">₹{product.price}</span>
-                          <button className="text-pink-600 hover:text-pink-800">
+                          <button className="cursor-pointer text-pink-600 hover:text-pink-800">
                             <Heart className="h-4 w-4 md:h-5 md:w-5 fill-current" />
                           </button>
                         </div>
@@ -363,7 +363,7 @@ export default function UserDashboard() {
                       </div>
                     )}
                     <div>
-                      <label htmlFor="currentPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
+                      <label htmlFor="currentPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2 cursor-pointer">
                         Current Password
                       </label>
                       <input
@@ -377,7 +377,7 @@ export default function UserDashboard() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="newPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
+                      <label htmlFor="newPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2 cursor-pointer">
                         New Password
                       </label>
                       <input
@@ -392,7 +392,7 @@ export default function UserDashboard() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="confirmPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
+                      <label htmlFor="confirmPassword" className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2 cursor-pointer">
                         Confirm New Password
                       </label>
                       <input
@@ -408,7 +408,7 @@ export default function UserDashboard() {
                     </div>
                     <button
                       type="submit"
-                      className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:shadow-md transition-all text-sm md:text-base w-full md:w-auto"
+                      className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:shadow-md transition-all text-sm md:text-base w-full md:w-auto"
                     >
                       Update Password
                     </button>
@@ -419,7 +419,7 @@ export default function UserDashboard() {
                   <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-4">Account Actions</h3>
                   <button
                     onClick={() => setShowDeleteConfirm(true)}
-                    className="text-red-600 hover:text-red-800 font-medium text-sm md:text-base"
+                    className="cursor-pointer text-red-600 hover:text-red-800 font-medium text-sm md:text-base"
                   >
                     Delete My Account
                   </button>
@@ -430,13 +430,13 @@ export default function UserDashboard() {
                       <div className="flex flex-col sm:flex-row gap-2 md:gap-4">
                         <button
                           onClick={deleteAccount}
-                          className="bg-red-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-red-700 text-sm md:text-base"
+                          className="cursor-pointer bg-red-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-red-700 text-sm md:text-base"
                         >
                           Yes, Delete Account
                         </button>
                         <button
                           onClick={() => setShowDeleteConfirm(false)}
-                          className="bg-gray-200 text-gray-800 px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-gray-300 text-sm md:text-base"
+                          className="cursor-pointer bg-gray-200 text-gray-800 px-3 py-2 md:px-4 md:py-2 rounded-lg hover:bg-gray-300 text-sm md:text-base"
                         >
                           Cancel
                         </button>

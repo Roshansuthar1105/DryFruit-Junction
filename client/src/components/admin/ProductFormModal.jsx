@@ -227,7 +227,6 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   //     onSuccess();
   //     onClose();
   //   } catch (err) {
-  //     console.log(formData,error);
   //     setError(err.response?.data?.message || err.message || 'Something went wrong');
   //   } finally {
   //     setLoading(false);
@@ -303,7 +302,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
           <h3 className="text-xl font-bold text-gray-800">
             {product ? 'Edit Product' : 'Add New Product'}
           </h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} className="cursor-pointer text-gray-500 hover:text-gray-700">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -318,7 +317,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Image Upload Section */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Images <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-wrap gap-4">
@@ -332,7 +331,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-1 right-1 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="cursor-pointer absolute top-1 right-1 bg-white/80 backdrop-blur-sm p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </button>
@@ -359,7 +358,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
               )}
             </div>            {/* Required Fields */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -373,14 +372,14 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Category <span className="text-red-500">*</span>
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                className="cursor-pointer w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               >
                 {categories.map(category => (
@@ -390,7 +389,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Slug
               </label>
               <input
@@ -404,7 +403,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Price (₹) <span className="text-red-500">*</span>
               </label>
               <input
@@ -420,7 +419,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Original Price (₹)
               </label>
               <input
@@ -435,7 +434,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Stock <span className="text-red-500">*</span>
               </label>
               <input
@@ -450,7 +449,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Low Stock Threshold
               </label>
               <input
@@ -464,7 +463,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Rating (1-5)
               </label>
               <input
@@ -487,7 +486,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                 onChange={handleChange}
                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label className="ml-2 block text-sm text-gray-700 cursor-pointer">
                 Active Product
               </label>
             </div>
@@ -500,7 +499,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                 onChange={handleChange}
                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label className="ml-2 block text-sm text-gray-700 cursor-pointer">
                 Featured Product
               </label>
             </div>
@@ -513,7 +512,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                 onChange={handleChange}
                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label className="ml-2 block text-sm text-gray-700 cursor-pointer">
                 Vegan
               </label>
             </div>
@@ -526,13 +525,13 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                 onChange={handleChange}
                 className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label className="ml-2 block text-sm text-gray-700 cursor-pointer">
                 Gluten Free
               </label>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Weight
               </label>
               <input
@@ -546,7 +545,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Shelf Life
               </label>
               <input
@@ -560,7 +559,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Preparation Time
               </label>
               <input
@@ -574,7 +573,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Ingredients (comma separated)
               </label>
               <textarea
@@ -587,7 +586,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Allergens (comma separated)
               </label>
               <textarea
@@ -600,7 +599,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Tags
               </label>
               <div className="flex">
@@ -615,7 +614,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                 <button
                   type="button"
                   onClick={addTag}
-                  className="bg-pink-500 text-white px-3 rounded-r-md"
+                  className="cursor-pointer bg-pink-500 text-white px-3 rounded-r-md"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -630,7 +629,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
                     <button
                       type="button"
                       onClick={() => removeTag(tag)}
-                      className="ml-1 text-gray-500 hover:text-red-500"
+                      className="cursor-pointer ml-1 text-gray-500 hover:text-red-500"
                     >
                       <Minus className="h-3 w-3" />
                     </button>
@@ -640,7 +639,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Storage Instructions
               </label>
               <textarea
@@ -653,7 +652,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Short Description
               </label>
               <textarea
@@ -668,7 +667,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Description <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -686,14 +685,14 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              className="cursor-pointer px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-md hover:shadow-md flex items-center space-x-2"
+              className="cursor-pointer px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-md hover:shadow-md flex items-center space-x-2"
               disabled={loading}
             >
               <Save className="h-4 w-4" />

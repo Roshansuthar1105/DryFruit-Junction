@@ -3,7 +3,7 @@ import { use, useEffect, useState } from 'react';
 import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react";
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-
+import toast from 'react-hot-toast';
 export default function Contact() {
   const { BACKEND_API, user } = useAuth();
   const [formData, setFormData] = useState({
@@ -37,6 +37,7 @@ export default function Contact() {
         message: formData.message
       });
       if (response.status === 201) {
+        toast.success("Response Sent Successfully");
         setSubmitSuccess(true);
         setFormData({
           name: '',
@@ -46,6 +47,7 @@ export default function Contact() {
         });
       }
     } catch (err) {
+      toast.error("Failed to send response");
       setError(err.response?.data?.message || 'Failed to submit form');
     } finally {
       setIsSubmitting(false);
@@ -144,7 +146,7 @@ export default function Contact() {
                 </p>
                 <button
                   onClick={() => setSubmitSuccess(false)}
-                  className="mt-4 text-pink-600 hover:text-pink-800 font-medium"
+                  className="mt-4 cursor-pointer text-pink-600 hover:text-pink-800 font-medium"
                 >
                   Send another message
                 </button>
@@ -159,7 +161,7 @@ export default function Contact() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                       Full Name
                     </label>
                     <input
@@ -175,7 +177,7 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                       Email Address
                     </label>
                     <input
@@ -193,7 +195,7 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                     Subject
                   </label>
                   <select
@@ -201,17 +203,17 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                    className="cursor-pointer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                   >
-                    <option value="general">General Inquiry</option>
-                    <option value="custom-order">Custom Order</option>
-                    <option value="catering">Catering Services</option>
-                    <option value="feedback">Feedback</option>
+                    <option className='cursor-pointer' value="general">General Inquiry</option>
+                    <option className='cursor-pointer' value="custom-order">Custom Order</option>
+                    <option className='cursor-pointer' value="catering">Catering Services</option>
+                    <option className='cursor-pointer' value="feedback">Feedback</option>
                   </select>
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                     Message
                   </label>
                   <textarea
@@ -229,7 +231,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70"
+                  className="w-full cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 disabled:opacity-70"
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>

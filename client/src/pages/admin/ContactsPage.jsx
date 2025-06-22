@@ -34,7 +34,7 @@ export default function ContactsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2"
+            className="cursor-pointer border border-gray-300 rounded-md px-3 py-2"
           >
             {statusFilters.map(filter => (
               <option key={filter.value} value={filter.value}>{filter.label}</option>

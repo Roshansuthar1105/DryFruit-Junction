@@ -28,7 +28,6 @@ export function useAdminData(resource) {
           break;
         case 'products':
           response = (await api.getProducts()).data;
-          // console.log("prod resp: ",response.data);
           setData(response.data);
           break;
         default:

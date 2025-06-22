@@ -31,7 +31,7 @@ export default function About() {
               
               <button
                 onClick={() => setShowBrandStory(true)}
-                className="mt-4 bg-gradient-to-r from-pink-500 to-pink-700 text-white px-6 py-3 rounded-full text-md font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="mt-4 cursor-pointer bg-gradient-to-r from-pink-500 to-pink-700 text-white px-6 py-3 rounded-full text-md font-semibold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 Read Our Full Story
               </button>

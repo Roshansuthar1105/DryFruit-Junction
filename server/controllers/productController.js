@@ -263,10 +263,6 @@ const deleteProductImage = asyncHandler(async (req, res) => {
   // Find the image to verify it exists
   // const imageExists = product.images.some(img => img._id === public_id || img._id==`ObjectId('${public_id}')`);
   const imageExists = product.images.filter(img => img._id.toString() === public_id);
-  // console.log("public id : ",public_id)
-  // // product.images.map((img)=>{
-  // //   console.log("ids :",,public_id,img._id )
-  // // })
   if (!imageExists) {
     res.status(404);
     throw new Error('Image not found in product');

@@ -91,7 +91,7 @@ const Signup = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-pink-800 mb-1">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-pink-800 mb-1 cursor-pointer">
                     First Name
                   </label>
                   <input
@@ -106,7 +106,7 @@ const Signup = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-pink-800 mb-1">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-pink-800 mb-1 cursor-pointer">
                     Last Name
                   </label>
                   <input
@@ -122,7 +122,7 @@ const Signup = () => {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-pink-800 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-pink-800 mb-1 cursor-pointer">
                   Email Address
                 </label>
                 <input
@@ -137,7 +137,7 @@ const Signup = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-pink-800 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-pink-800 mb-1 cursor-pointer">
                   Password
                 </label>
                 <input
@@ -153,7 +153,7 @@ const Signup = () => {
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-pink-800 mb-1">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-pink-800 mb-1 cursor-pointer">
                   Confirm Password
                 </label>
                 <input
@@ -176,7 +176,7 @@ const Signup = () => {
                   className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-pink-300 rounded"
                   required
                 />
-                <label htmlFor="terms" className="ml-2 block text-sm text-pink-700">
+                <label htmlFor="terms" className="ml-2 block text-sm text-pink-700 cursor-pointer">
                   I agree to the <Link to="/terms" className="text-pink-600 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-pink-600 hover:underline">Privacy Policy</Link>
                 </label>
               </div>
@@ -184,7 +184,7 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-6 bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
+                className="cursor-pointer w-full mt-6 bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-70"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">

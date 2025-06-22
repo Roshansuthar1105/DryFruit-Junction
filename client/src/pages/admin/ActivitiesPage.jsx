@@ -40,7 +40,7 @@ export default function ActivitiesPage() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2"
+              className="cursor-pointer border border-gray-300 rounded-md px-3 py-2"
             >
               {activityTypes.map(type => (
                 <option key={type.value} value={type.value}>{type.label}</option>

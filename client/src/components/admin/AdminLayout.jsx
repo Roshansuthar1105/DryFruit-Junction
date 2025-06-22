@@ -39,7 +39,7 @@ export default function AdminLayout() {
       {/* Mobile menu button */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed top-4 right-4 z-50 p-2 rounded-md text-gray-700 hover:bg-gray-100 bg-white shadow-md"
+        className="md:hidden cursor-pointer fixed top-4 right-4 z-50 p-2 rounded-md text-gray-700 hover:bg-gray-100 bg-white shadow-md"
       >
         {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>

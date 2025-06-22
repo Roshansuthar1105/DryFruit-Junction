@@ -13,7 +13,6 @@ const createOrder = asyncHandler(async (req, res) => {
     'items.product',
     'name price images'
   );
-  console.log("item in pop : ",cart.items[0].product)
   if (!cart || cart.items.length === 0) {
     res.status(400);
     throw new Error('No items in cart');

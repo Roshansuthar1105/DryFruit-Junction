@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
               // Optionally show a toast/modal suggesting to login
             }
           }}
-          className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${isFavorite(product._id)
+          className={`absolute top-4 right-4 p-2 cursor-pointer rounded-full transition-colors ${isFavorite(product._id)
               ? 'bg-pink-100 text-pink-600'
               : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-pink-50'
             }`}

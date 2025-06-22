@@ -44,7 +44,6 @@ const ProductPage = () => {
         setRelatedLoading(true);
         const response = await api.getProducts();
         // Filter products from same category excluding current product
-        // console.log(response.data.data);
         const filtered = response.data.data.filter(
           // p => p.category === category && p._id !== excludeId
           p => p._id !== excludeId
@@ -106,7 +105,7 @@ const ProductPage = () => {
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="cursor-pointer mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
         >
           Go Back
         </button>
@@ -119,7 +118,7 @@ const ProductPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => navigate(-1)}
-            className="group mb-8 flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-pink-600"
+            className="cursor-pointer group mb-8 flex items-center gap-2 text-gray-600 transition-colors duration-200 hover:text-pink-600"
           >
             <ArrowLeft className="w-5 h-5 group-hover:text-pink-600" />
             <span>Back to Shop</span>
@@ -143,7 +142,7 @@ const ProductPage = () => {
                 {product.images.length >1 && product.images.map((image, index) => (
                   <button
                     key={image._id}
-                    onClick={() => { console.log("image change to ", index, product.images[index], image); setSelectedImageIndex(index) }}
+                    onClick={() => {setSelectedImageIndex(index) }}
                     className={`cursor-pointer bg-white p-2 rounded-xl shadow-md transition-all duration-200 ${selectedImageIndex === index ? 'ring-2 ring-pink-500' : 'hover:ring-1 hover:ring-gray-300'
                       }`}
                   >
@@ -199,14 +198,14 @@ const ProductPage = () => {
                 <div className="flex items-center border border-gray-300 rounded-full">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-2 text-gray-600 hover:text-pink-600"
+                    className="cursor-pointer px-4 py-2 text-gray-600 hover:text-pink-600"
                   >
                     -
                   </button>
                   <span className="px-4 py-2">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-2 text-gray-600 hover:text-pink-600"
+                    className="cursor-pointer px-4 py-2 text-gray-600 hover:text-pink-600"
                   >
                     +
                   </button>
@@ -228,7 +227,7 @@ const ProductPage = () => {
                 <button
                   onClick={handleAddToCart}
                   disabled={product.stock <= 0}
-                  className={`flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${product.stock > 0
+                  className={`cursor-pointer flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${product.stock > 0
                       ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:shadow-xl'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
@@ -236,7 +235,7 @@ const ProductPage = () => {
                   <ShoppingCart className="w-5 h-5" />
                   Add to Cart
                 </button>
-                <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
+                <button className="cursor-pointer border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-pink-500 hover:text-pink-600 transition-all duration-300">
                   <Heart className="w-5 h-5 inline mr-2" />
                   Wishlist
                 </button>
@@ -389,7 +388,7 @@ const ProductPage = () => {
                     </div>
                     <button
                       onClick={() => navigate(`/products/${relatedProduct._id}`)}
-                      className="mt-4 w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium hover:opacity-90 transition-opacity"
+                      className="cursor-pointer mt-4 w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium hover:opacity-90 transition-opacity"
                     >
                       View Details
                     </button>

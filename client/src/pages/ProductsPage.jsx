@@ -31,7 +31,6 @@ export default function ProductsPage() {
           // },
         });
         setProducts(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);
       }
@@ -238,7 +237,7 @@ export default function ProductsPage() {
             <p className="mt-2 text-gray-500">Try adjusting your search or filter criteria</p>
             <button
               onClick={resetFilters}
-              className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+              className="cursor-pointer mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
             >
               Reset Filters
             </button>
