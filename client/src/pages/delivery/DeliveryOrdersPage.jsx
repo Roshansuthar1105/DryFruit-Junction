@@ -14,6 +14,7 @@ export default function DeliveryOrdersPage() {
 //     order.orderNumber?.toString().includes(searchTerm) ||
 //     order._id.includes(searchTerm))
 //   );
+console.log(orders)
     const filteredOrders=orders;
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -89,9 +90,15 @@ export default function DeliveryOrdersPage() {
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <h4 className="font-medium text-gray-800 mb-2">Delivery Address</h4>
                   <p className="text-sm text-gray-600">
-                    {order.shippingInfo?.address}, {order.shippingInfo?.city}, {order.shippingInfo?.state} - {order.shippingInfo?.pinCode}
+                    {order.shippingInfo?.address}, {order.shippingInfo?.city}, {order.shippingInfo?.state} - {order.shippingInfo?.pincode}
                   </p>
                   <p className="text-sm text-gray-600 mt-1">Phone: {order.shippingInfo?.phone}</p>
+                  <p className="text-sm text-gray-600">
+                    {order.shippingInfo?.email}, {order.shippingInfo?.name}
+                  </p>
+                  {order.shippingInfo?.note && <p>
+                    Special Note : {order.shippingInfo?.note}
+                    </p>}
                 </div>
               </div>
             ))}

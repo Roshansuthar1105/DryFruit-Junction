@@ -6,7 +6,9 @@ import {
   ShoppingCart,
   Truck,
   Home,
-  User
+  User,
+  MapPin,
+  DollarSign
 } from 'lucide-react';
 
 const navItems = [
@@ -14,7 +16,9 @@ const navItems = [
     header: 'Delivery',
     items: [
       { path: '/delivery', icon: LayoutDashboard, label: 'Dashboard' },
-      // { path: '/delivery/orders', icon: ShoppingCart, label: 'My Deliveries' },
+      { path: '/delivery/orders', icon: ShoppingCart, label: 'My Deliveries' },
+      { path: '/delivery/tracking', icon: MapPin, label: 'Live Tracking' },
+      { path: '/delivery/earnings', icon: DollarSign, label: 'Earnings' },
     ]
   },
   {
@@ -37,9 +41,9 @@ export default function DeliverySidebar({ user, onLinkClick, isMobileOpen }) {
   };
 
   return (
-    <div className="transition-all duration-300 ease-in-out bg-white/90 backdrop-blur-lg border-r border-gray-200 h-full shadow-md flex flex-col rounded-sm w-64">
+    <div className="transition-all duration-300 ease-in-out bg-white/90 backdrop-blur-lg border-r border-gray-200 h-full shadow-md flex flex-col rounded-sm w-64 z-50">
       {/* Profile section */}
-      <div className="flex items-center space-x-3 p-4 border-b border-gray-200">
+      <div className="flex items-center space-x-3 p-4 border-b border-gray-200 z-50">
         <div className="bg-gradient-to-r from-blue-500 to-cyan-500 w-10 h-10 rounded-full flex items-center justify-center">
           <Truck className="h-5 w-5 text-white" />
         </div>
