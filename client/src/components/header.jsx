@@ -14,13 +14,14 @@ export default function Header() {
 
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-lg sticky w-full left-0 top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-pink-500 to-orange-500 p-2 rounded-full">
+              <img src="logo.png" alt="Logo" width={40} height={40} />
+            {/* <div className="bg-gradient-to-r from-pink-500 to-orange-500 p-2 rounded-full">
               <Heart className="h-6 w-6 text-white" />
-            </div>
+            </div> */}
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
               DryFruit Junction
             </span>

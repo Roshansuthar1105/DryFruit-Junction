@@ -57,13 +57,13 @@ export default function Hero() {
 
           {/* Right Content - Hero Image */}
           <div className="relative">
-            <div className="relative z-10 px-5">
+            <div className="relative z-10 px-5 ">
               <img
-                src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJ5JTIwZnJ1aXQlMjBzd2VldHN8ZW58MHx8MHx8fDA%3D"
+                src="https://img.freepik.com/free-photo/nagpur-orange-burfee-barfi-burfi-is-creamy-fudge-made-with-fresh-oranges-mawa_466689-72287.jpg?ga=GA1.1.429237435.1750599163&semt=ais_hybrid&w=740"
                 alt="Premium dry fruit sweets from DryFruit Junction"
                 width={500}
                 height={600}
-                className="rounded-3xl shadow-2xl w-full"
+                className="rounded-3xl shadow-2xl w-full max-h-[70dvh] object-cover"
               />
             </div>
             {/* Decorative elements */}

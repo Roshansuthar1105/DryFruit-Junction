@@ -11,9 +11,11 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-to-r from-pink-500 to-pink-700 p-2 rounded-full">
+            <img src="logo.png" alt="Logo" width={40} height={40} />
+              {/* <div className="bg-gradient-to-r from-pink-500 to-pink-700 p-2 rounded-full">
                 <Heart className="h-6 w-6 text-white" />
-              </div>
+              </div> */}
+
               <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">
                 DryFruit Junction
               </span>
