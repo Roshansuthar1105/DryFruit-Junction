@@ -6,11 +6,12 @@ const asyncHandler = require('express-async-handler');
 // @route   POST /api/contact
 // @access  Public
 const submitContactForm = asyncHandler(async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, message,phone } = req.body;
 
   const contact = await Contact.create({
     name,
     email,
+    phone,
     message
   });
 

@@ -381,6 +381,9 @@ export default function AdminDashboard() {
                             <p className="text-sm text-gray-500">
                               {contact.email} • {new Date(contact.createdAt).toLocaleDateString()}
                             </p>
+                            <p className="text-sm text-gray-500">
+                              {contact.phone} • {new Date(contact.createdAt).toLocaleDateString()}
+                            </p>
                           </div>
                           <div className="flex items-center space-x-2">
                             <select

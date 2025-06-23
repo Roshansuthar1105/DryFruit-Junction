@@ -64,6 +64,9 @@ export default function ContactsPage() {
                 <div>
                   <h3 className="font-bold text-gray-800">{contact.name}</h3>
                   <p className="text-sm text-gray-500">
+                    {contact.phone}
+                  </p>
+                  <p className="text-sm text-gray-500">
                     {contact.email} • {new Date(contact.createdAt).toLocaleDateString()}
                   </p>
                 </div>

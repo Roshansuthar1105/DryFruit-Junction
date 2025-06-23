@@ -9,6 +9,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     message: '',
     subject: 'general'
   });
@@ -34,6 +35,7 @@ export default function Contact() {
       const response = await axios.post(`${BACKEND_API}/api/contact`, {
         name: formData.name,
         email: formData.email,
+        phone: formData.phone,
         message: formData.message
       });
       if (response.status === 201) {
@@ -42,6 +44,7 @@ export default function Contact() {
         setFormData({
           name: '',
           email: '',
+          phone: '',
           message: '',
           subject: 'general'
         });
@@ -193,6 +196,22 @@ export default function Contact() {
                     />
                   </div>
                 </div>
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
+                    Phone No.
+                    </label>
+                    <input
+                      type="number"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                      placeholder="Ex. 9876543210"
+                      required
+                      disabled={user?.phone}
+                    />
+                  </div>
 
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
