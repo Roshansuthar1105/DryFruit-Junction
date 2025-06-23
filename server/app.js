@@ -14,6 +14,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const userRoutes = require('./routes/userRoutes');
 const activityRoutes = require('./routes/activityRoutes');
+const VisitorRoutes = require('./routes/VisitorRoutes');
 // Connect to database
 connectDB();
 
@@ -38,6 +39,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/activities', activityRoutes);
+app.use('/api/visitors', VisitorRoutes);
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Mount routers (add this after other router mounts)
