@@ -3,6 +3,16 @@
 
 A modern, responsive admin dashboard built with **React**, **Tailwind CSS**, and **Vite**, designed to manage users, orders, and contact submissions for the DryFruit Junction sweets e-commerce platform.
 
+## 🌟 Brand Story
+
+**“A Sweet Revolution from the Heart of Rajasthan”**
+
+DryFruit Junction was born not from a factory, but from our family-run kitchen in Jodhpur, Rajasthan. A brand that blends purity, premium dry fruits, and the richness of handmade tradition. From our signature Besan Chakki to exotic flavors like Mango and Strawberry Kaju Katli, we redefine what real mithai means.
+
+> “This is the taste I was looking for.”
+
+We bring trust, taste, and tradition—one sweet at a time.
+
 ## 🚀 Features
 
 - 👥 Manage Users (roles, permissions)
@@ -10,6 +20,25 @@ A modern, responsive admin dashboard built with **React**, **Tailwind CSS**, and
 - 💬 View & respond to Contact Submissions
 - 🌈 Responsive UI with Tailwind and glassmorphism
 - 🔒 Admin-only route protection
+- 🎁 Product highlight sections (Kaju Katli, Panch Mewa)
+- 🧁 Integrated product freshness & delivery messaging
+
+## 🧁 Signature Products
+
+### ✅ Kaju Katli - Classic
+- Made with 100% pure cashews
+- No preservatives or fillers
+- Handmade fresh after every order
+
+### ✅ Mango/Strawberry Kaju Katli
+- Pure cashew base with real fruit essence
+- Festive packaging
+- Zero compromise on quality
+
+### ✅ Panch Mewa Burfi
+- Made with 5 premium dry fruits & saffron
+- No added sugar syrups
+- Ideal for gifting and nutrition
 
 ## 🛠️ Tech Stack
 
@@ -19,55 +48,6 @@ A modern, responsive admin dashboard built with **React**, **Tailwind CSS**, and
 - Axios for API calls
 - Context API (Auth, Cart, Favorites)
 
-## 📁 Folder Structure
-
-```
-src/
-│
-├── components/         # Reusable components (Header, Sidebar, etc)
-├── context/            # Auth, Cart, Favorites Context
-├── pages/              # Admin pages like Dashboard, Users, Orders, Contacts
-└── App.jsx             # Main app with routes
-```
-
-## ⚙️ Getting Started
-
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/your-username/sweet-delights-admin.git
-cd sweet-delights-admin
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Start the development server
-
-```bash
-npm run dev
-```
-
-## 📦 Build
-
-```bash
-npm run build
-```
-
-## 🔐 Environment Variables
-
-Create a `.env` file:
-
-```
-VITE_API_BASE_URL=https://your-backend-api.com
-```
-
-## 🧑‍💻 Admin Credentials
-
-To access admin panel, log in with a user that has `"role": "admin"`.
 
 ## 📄 License
 
@@ -75,4 +55,5 @@ MIT
 
 ---
 
-Crafted with 💖 by the DryFruit Junction Team
+Crafted with 💖 by the DryFruit Junction Team  
+Taste once. Trust forever.
