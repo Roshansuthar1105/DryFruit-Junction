@@ -49,7 +49,6 @@ export default function Header() {
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link to="/dashboard" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
-                  <User className="h-5 w-5 mr-1" />
                   {user ? user.firstName : "Account"}
                 </Link>
                 <button
@@ -61,7 +60,7 @@ export default function Header() {
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link to="/login" className="flex items-center text-gray-700 hover:text-pink-600 transition-colors">
+                <Link to="/login" className="flex items-center bg-pink-500 text-white py-1 px-2 rounded-4xl hover:bg-gray-600 transition-colors">
                   <LogIn className="h-5 w-5 mr-1" />
                   Login
                 </Link>

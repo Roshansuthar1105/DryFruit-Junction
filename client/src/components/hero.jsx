@@ -1,6 +1,7 @@
 import { Star, Award, Clock } from "lucide-react"
 import { Link } from "react-router-dom";
 // Update Hero.jsx
+import TestimonialCarousel from './TestimonialCarousel'
 export default function Hero() {
   return (
     <section className="relative py-20 overflow-hidden">
@@ -57,7 +58,8 @@ export default function Hero() {
 
           {/* Right Content - Hero Image */}
           <div className="relative">
-            <div className="relative z-10 px-5 ">
+            
+            {/* <div className="relative z-10 px-5 ">
               <img
                 src="https://img.freepik.com/free-photo/nagpur-orange-burfee-barfi-burfi-is-creamy-fudge-made-with-fresh-oranges-mawa_466689-72287.jpg?ga=GA1.1.429237435.1750599163&semt=ais_hybrid&w=740"
                 alt="Premium dry fruit sweets from DryFruit Junction"
@@ -65,7 +67,8 @@ export default function Hero() {
                 height={600}
                 className="rounded-3xl shadow-2xl w-full max-h-[70dvh] object-cover"
               />
-            </div>
+            </div> */}
+            <TestimonialCarousel/>
             {/* Decorative elements */}
             <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-r from-pink-200 to-pink-300 rounded-full opacity-20 blur-3xl"></div>
             <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-gradient-to-r from-pink-100 to-pink-200 rounded-full opacity-20 blur-3xl"></div>
