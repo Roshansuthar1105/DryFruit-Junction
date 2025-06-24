@@ -50,7 +50,7 @@ export default function ProductCard({ product }) {
           <h3 className="text-xl font-bold text-gray-800 mb-2 hover:text-pink-600 transition-colors">
             {product.name}
           </h3>
-          <p className="text-gray-600 mb-4">{product.description}</p>
+          <p className="text-gray-600 mb-4 text-justify">{product.shortDescription}</p>
         </Link>
 
         <div className="flex items-center justify-between">

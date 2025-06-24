@@ -30,6 +30,8 @@ export default function ProductsPage() {
           //   search: searchTerm,
           // },
         });
+        
+        console.table(response.data.data);
         setProducts(response.data.data);
       } catch (error) {
         console.error('Failed to fetch products:', error);

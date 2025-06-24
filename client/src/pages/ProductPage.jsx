@@ -374,16 +374,19 @@ const ProductPage = () => {
                       loading="lazy"
                     />
                   </div>
-                  <div className="p-6">
+                  <div className="p-6 h-72 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div >
                         <h3 className="text-lg font-bold text-gray-800">
                           {relatedProduct.name}
                         </h3>
-                        <div className="flex items-center mt-1">
+                        <p className="text-md font-semibold text-gray-600">
+                          {relatedProduct.shortDescription}
+                        </p>
+                        {/* <div className="flex items-center mt-1">
                           <div className="flex mr-1">{renderStars(relatedProduct.rating)}</div>
                           <span className="text-xs text-gray-500">({relatedProduct.numReviews})</span>
-                        </div>
+                        </div> */}
                       </div>
                       <span className="text-lg font-semibold text-pink-600">
                         ₹{relatedProduct.price.toFixed(2)}
