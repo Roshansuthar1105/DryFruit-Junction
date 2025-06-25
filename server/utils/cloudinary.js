@@ -10,21 +10,33 @@ cloudinary.config({
 });
 
 // Upload a file to Cloudinary
-const uploadToCloudinary = async (filePath, folder = '') => {
-  try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: folder
-    });
-    // Delete file from local storage after upload
-    fs.unlinkSync(filePath);
-    return result;
-  } catch (error) {
-    // Delete file from local storage if upload fails
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-    throw error;
-  }
+// const uploadToCloudinary = async (filePath, folder = '') => {
+//   try {
+//     const result = await cloudinary.uploader.upload(filePath, {
+//       folder: folder
+//     });
+//     // Delete file from local storage after upload
+//     fs.unlinkSync(filePath);
+//     return result;
+//   } catch (error) {
+//     // Delete file from local storage if upload fails
+//     if (fs.existsSync(filePath)) {
+//       fs.unlinkSync(filePath);
+//     }
+//     throw error;
+//   }
+// };
+const uploadToCloudinary = async (buffer, folder = '') => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
 };
 
 // Delete a file from Cloudinary
