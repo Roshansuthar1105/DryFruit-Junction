@@ -1,17 +1,36 @@
 // src/components/ProductCard.jsx
-import { ShoppingCart, Heart } from 'lucide-react'
-import { useCart } from '../context/CartContext'
-import { useFavorites } from '../context/FavoritesContext'
-import { useAuth } from '../context/AuthContext'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import { ShoppingCart, Heart } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
+import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useCart()
-  const { isFavorite, toggleFavorite } = useFavorites()
-  const { user } = useAuth()
+  const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { user } = useAuth();
+  const [selectedVariant, setSelectedVariant] = useState(
+    product.variants?.[0]?._id || ''
+  );
+
+  const currentVariant = product.variants?.find(v => v._id === selectedVariant) || 
+    product.variants?.[0] || 
+    { price: product.price, weight: product.weight, _id: null };
+
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      selectedVariant,
+      price: currentVariant.price,
+      weight: currentVariant.weight,
+      variantId: currentVariant._id
+    });
+  };
 
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
+      {/* Product image and header */}
       <div className="relative overflow-hidden">
         <Link to={`/products/${product._id}`}>
           <img
@@ -26,22 +45,14 @@ export default function ProductCard({ product }) {
           </span>
         </div>
         <button
-          onClick={() => {
-            if (user) {
-              toggleFavorite(product)
-            } else {
-              // Optionally show a toast/modal suggesting to login
-            }
-          }}
-          className={`absolute top-4 right-4 p-2 cursor-pointer rounded-full transition-colors ${isFavorite(product._id)
-              ? 'bg-pink-100 text-pink-600'
+          onClick={() => user ? toggleFavorite(product) : null}
+          className={`absolute top-4 right-4 p-2 cursor-pointer rounded-full transition-colors ${
+            isFavorite(product._id) 
+              ? 'bg-pink-100 text-pink-600' 
               : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-pink-50'
-            }`}
+          }`}
         >
-          <Heart
-            className={`h-5 w-5 ${isFavorite(product._id) ? 'fill-pink-600' : ''
-              }`}
-          />
+          <Heart className={`h-5 w-5 ${isFavorite(product._id) ? 'fill-pink-600' : ''}`} />
         </button>
       </div>
 
@@ -55,17 +66,46 @@ export default function ProductCard({ product }) {
 
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-            ₹{product.price}
+            ₹{currentVariant.price}
           </span>
-          <button
-            onClick={() => addToCart(product)}
-            className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            <span>Add to Cart</span>
-          </button>
+
+          {/* Variant selector */}
+          {product.variants?.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap gap-2">
+                {product.variants.map(variant => (
+                  <button
+                    key={variant._id}
+                    onClick={() => setSelectedVariant(variant._id)}
+                    className={`border rounded-lg px-3 py-1 text-sm transition-all ${
+                      selectedVariant === variant._id
+                        ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white border-transparent'
+                        : 'border-gray-300 hover:border-pink-300'
+                    }`}
+                  >
+                    {variant.weight} - ₹{variant.price}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={handleAddToCart}
+                className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center gap-2 w-fit"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                <span>Add to Cart</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+            >
+              <ShoppingCart className="h-4 w-4" />
+              <span>Add to Cart</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }

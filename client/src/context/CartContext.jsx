@@ -6,70 +6,89 @@ import axios from 'axios';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user,BACKEND_API } = useAuth();
+  const { user, BACKEND_API } = useAuth();
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem('sweetDelightsCart');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // 💾 Always save to localStorage
   useEffect(() => {
     localStorage.setItem('sweetDelightsCart', JSON.stringify(cart));
   }, [cart]);
 
-  // 🔄 Load cart on login/logout
-  // Update the fetchCart function to properly handle images
-const fetchCart = async () => {
-  const token = localStorage.getItem('token');
-  if (user && token) {
-    try {
-      const response = await axios.get(`${BACKEND_API}/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const fetchCart = async () => {
+    const token = localStorage.getItem('token');
+    if (user && token) {
+      try {
+        const response = await axios.get(`${BACKEND_API}/api/cart`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      const serverCart = (response.data.items || []).map(item => ({
-        ...item.product,
-        images: item.product.images, // Ensure images are included
-        quantity: item.quantity,
-        _id: item.product._id,
-        itemId: item._id,
-      }));
+        const serverCart = (response.data.items || []).map(item => ({
+          ...item.product,
+          images: item.product.images,
+          quantity: item.quantity,
+          _id: item.product._id,
+          itemId: item._id,
+          variantId: item.variant,
+          price: item.price,
+          weight: item.product.variants?.find(v => v._id === item.variant)?.weight || ''
+        }));
 
-      setCart(serverCart);
-      localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
-    } catch (err) {
-      console.error('❌ Fetching cart failed:', err);
-      toast.error('❌ Fetching cart failed:', err);
+        setCart(serverCart);
+        localStorage.setItem('sweetDelightsCart', JSON.stringify(serverCart));
+      } catch (err) {
+        console.error('❌ Fetching cart failed:', err);
+        toast.error('Failed to load cart');
+      }
     }
-  }
-};
-  useEffect(() => {
+  };
 
+  useEffect(() => {
     fetchCart();
   }, [user]);
 
-  const addToCart = async (product, quantity = 1) => {
-    const updatedCart = cart.some(item => item._id === product._id)
-      ? cart.map(item =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        )
-      : [...cart, { ...product, quantity }];
+  const addToCart = async (product, quantity = 1, variantId = null) => {
+    const existingItemIndex = cart.findIndex(
+      item => item._id === product._id && item.variantId === variantId
+    );
+
+    const updatedCart = existingItemIndex >= 0
+      ? cart.map((item, index) =>
+        index === existingItemIndex
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      )
+      : [
+        ...cart,
+        {
+          ...product,
+          quantity,
+          variantId,
+          price: variantId
+            ? product.variants.find(v => v._id === variantId)?.price
+            : product.price,
+          weight: variantId
+            ? product.variants.find(v => v._id === variantId)?.weight
+            : product.weight
+        }
+      ];
 
     setCart(updatedCart);
-    toast.success("Item Added to cart");
+    toast.success("Item added to cart");
+
     if (user) {
       try {
         await axios.post(`${BACKEND_API}/api/cart`, {
           productId: product._id,
+          variantId,
           quantity,
         }, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
       } catch (err) {
-        console.error('❌ Failed to sync addToCart:', err);
-        toast.error('❌ Failed to sync addToCart:', err);
+        console.error('❌ Failed to sync cart:', err);
+        toast.error('Failed to sync cart with server');
       }
     }
   };

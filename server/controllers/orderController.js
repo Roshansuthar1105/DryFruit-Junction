@@ -1,6 +1,6 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
-const asyncHandler = require('express-async-handler');
+const Order = require("../models/Order");
+const Cart = require("../models/Cart");
+const asyncHandler = require("express-async-handler");
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -10,21 +10,25 @@ const createOrder = asyncHandler(async (req, res) => {
 
   // Get user's cart
   const cart = await Cart.findOne({ user: req.user._id }).populate(
-    'items.product',
-    'name price images'
+    "items.product",
+    "name price images"
   );
   if (!cart || cart.items.length === 0) {
     res.status(400);
-    throw new Error('No items in cart');
+    throw new Error("No items in cart");
   }
 
   // Prepare order items
   const orderItems = cart.items.map((item) => ({
     product: item.product._id,
+    variant: item.variant, // Include variant
     name: item.product.name,
     quantity: item.quantity,
-    price: item.product.price,
+    price: item.price, // Use the price from cart item
     images: item.product.images,
+    weight:
+      item.product.variants.find((v) => v._id.toString() === item.variant)
+        ?.weight || "",
   }));
 
   // Calculate prices
@@ -60,24 +64,24 @@ const createOrder = asyncHandler(async (req, res) => {
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
-    'user',
-    'firstName lastName email'
+    "user",
+    "firstName lastName email"
   );
 
   if (order) {
     // Check if the order belongs to the user or if user is admin
     if (
       order.user._id.toString() !== req.user._id.toString() &&
-      req.user.role !== 'admin'
+      req.user.role !== "admin"
     ) {
       res.status(401);
-      throw new Error('Not authorized to view this order');
+      throw new Error("Not authorized to view this order");
     }
 
     res.json(order);
   } else {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 });
 
@@ -93,7 +97,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('user', 'firstName lastName');
+  const orders = await Order.find({}).populate("user", "firstName lastName");
   res.json(orders);
 });
 
@@ -104,41 +108,41 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (order) {
-    order.orderStatus = 'delivered';
+    order.orderStatus = "delivered";
     order.deliveredAt = Date.now();
 
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } else {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 });
 // Update the updateOrderStatus function
 const updateOrderStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
-  const validStatuses = ['processing', 'shipped', 'delivered', 'cancelled'];
-  
+  const validStatuses = ["processing", "shipped", "delivered", "cancelled"];
+
   if (!validStatuses.includes(status)) {
     res.status(400);
-    throw new Error('Invalid status value');
+    throw new Error("Invalid status value");
   }
 
   const order = await Order.findById(req.params.id);
-  
+
   if (!order) {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 
   // Additional business logic checks if needed
-  if (status === 'delivered') {
+  if (status === "delivered") {
     order.deliveredAt = Date.now();
   }
 
   order.orderStatus = status;
   const updatedOrder = await order.save();
-  
+
   res.json(updatedOrder);
 });
 
@@ -148,5 +152,5 @@ module.exports = {
   getMyOrders,
   getOrders,
   updateOrderToDelivered,
-  updateOrderStatus
+  updateOrderStatus,
 };

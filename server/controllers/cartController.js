@@ -9,7 +9,7 @@ const asyncHandler = require('express-async-handler');
 const getCart = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id }).populate({
     path: 'items.product',
-    select: 'name price images description stock category',
+    select: 'name description images category variants',
     populate: {
       path: 'images',
       select: 'url alt'
@@ -57,8 +57,9 @@ const addToCart = asyncHandler(async (req, res) => {
     // Add new item to cart
     cart.items.push({
       product: productId,
+      variant: req.body.variantId, // Add variant ID
       quantity,
-      price: product.price,
+      price: variant.price // Use variant price
     });
   }
 
