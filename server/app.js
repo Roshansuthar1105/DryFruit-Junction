@@ -41,7 +41,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/activities', activityRoutes);
 app.use('/api/visitors', VisitorRoutes);
 // Serve static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Mount routers (add this after other router mounts)
 // Error handler middleware
 // app.use(errorHandler);
