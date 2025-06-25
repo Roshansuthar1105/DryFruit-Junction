@@ -63,11 +63,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/team" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Our Team
-                </Link>
-              </li>
             </ul>
           </div>
 

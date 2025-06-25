@@ -8,7 +8,6 @@ import Footer from './components/footer.jsx';
 import Loading from './components/Loading.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ScrollToTopButton from './components/ScrollToTopButton.jsx';
-import OurTeam from './pages/OurTeam.jsx';
 import { PrivacyPolicy } from './pages/PrivacyPolicy.jsx';
 import { TermsAndConditions } from './pages/TermsAndConditions.jsx';
 
@@ -101,11 +100,6 @@ function App() {
                   <Route path="/contact" element={
                     <LayoutWrapper>
                       <Contact />
-                    </LayoutWrapper>
-                  } />
-                  <Route path="/team" element={
-                    <LayoutWrapper>
-                      <OurTeam />
                     </LayoutWrapper>
                   } />
                   <Route path="/privacy" element={
