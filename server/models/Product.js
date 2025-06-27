@@ -1,5 +1,27 @@
 const mongoose = require('mongoose');
-
+const variantSchema = new mongoose.Schema({
+  weight: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: [0, 'Price must be at least 0']
+  },
+  originalPrice: {
+    type: Number
+  },
+  stock: {
+    type: Number,
+    required: true,
+    min: [0, 'Stock cannot be negative']
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+}, { _id: true });
 const imageSchema = new mongoose.Schema({
   url: {
     type: String,
@@ -33,15 +55,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: false // Optional field
   },
-  price: {
-    type: Number,
-    required: [true, 'Product price is required'],
-    min: [0, 'Price must be at least 0'],
-  },
-  originalPrice: {
-    type: Number,
-    required: false // Optional field
-  },
+  variants: [variantSchema],
   category: {
     type: String,
     required: [true, 'Product category is required'],
@@ -64,11 +78,6 @@ const productSchema = new mongoose.Schema({
     //   },
     //   message: 'At least one image is required'
     // }
-  },
-  stock: {
-    type: Number,
-    required: [true, 'Stock quantity is required'],
-    min: [0, 'Stock cannot be negative'],
   },
   lowStockThreshold: {
     type: Number,
@@ -143,47 +152,3 @@ productSchema.index({
 });
 
 module.exports = mongoose.model('Product', productSchema);
-// const mongoose = require('mongoose');
-
-// const productSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: [true, 'Product name is required'],
-//     trim: true,
-//   },
-//   description: {
-//     type: String,
-//     required: [true, 'Product description is required'],
-//   },
-//   price: {
-//     type: Number,
-//     required: [true, 'Product price is required'],
-//     min: [0, 'Price must be at least 0'],
-//   },
-//   category: {
-//     type: String,
-//     required: [true, 'Product category is required'],
-//     enum: ['Chocolates', 'Macarons', 'Fudge', 'Bonbons', 'Jellies', 'Pralines'],
-//   },
-//   image: {
-//     type: String,
-//     required: [true, 'Product image is required'],
-//   },
-//   rating: {
-//     type: Number,
-//     default: 4.5,
-//     min: [1, 'Rating must be at least 1'],
-//     max: [5, 'Rating must be at most 5'],
-//   },
-//   stock: {
-//     type: Number,
-//     default: 10,
-//     min: [0, 'Stock cannot be negative'],
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: Date.now,
-//   },
-// });
-
-// module.exports = mongoose.model('Product', productSchema);

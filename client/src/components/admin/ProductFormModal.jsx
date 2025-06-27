@@ -7,27 +7,32 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   const api = useApi();
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
-    name: 'Organic Matcha Green Tea Powder',
-    description: 'Premium ceremonial grade matcha powder sourced directly from Uji, Japan. Our organic matcha is stone-ground from shade-grown tea leaves, packed with antioxidants and provides a calm energy boost. Perfect for traditional tea ceremonies, lattes, or adding to smoothies.',
-    shortDescription: 'Premium ceremonial grade organic matcha from Japan',
-    price: '29.99',
-    originalPrice: '34.99',
-    category: categories[0], // Assuming this is something like 'Tea' or 'Beverages'
-    weight: '30g',
-    ingredients: ['Organic matcha green tea'],
-    stock: 10,
+    name: '',
+    description: '',
+    shortDescription: '',
+    category: categories[0],
+    variants: [
+      {
+        weight: '',
+        price: '',
+        originalPrice: '',
+        stock: 10,
+        isActive: true
+      }
+    ],
+    ingredients: [],
     lowStockThreshold: 10,
     isActive: true,
     featured: true,
-    tags: ['organic', 'matcha', 'green tea', 'ceremonial grade', 'japanese'],
+    tags: [],
     rating: 4.5,
-    shelfLife: '12 months',
-    storageInstructions: 'Store in a cool, dry place away from sunlight. Keep sealed after opening.',
+    shelfLife: '',
+    storageInstructions: '',
     allergens: [],
-    isVegan: true,
-    isGlutenFree: true,
-    preparationTime: '2 minutes',
-    slug: 'organic-matcha-green-tea-powder',
+    isVegan: false,
+    isGlutenFree: false,
+    preparationTime: '',
+    slug: '',
     images: []
   });
   const [newTag, setNewTag] = useState('');
@@ -36,6 +41,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
   const [imagePreviews, setImagePreviews] = useState([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
   const modalRef = useRef(null);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -51,18 +57,24 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose]);
+
   useEffect(() => {
     if (product) {
       setFormData({
         name: product.name,
         description: product.description,
         shortDescription: product.shortDescription || '',
-        price: product.price,
-        originalPrice: product.originalPrice || '',
         category: product.category,
-        weight: product.weight || '',
+        variants: product.variants?.length ? product.variants : [
+          {
+            weight: product.weight || '',
+            price: product.price,
+            originalPrice: product.originalPrice || '',
+            stock: product.stock,
+            isActive: true
+          }
+        ],
         ingredients: product.ingredients || [],
-        stock: product.stock,
         lowStockThreshold: product.lowStockThreshold || 10,
         isActive: product.isActive,
         featured: product.featured || false,
@@ -74,8 +86,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
         isVegan: product.isVegan || false,
         isGlutenFree: product.isGlutenFree || false,
         preparationTime: product.preparationTime || '',
-        slug: product.slug || 'product.name.toLowerCase().replace(/\s+/g, ' - ')',
-        // slug: product.slug || product.name.toLowerCase().replace(/\s+/g, '-') ,
+        slug: product.slug || '',
         images: product.images || []
       });
       setImagePreviews(product.images || []);
@@ -84,12 +95,17 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
         name: '',
         description: '',
         shortDescription: '',
-        price: '',
-        originalPrice: '',
         category: categories[0],
-        weight: '',
+        variants: [
+          {
+            weight: '',
+            price: '',
+            originalPrice: '',
+            stock: 10,
+            isActive: true
+          }
+        ],
         ingredients: [],
-        stock: 10,
         lowStockThreshold: 10,
         isActive: true,
         featured: false,
@@ -115,6 +131,44 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleVariantChange = (index, field, value) => {
+    const updatedVariants = [...formData.variants];
+    updatedVariants[index][field] = value;
+    setFormData(prev => ({
+      ...prev,
+      variants: updatedVariants
+    }));
+  };
+
+  const addVariant = () => {
+    setFormData(prev => ({
+      ...prev,
+      variants: [
+        ...prev.variants,
+        {
+          weight: '',
+          price: '',
+          originalPrice: '',
+          stock: 10,
+          isActive: true
+        }
+      ]
+    }));
+  };
+
+  const removeVariant = (index) => {
+    if (formData.variants.length > 1) {
+      const updatedVariants = [...formData.variants];
+      updatedVariants.splice(index, 1);
+      setFormData(prev => ({
+        ...prev,
+        variants: updatedVariants
+      }));
+    } else {
+      toast.error('At least one variant is required');
+    }
   };
 
   const handleArrayChange = (field, value) => {
@@ -160,7 +214,6 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     const newPreviews = [...imagePreviews];
     const removed = newPreviews.splice(index, 1);
 
-    // If it was a newly added file, remove from filesToUpload
     if (removed[0].isNew) {
       setFilesToUpload(filesToUpload.filter(f =>
         f.name !== removed[0].file.name
@@ -170,85 +223,31 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     setImagePreviews(newPreviews);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setError('');
-
-  //   try {
-  //     // Validate at least one image exists
-  //     if (imagePreviews.length === 0) {
-  //       throw new Error('At least one image is required');
-  //     }
-
-  //     const formData = new FormData();
-
-  //     // Add all files to upload
-  //     filesToUpload.forEach(file => {
-  //       formData.append('productImages', file);
-  //     });
-
-  //     // Add product data as JSON
-  //     const productJson = {
-  //       name: formData.name,
-  //       description: formData.description,
-  //       shortDescription: formData.shortDescription,
-  //       price: formData.price,
-  //       originalPrice: formData.originalPrice,
-  //       category: formData.category,
-  //       weight: formData.weight,
-  //       ingredients: formData.ingredients,
-  //       stock: formData.stock,
-  //       lowStockThreshold: formData.lowStockThreshold,
-  //       isActive: formData.isActive,
-  //       featured: formData.featured,
-  //       tags: formData.tags,
-  //       rating: formData.rating,
-  //       shelfLife: formData.shelfLife,
-  //       storageInstructions: formData.storageInstructions,
-  //       allergens: formData.allergens,
-  //       isVegan: formData.isVegan,
-  //       isGlutenFree: formData.isGlutenFree,
-  //       preparationTime: formData.preparationTime,
-  //       slug: formData.slug || 'formData.name.toLowerCase().replace(/\s+/g, '-')',
-  //       // slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-'),
-  //       images: imagePreviews
-  //         .filter(img => !img.isNew) // existing images
-  //         .map(img => ({
-  //           url: img.url,
-  //           public_id: img.public_id,
-  //           alt: img.alt || ''
-  //         }))
-  //     };
-
-  //     formData.append('data', JSON.stringify(productJson));
-
-  //     await api.createProduct(formData);
-  //     onSuccess();
-  //     onClose();
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || err.message || 'Something went wrong');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // Modify the handleSubmit function to not include images in the initial creation
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
+      // Validate variants
+      for (const variant of formData.variants) {
+        if (!variant.weight || !variant.price || variant.stock < 0) {
+          throw new Error('Please fill all required fields for variants');
+        }
+      }
+
       const productData = {
         name: formData.name,
         description: formData.description,
         shortDescription: formData.shortDescription,
-        price: formData.price,
-        originalPrice: formData.originalPrice,
         category: formData.category,
-        weight: formData.weight,
+        variants: formData.variants.map(variant => ({
+          ...variant,
+          price: parseFloat(variant.price),
+          originalPrice: variant.originalPrice ? parseFloat(variant.originalPrice) : null,
+          stock: parseInt(variant.stock)
+        })),
         ingredients: formData.ingredients,
-        stock: formData.stock,
         lowStockThreshold: formData.lowStockThreshold,
         isActive: formData.isActive,
         featured: formData.featured,
@@ -262,6 +261,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
         preparationTime: formData.preparationTime,
         slug: formData.slug || formData.name.toLowerCase().replace(/\s+/g, '-')
       };
+
       let result;
       if (product) {
         // For update, include images if they exist
@@ -287,12 +287,12 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
       setError(errorMsg);
-      // toast.error(errorMsg);
-
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -403,52 +403,100 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                Price (₹) <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                min="0"
-                step="0.01"
-                required
-              />
+            {/* Variants Section */}
+            <div className="md:col-span-2">
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-gray-700 cursor-pointer">
+                  Variants <span className="text-red-500">*</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={addVariant}
+                  className="cursor-pointer text-sm bg-pink-500 text-white px-3 py-1 rounded-md flex items-center"
+                >
+                  <Plus className="h-3 w-3 mr-1" /> Add Variant
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {formData.variants.map((variant, index) => (
+                  <div key={index} className="border border-gray-200 rounded-md p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 cursor-pointer">
+                          Weight <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={variant.weight}
+                          onChange={(e) => handleVariantChange(index, 'weight', e.target.value)}
+                          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                          placeholder="e.g., 250g, 1kg"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 cursor-pointer">
+                          Price (₹) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          value={variant.price}
+                          onChange={(e) => handleVariantChange(index, 'price', e.target.value)}
+                          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                          min="0"
+                          step="0.01"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 cursor-pointer">
+                          Original Price (₹)
+                        </label>
+                        <input
+                          type="number"
+                          value={variant.originalPrice}
+                          onChange={(e) => handleVariantChange(index, 'originalPrice', e.target.value)}
+                          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                          min="0"
+                          step="0.01"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 cursor-pointer">
+                          Stock <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          value={variant.stock}
+                          onChange={(e) => handleVariantChange(index, 'stock', e.target.value)}
+                          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                          min="0"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end mt-2">
+                      {formData.variants.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeVariant(index)}
+                          className="cursor-pointer text-xs text-red-600 hover:text-red-800 flex items-center"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" /> Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                Original Price (₹)
-              </label>
-              <input
-                type="number"
-                name="originalPrice"
-                value={formData.originalPrice}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                min="0"
-                step="0.01"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                Stock <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                min="0"
-                required
-              />
-            </div>
-
+            {/* Other fields... */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Low Stock Threshold
@@ -529,20 +577,6 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
               <label className="ml-2 block text-sm text-gray-700 cursor-pointer">
                 Gluten Free
               </label>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                Weight
-              </label>
-              <input
-                type="text"
-                name="weight"
-                value={formData.weight}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                placeholder="e.g., 500g, 1kg"
-              />
             </div>
 
             <div>

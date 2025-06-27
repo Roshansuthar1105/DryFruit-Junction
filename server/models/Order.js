@@ -14,6 +14,10 @@ const orderItemSchema = new mongoose.Schema({
     ref: "Product",
     required: true,
   },
+  variant: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   name: { type: String, required: true },
   quantity: {
     type: Number,
@@ -21,6 +25,7 @@ const orderItemSchema = new mongoose.Schema({
     min: [1, "Quantity must be at least 1"],
   },
   price: { type: Number, required: true },
+  weight: { type: String },
   images: [
     {
       url: { type: String, required: true },
