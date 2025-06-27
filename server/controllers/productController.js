@@ -259,11 +259,6 @@ const uploadProductImages = asyncHandler(async (req, res) => {
     throw new Error('No files uploaded');
   }
 
-  if (!req.files || req.files.length === 0) {
-    res.status(400);
-    throw new Error('No files uploaded');
-  }
-
   const urls = [];
   
   try {
@@ -293,6 +288,7 @@ const uploadProductImages = asyncHandler(async (req, res) => {
       productId: product._id,
       imagesCount: urls.length
     });
+
 
     res.status(200).json({
       success: true,
