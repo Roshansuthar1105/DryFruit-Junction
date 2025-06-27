@@ -1,6 +1,6 @@
 // src/components/contact.jsx
 import { use, useEffect, useState } from 'react';
-import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, CheckCircle, Factory } from "lucide-react";
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -82,13 +82,29 @@ export default function Contact() {
                   <MapPin className="h-6 w-6 text-pink-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Our Kitchen</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Our Office</h3>
                   <p className="text-gray-600">
-                  Family Kitchen
+                    Omni Ecomm Services Pvt Ltd
+                    <br />
+                    Santosh Bhawan, Gehloto Ka Bas
+                    <br />
+                    Magra Poonjala, Jodhpur, Rajasthan
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Factory className="h-6 w-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Manufacturing Facility</h3>
+                  <p className="text-gray-600">
+                    Hotel Omni Plaza, B2
+                    <br />
+                    Maan Ji Ka Hattha, Paota
                     <br />
                     Jodhpur, Rajasthan
-                    <br />
-                    India
                   </p>
                 </div>
               </div>
@@ -100,9 +116,9 @@ export default function Contact() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-800 mb-2">Call Us</h3>
                   <p className="text-gray-600">
-                    (555) 123-SWEET
+                    Pooran Singh Gehlot
                     <br />
-                    (555) 123-7933
+                    +91-9116009307
                   </p>
                 </div>
               </div>
@@ -114,9 +130,9 @@ export default function Contact() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-800 mb-2">Email Us</h3>
                   <p className="text-gray-600">
-                    hello@sweetdelights.com
+                    hello@dryfruitjunction.com
                     <br />
-                    orders@sweetdelights.com
+                    orders@dryfruitjunction.com
                   </p>
                 </div>
               </div>
@@ -126,11 +142,10 @@ export default function Contact() {
                   <Clock className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Store Hours</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Business Hours</h3>
                   <div className="text-gray-600 space-y-1">
-                    <p>Monday - Friday: 8:00 AM - 8:00 PM</p>
-                    <p>Saturday: 9:00 AM - 9:00 PM</p>
-                    <p>Sunday: 10:00 AM - 6:00 PM</p>
+                    <p>Monday - Sunday: 8:00 AM - 8:00 PM</p>
+                    <p>Fresh sweets made after every order</p>
                   </div>
                 </div>
               </div>
@@ -196,22 +211,22 @@ export default function Contact() {
                     />
                   </div>
                 </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                     Phone No.
-                    </label>
-                    <input
-                      type="number"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Ex. 9876543210"
-                      required
-                      disabled={user?.phone}
-                    />
-                  </div>
+                  </label>
+                  <input
+                    type="number"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Ex. 9876543210"
+                    required
+                    disabled={user?.phone}
+                  />
+                </div>
 
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">

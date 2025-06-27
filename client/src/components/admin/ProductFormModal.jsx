@@ -316,7 +316,7 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Image Upload Section */}
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Images <span className="text-red-500">*</span>
               </label>
@@ -356,9 +356,8 @@ export default function ProductFormModal({ isOpen, onClose, product, onSuccess, 
               {imagePreviews.length === 0 && (
                 <p className="mt-1 text-sm text-red-600">At least one image is required</p>
               )}
-            </div>
-
-            {/* Required Fields */}
+            </div>    */}
+                     {/* Required Fields */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
                 Name <span className="text-red-500">*</span>
