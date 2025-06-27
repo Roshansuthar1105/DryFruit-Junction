@@ -22,6 +22,13 @@ const ProductPage = () => {
 
   const { BACKEND_API } = useAuth();
   const api = useApi();
+
+  useEffect(() => {
+    if (product?.variants?.length > 0) {
+      setSelectedVariant(product.variants[0]._id);
+    }
+  }, [product]);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -71,7 +78,6 @@ const ProductPage = () => {
   const handleAddToCart = async () => {
     try {
       addToCart(product, quantity, selectedVariant);
-      toast.success("Added to cart");
     } catch (err) {
       toast.error("Error in adding to cart");
       console.error('Error adding to cart:', err);
@@ -209,18 +215,27 @@ const ProductPage = () => {
                     Select Variant:
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {product.variants?.map(variant => (
-                      <button
-                        key={variant._id}
-                        onClick={() => setSelectedVariant(variant._id)}
-                        className={`px-4 py-2 rounded-full border ${selectedVariant === variant._id
-                          ? 'bg-pink-100 border-pink-500 text-pink-700'
-                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                          }`}
-                      >
-                        {variant.weight} - ₹{variant.price.toFixed(2)}
-                      </button>
-                    ))}
+                    {product.variants?.length > 0 && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Select Variant:
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {product.variants.map(variant => (
+                            <button
+                              key={variant._id}
+                              onClick={() => setSelectedVariant(variant._id)}
+                              className={`px-4 py-2 rounded-full border ${selectedVariant === variant._id
+                                ? 'bg-pink-100 border-pink-500 text-pink-700'
+                                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                                }`}
+                            >
+                              {variant.weight} - ₹{variant.price.toFixed(2)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -243,29 +258,25 @@ const ProductPage = () => {
                   className={`text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'
                     }`}
                 >
-                  
-                  {product.stock > 0
-                    ? `${product.stock} in stock`
-                    : 'Out of stock'}
-                  {product.stock <= product.lowStockThreshold && product.stock > 0 && (
-                    <span className="text-yellow-600"> • Low stock</span>
-                  )}
-                  {/* {product.stock > 0
-                    ? `${product.stock} in stock`
-                    : 'Out of stock'}
-                  {product.stock <= product.lowStockThreshold && product.stock > 0 && (
-                    <span className="text-yellow-600"> • Low stock</span>
-                  )} */}
+                  <span className={`text-sm font-medium ${currentVariant?.stock > 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                    {currentVariant?.stock > 0
+                      ? `${currentVariant.stock} in stock`
+                      : 'Out of stock'}
+                    {currentVariant?.stock <= product.lowStockThreshold && currentVariant?.stock > 0 && (
+                      <span className="text-yellow-600"> • Low stock</span>
+                    )}
+                  </span>
                 </span>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <button
                   onClick={() => handleAddToCart(product, quantity, selectedVariant)}
-                  // disabled={currentVariant?.stock <= 0}
-                  className={`cursor-pointer flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${product.stock > 0
-                    ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:shadow-xl'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  disabled={currentVariant?.stock <= 0}
+                  className={`cursor-pointer flex items-center justify-center gap-2 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:-translate-y-1 ${currentVariant?.stock > 0
+                      ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:shadow-xl'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                 >
                   <ShoppingCart className="w-5 h-5" />

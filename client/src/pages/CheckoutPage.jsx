@@ -14,12 +14,12 @@ export default function CheckoutPage() {
     name: '',
     email: user?.email || '',
     phone: '',
-    pincode:'',
+    pincode: '',
     address: '',
-    apiAddress:{
-      address:'',
-      latitude:'',
-      longitude:''
+    apiAddress: {
+      address: '',
+      latitude: '',
+      longitude: ''
     },
     notes: '',
     paymentMethod: 'cod',
@@ -27,9 +27,9 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLocationFetched, setIsLocationFetched] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(false)
-  useEffect(()=>{
+  useEffect(() => {
     fetchLocation();
-  },[]);
+  }, []);
   useEffect(() => {
     if (user) {
       setFormData(prev => ({
@@ -39,7 +39,7 @@ export default function CheckoutPage() {
       }));
     }
   }, [user]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -48,10 +48,10 @@ export default function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+
     try {
       const token = localStorage.getItem('token'); // Or however you're storing the JWT
-  
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/orders`,
         {
@@ -87,18 +87,18 @@ export default function CheckoutPage() {
       setIsSubmitting(false);
     }
   };
-  
+
 
   const fetchLocation = () => {
     if (!navigator.geolocation) {
       toast.error('Geolocation is not supported by your browser');
       return;
     }
-  
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           const response = await axios.get('https://nominatim.openstreetmap.org/reverse', {
             params: {
@@ -111,11 +111,11 @@ export default function CheckoutPage() {
               'Accept-Language': 'en',
             },
           });
-  
-          const apiAddress ={
+
+          const apiAddress = {
             address: response.data.display_name || 'Unknown location',
-            latitude:latitude,
-            longitude:longitude
+            latitude: latitude,
+            longitude: longitude
           };
           setFormData((prev) => ({
             ...prev,
@@ -133,41 +133,41 @@ export default function CheckoutPage() {
       }
     );
   };
-  
+
 
   if (orderSuccess) {
-    return(<>
-    {orderSuccess && orderData && (
-      <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Order Confirmed!</h2>
-            <p className="text-gray-600 mb-4">
-              Thank you for your order. We’ve received it and will start preparing your sweet treats shortly.
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Order ID:</strong>{orderData._id}
-            </p>
-            <p className="text-gray-600 mb-6">
-              <strong>Status:</strong> {orderData.orderStatus}
-            </p>
-            <Link
-              to="/dashboard"
-              className="inline-block bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:shadow-xl transition-all duration-300"
+    return (<>
+      {orderSuccess && orderData && (
+        <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">Order Confirmed!</h2>
+              <p className="text-gray-600 mb-4">
+                Thank you for your order. We’ve received it and will start preparing your sweet treats shortly.
+              </p>
+              <p className="text-gray-600 mb-2">
+                <strong>Order ID:</strong>{orderData._id}
+              </p>
+              <p className="text-gray-600 mb-6">
+                <strong>Status:</strong> {orderData.orderStatus}
+              </p>
+              <Link
+                to="/dashboard"
+                className="inline-block bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:shadow-xl transition-all duration-300"
               >
-              View Order Details
-            </Link>
+                View Order Details
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
-    )}
+        </section>
+      )}
     </>)
-    
+
     return (
       <section className="py-20 bg-gradient-to-br from-pink-50 to-orange-50 min-h-screen">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -269,8 +269,8 @@ export default function CheckoutPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
                   required
                 />
-                </div>
-                <div>
+              </div>
+              <div>
                 <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2 cursor-pointer">
                   City
                 </label>
@@ -306,9 +306,9 @@ export default function CheckoutPage() {
                     Use My Location
                   </button> */}
                 </div>
-                
-                {formData.apiAddress.address && 
-                <p className='text-xs' >Current Address : {formData.apiAddress.address}x</p>
+
+                {formData.apiAddress.address &&
+                  <p className='text-xs' >Current Address : {formData.apiAddress.address}x</p>
                 }
               </div>
 
@@ -364,7 +364,7 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                disabled={isSubmitting || cart.length === 0 }
+                disabled={isSubmitting || cart.length === 0}
                 className="cursor-pointer w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white py-4 rounded-xl text-lg font-semibold hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isSubmitting ? (
@@ -386,7 +386,6 @@ export default function CheckoutPage() {
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Order Summary</h3>
             <div className="space-y-6">
               {cart.map(item => (
-
                 <div key={item._id} className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <img
@@ -396,13 +395,14 @@ export default function CheckoutPage() {
                     />
                     <div>
                       <h4 className="text-gray-800 font-medium">{item.name}</h4>
+                      {item.variantId && (
+                        <p className="text-xs text-gray-500">{item.weight}</p>
+                      )}
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
                   </div>
                   <span className="text-gray-800 font-medium">
-                    ₹{(parseFloat(typeof item.price === 'string' 
-        ? parseFloat(item.price.replace(/[^0-9.-]/g, '')) 
-        : item.price) * item.quantity)}
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}

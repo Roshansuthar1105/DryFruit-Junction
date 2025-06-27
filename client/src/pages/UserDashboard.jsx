@@ -3,7 +3,7 @@ import { Heart, ShoppingBag, User, LogOut, ChevronDown, ChevronUp } from 'lucide
 import { useAuth } from '../context/AuthContext'
 import { useFavorites } from '../context/FavoritesContext'
 import axios from 'axios'
-import {toast}from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 export default function UserDashboard() {
   const { user, logout, BACKEND_API } = useAuth()
@@ -279,34 +279,37 @@ export default function UserDashboard() {
                           </div>
                         </div>
                         <div className="space-y-2 md:space-y-3">
-                        {order.orderItems.map((item, index) => {
-  // Find primary image or use first image
-  const displayImage = item.images?.find(img => img.isPrimary) || item.images?.[0];
-  
-  return (
-    <div key={index} className="flex justify-between items-center">
-      <div className="flex items-center space-x-3">
-        {displayImage ? (
-          <img 
-            src={displayImage.url} 
-            alt={displayImage.alt || item.name}
-            className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover"
-          />
-        ) : (
-          <div className="bg-gray-100 w-10 h-10 md:w-12 md:h-12 rounded-lg" />
-        )}
-        
-        <div>
-          <h4 className="font-medium text-gray-800 text-sm md:text-base">{item.name}</h4>
-          <p className="text-xs md:text-sm text-gray-500">Qty: {item.quantity}</p>
-        </div>
-      </div>
-      <span className="text-gray-800 text-sm md:text-base">
-        ₹{(item.price * item.quantity).toFixed(2)}
-      </span>
-    </div>
-  );
-})}
+                          {order.orderItems.map((item, index) => {
+                            // Find primary image or use first image
+                            const displayImage = item.images?.find(img => img.isPrimary) || item.images?.[0];
+
+                            return (
+                              <div key={index} className="flex justify-between items-center">
+                                <div className="flex items-center space-x-3">
+                                  {displayImage ? (
+                                    <img
+                                      src={displayImage.url}
+                                      alt={displayImage.alt || item.name}
+                                      className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover"
+                                    />
+                                  ) : (
+                                    <div className="bg-gray-100 w-10 h-10 md:w-12 md:h-12 rounded-lg" />
+                                  )}
+
+                                  <div>
+                                    <h4 className="font-medium text-gray-800 text-sm md:text-base">{item.name}</h4>
+                                    {item.variant && (
+                                      <p className="text-xs text-gray-500">{item.variant}</p>
+                                    )}
+                                    <p className="text-xs md:text-sm text-gray-500">Qty: {item.quantity}</p>
+                                  </div>
+                                </div>
+                                <span className="text-gray-800 text-sm md:text-base">
+                                  ₹{(item.price * item.quantity).toFixed(2)}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}

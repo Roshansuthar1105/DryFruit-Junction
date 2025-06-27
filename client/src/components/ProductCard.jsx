@@ -11,22 +11,16 @@ export default function ProductCard({ product }) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { user } = useAuth();
   const [selectedVariant, setSelectedVariant] = useState(
-    product.variants?.[0]?._id || ''
+    product.variants?.[0]?._id || null  
   );
 
   const currentVariant = product.variants?.find(v => v._id === selectedVariant) || 
     product.variants?.[0] || 
     { price: product.price, weight: product.weight, _id: null };
 
-  const handleAddToCart = () => {
-    addToCart({
-      ...product,
-      selectedVariant,
-      price: currentVariant.price,
-      weight: currentVariant.weight,
-      variantId: currentVariant._id
-    });
-  };
+    const handleAddToCart = () => {
+      addToCart(product, 1, selectedVariant);
+    };
 
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
@@ -70,42 +64,42 @@ export default function ProductCard({ product }) {
           </span>
 
           {/* Variant selector */}
-          {product.variants?.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-wrap gap-2">
-                {product.variants.map(variant => (
-                  <button
-                    key={variant._id}
-                    onClick={() => setSelectedVariant(variant._id)}
-                    className={`border rounded-lg px-3 py-1 text-sm transition-all ${
-                      selectedVariant === variant._id
-                        ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white border-transparent'
-                        : 'border-gray-300 hover:border-pink-300'
-                    }`}
-                  >
-                    {variant.weight} - ₹{variant.price}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={handleAddToCart}
-                className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center gap-2 w-fit"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                <span>Add to Cart</span>
-              </button>
+          {product.variants?.length > 0 && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Variants
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {product.variants.map(variant => (
+                <button
+                  key={variant._id}
+                  onClick={() => setSelectedVariant(variant._id)}
+                  className={`px-3 py-1 text-sm rounded-full border ${
+                    selectedVariant === variant._id
+                      ? 'bg-pink-100 border-pink-500 text-pink-700'
+                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  {variant.weight} - ₹{variant.price}
+                </button>
+              ))}
             </div>
-          ) : (
-            <button
-              onClick={handleAddToCart}
-              className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              <span>Add to Cart</span>
-            </button>
-          )}
-        </div>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+        <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
+          ₹{currentVariant.price}
+        </span>
+        <button
+          onClick={handleAddToCart}
+          className="cursor-pointer bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+        >
+          <ShoppingCart className="h-4 w-4" />
+          <span>Add to Cart</span>
+        </button>
       </div>
     </div>
+  </div>
+  </div>
   );
 }

@@ -1,3 +1,4 @@
+// Updated CartContext.js
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { toast } from "react-hot-toast";
@@ -53,6 +54,10 @@ export const CartProvider = ({ children }) => {
       item => item._id === product._id && item.variantId === variantId
     );
 
+    const selectedVariant = product.variants?.find(v => v._id === variantId) ||
+      product.variants?.[0] ||
+      { price: product.price, weight: product.weight, _id: null };
+
     const updatedCart = existingItemIndex >= 0
       ? cart.map((item, index) =>
         index === existingItemIndex
@@ -64,13 +69,10 @@ export const CartProvider = ({ children }) => {
         {
           ...product,
           quantity,
-          variantId,
-          price: variantId
-            ? product.variants.find(v => v._id === variantId)?.price
-            : product.price,
-          weight: variantId
-            ? product.variants.find(v => v._id === variantId)?.weight
-            : product.weight
+          variantId: selectedVariant._id,
+          price: selectedVariant.price,
+          weight: selectedVariant.weight,
+          variant: selectedVariant
         }
       ];
 
@@ -81,8 +83,9 @@ export const CartProvider = ({ children }) => {
       try {
         await axios.post(`${BACKEND_API}/api/cart`, {
           productId: product._id,
-          variantId,
+          variantId: selectedVariant._id,
           quantity,
+          price: selectedVariant.price
         }, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
@@ -93,16 +96,23 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateQuantity = async (productId, newQuantity) => {
-    if (newQuantity < 1) return;
+  // Updated updateQuantity function to handle variant-specific items
+  const updateQuantity = async (productId, variantId, newQuantity) => {
+    if (newQuantity < 1) {
+      // If quantity would go below 1, remove the item instead
+      await removeFromCart(productId, variantId);
+      return;
+    }
 
     const updated = cart.map(item =>
-      item._id === productId ? { ...item, quantity: newQuantity } : item
+      item._id === productId && item.variantId === variantId 
+        ? { ...item, quantity: newQuantity } 
+        : item
     );
     setCart(updated);
 
     if (user) {
-      const item = cart.find(i => i._id === productId);
+      const item = cart.find(i => i._id === productId && i.variantId === variantId);
       if (!item?.itemId) return;
       try {
         await axios.put(`${BACKEND_API}/api/cart/${item.itemId}`, {
@@ -116,13 +126,21 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (productId) => {
-    const item = cart.find(i => i._id === productId);
-    setCart(prev => prev.filter(item => item._id !== productId));
+  // Updated removeFromCart to handle variant-specific items
+  const removeFromCart = async (productId, variantId = null) => {
+    const itemToRemove = variantId 
+      ? cart.find(i => i._id === productId && i.variantId === variantId)
+      : cart.find(i => i._id === productId);
 
-    if (user && item?.itemId) {
+    setCart(prev => 
+      variantId
+        ? prev.filter(item => !(item._id === productId && item.variantId === variantId))
+        : prev.filter(item => item._id !== productId)
+    );
+
+    if (user && itemToRemove?.itemId) {
       try {
-        await axios.delete(`${BACKEND_API}/api/cart/${item.itemId}`, {
+        await axios.delete(`${BACKEND_API}/api/cart/${itemToRemove.itemId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
       } catch (err) {

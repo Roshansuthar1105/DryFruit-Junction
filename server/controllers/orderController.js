@@ -8,28 +8,30 @@ const asyncHandler = require("express-async-handler");
 const createOrder = asyncHandler(async (req, res) => {
   const { shippingInfo, paymentMethod } = req.body;
 
-  // Get user's cart
-  const cart = await Cart.findOne({ user: req.user._id }).populate(
-    "items.product",
-    "name price images"
-  );
+  // Get user's cart with populated product and variant info
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: 'items.product',
+    select: 'name images variants'
+  });
+  
   if (!cart || cart.items.length === 0) {
     res.status(400);
     throw new Error("No items in cart");
   }
 
-  // Prepare order items
-  const orderItems = cart.items.map((item) => ({
-    product: item.product._id,
-    variant: item.variant, // Include variant
-    name: item.product.name,
-    quantity: item.quantity,
-    price: item.price, // Use the price from cart item
-    images: item.product.images,
-    weight:
-      item.product.variants.find((v) => v._id.toString() === item.variant)
-        ?.weight || "",
-  }));
+  // Prepare order items with variant info
+  const orderItems = cart.items.map((item) => {
+    const variant = item.product.variants.find(v => v._id.toString() === item.variant.toString());
+    return {
+      product: item.product._id,
+      variant: item.variant,
+      name: item.product.name,
+      quantity: item.quantity,
+      price: variant.price,
+      weight: variant.weight,
+      images: item.product.images
+    };
+  });
 
   // Calculate prices
   const itemsPrice = orderItems.reduce(
@@ -51,7 +53,9 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   });
+
   const createdOrder = await order.save();
+  
   // Clear the cart
   cart.items = [];
   await cart.save();
@@ -59,16 +63,29 @@ const createOrder = asyncHandler(async (req, res) => {
   res.status(201).json(createdOrder);
 });
 
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
+// Update getOrderById to populate variant info
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "firstName lastName email"
-  );
+  const order = await Order.findById(req.params.id)
+    .populate("user", "firstName lastName email")
+    .populate({
+      path: "orderItems.product",
+      select: "name variants"
+    });
 
   if (order) {
+    // Enhance order items with variant details
+    const enhancedOrder = {
+      ...order.toObject(),
+      orderItems: order.orderItems.map(item => {
+        const product = item.product;
+        const variant = product.variants.find(v => v._id.toString() === item.variant.toString());
+        return {
+          ...item,
+          variantDetails: variant
+        };
+      })
+    };
+
     // Check if the order belongs to the user or if user is admin
     if (
       order.user._id.toString() !== req.user._id.toString() &&
@@ -78,7 +95,7 @@ const getOrderById = asyncHandler(async (req, res) => {
       throw new Error("Not authorized to view this order");
     }
 
-    res.json(order);
+    res.json(enhancedOrder);
   } else {
     res.status(404);
     throw new Error("Order not found");

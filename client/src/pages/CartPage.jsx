@@ -1,6 +1,6 @@
 // src/pages/CartPage.jsx
 import { Link } from 'react-router-dom';
-import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,7 +12,7 @@ export default function CartPage() {
     <div className="min-h-screen py-12 bg-gradient-to-br from-pink-50 to-orange-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Cart ({cartCount})</h1>
-        
+
         {cart.length === 0 ? (
           <div className="text-center py-12">
             <ShoppingCart className="mx-auto h-16 w-16 text-gray-400" />
@@ -38,33 +38,33 @@ export default function CartPage() {
                     <div className="flex justify-between">
                       <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
                       <button
-                        onClick={() => removeFromCart(item._id)}
+                        onClick={() => removeFromCart(item._id, item.variantId)}
                         className="cursor-pointer text-gray-400 hover:text-red-500"
                       >
-                        <X className="h-5 w-5" />
+                        <Trash2 className="h-5 w-5" />
                       </button>
                     </div>
-                    
+
                     {item.variantId && (
                       <p className="text-sm text-gray-500 mt-1">
-                        Variant: {item.weight}
+                        Variant: {item.weight} - ₹{item.price}
                       </p>
                     )}
-                    
+
                     <p className="text-lg font-bold text-pink-600 mt-2">
                       ₹{(item.price * item.quantity).toFixed(2)}
                     </p>
-                    
+
                     <div className="flex items-center mt-4 border border-gray-300 rounded-full w-fit">
                       <button
-                        onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item._id, item.variantId, item.quantity - 1)}
                         className="cursor-pointer px-3 py-1 text-gray-600 hover:text-pink-600"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
                       <span className="px-3 py-1">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item._id, item.variantId, item.quantity + 1)}
                         className="cursor-pointer px-3 py-1 text-gray-600 hover:text-pink-600"
                       >
                         <Plus className="h-4 w-4" />
@@ -74,7 +74,7 @@ export default function CartPage() {
                 </div>
               ))}
             </div>
-            
+
             <div className="bg-white rounded-xl shadow-md p-6 h-fit sticky top-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
               <div className="space-y-4">

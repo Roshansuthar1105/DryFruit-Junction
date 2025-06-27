@@ -23,13 +23,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${BACKEND_API}/api/products`, {
-          // params: {
-          //   ...filters,
-          //   sort: sortOption,
-          //   search: searchTerm,
-          // },
-        });
+        const response = await axios.get(`${BACKEND_API}/api/products`);
         
         console.table(response.data.data);
         setProducts(response.data.data);
