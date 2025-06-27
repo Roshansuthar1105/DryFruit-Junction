@@ -69,7 +69,7 @@ export default function ProductCard({ product }) {
                 <button
                   key={variant._id}
                   onClick={() => setSelectedVariant(variant._id)}
-                  className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${selectedVariant === variant._id
+                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full border transition-colors ${selectedVariant === variant._id
                       ? 'bg-pink-50 border-pink-300 text-pink-700'
                       : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                     }`}
@@ -83,9 +83,14 @@ export default function ProductCard({ product }) {
 
         <div className="flex items-center justify-between mt-2">
           <div className="flex flex-col">
+            <div className='flex flex-row gap-2' >
             <span className="text-lg font-bold text-gray-900">
-              ₹{currentVariant.price}
+              ₹{currentVariant.price} 
             </span>
+            <span className="text-lg font-bold text-gray-500 line-through ">
+              ₹{currentVariant.originalPrice} 
+            </span>
+            </div>
             {product.variants?.length > 0 && (
               <span className="text-xs text-gray-500">
                 {currentVariant.weight}
@@ -94,7 +99,7 @@ export default function ProductCard({ product }) {
           </div>
           <button
             onClick={handleAddToCart}
-            className="flex items-center gap-1.5 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm hover:shadow-md"
+            className="cursor-pointer flex items-center gap-1.5 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm hover:shadow-md"
           >
             <ShoppingCart className="h-4 w-4" />
             <span>Add</span>

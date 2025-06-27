@@ -216,7 +216,7 @@ export default function ProductsPage() {
               setSelectedProduct(null);
               setIsFormOpen(true);
             }}
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2.5 rounded-lg shadow-sm transition-all"
+            className="cursor-pointer flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white px-4 py-2.5 rounded-lg shadow-sm transition-all"
           >
             <Plus className="h-4 w-4" />
             <span>Add Product</span>
@@ -368,17 +368,17 @@ export default function ProductsPage() {
                             setSelectedProduct(product);
                             setIsFormOpen(true);
                           }}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                          className="cursor-pointer p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                           title="Edit"
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4 " />
                         </button>
                         <button
                           onClick={() => {
                             setSelectedProduct(product);
                             setIsImageUploadOpen(true);
                           }}
-                          className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg relative"
+                          className="cursor-pointer p-2 text-purple-600 hover:bg-purple-50 rounded-lg relative"
                           title="Manage Images"
                         >
                           <ImageIcon className="h-4 w-4" />
@@ -393,7 +393,7 @@ export default function ProductsPage() {
                             setSelectedProduct(product);
                             setIsDeleteModalOpen(true);
                           }}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-lg"
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />
