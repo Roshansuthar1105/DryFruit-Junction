@@ -38,7 +38,7 @@ export default function About() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-6">
+            {/* <div className="grid grid-cols-2 gap-6">
               <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
                 <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-pink-600" />
@@ -53,7 +53,7 @@ export default function About() {
                 <div className="text-3xl font-bold text-gray-800 mb-2">25+</div>
                 <div className="text-gray-600">Awards Won</div>
               </div>
-            </div>
+            </div> */}
           </div>
           {/* Right Content */}
           <div className="relative">

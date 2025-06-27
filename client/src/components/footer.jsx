@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-            <img src="logo.png" alt="Logo" width={40} height={40} />
+              <img src="logo.png" alt="Logo" width={40} height={40} />
               {/* <div className="bg-gradient-to-r from-pink-500 to-pink-700 p-2 rounded-full">
                 <Heart className="h-6 w-6 text-white" />
               </div> */}
@@ -63,11 +63,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/team" className="text-gray-400 hover:text-pink-400 transition-colors">
-                  Our Team
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -107,24 +102,26 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-2 text-gray-400">
-              <p>Family Kitchen, Jodhpur</p>
-              <p>Rajasthan, India</p>
-              <p>+91 XXXXX XXXXX</p>
-              <p>hello@dryfruitjunction.com</p>
+              <p>Omni Ecomm Services Pvt Ltd</p>
+              <p>Santosh Bhawan, Gehloto Ka Bas, Magra Poonjala, Jodhpur</p>
+              <p>Manufacturing Facility: Hotel Omni Plaza, B2, Maan Ji Ka Hattha, Paota, Jodhpur</p>
+              <p>Contact: Pooran Singh Gehlot</p>
+              <p>Phone: +91-9116009307</p>
             </div>
-            <div className="mt-4">
-              <h4 className="font-semibold text-white mb-2">Order Hours</h4>
-              <div className="text-sm text-gray-400 space-y-1">
-                <p>Mon-Sun: 8AM - 8PM</p>
-                <p>Fresh sweets made after every order</p>
-              </div>
-            </div>
+            {/* <div className="mt-4">
+    <h4 className="font-semibold text-white mb-2">Order Hours</h4>
+    <div className="text-sm text-gray-400 space-y-1">
+      <p>Mon-Sun: 8AM - 8PM</p>
+      <p>Fresh sweets made after every order</p>
+    </div>
+  </div> */}
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">© {new Date().getFullYear()} DryFruit Junction. All rights reserved.</p>
+          {/* <VisitorCounter location="footer" /> */}
           <VisitorCounter location="footer" />
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-gray-400 hover:text-pink-400 text-sm transition-colors">

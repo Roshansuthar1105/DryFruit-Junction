@@ -254,36 +254,66 @@ const uploadProductImages = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 
-  const urls = [];
-  const files = req.files;
-
-  for (const file of files) {
-    const { path } = file;
-    const result = await uploader(path, "sweet-delights/products");
-
-    urls.push({
-      url: result.secure_url,
-      public_id: result.public_id, // Store Cloudinary's public_id
-      alt: file.originalname,
-    });
+  if (!req.files || req.files.length === 0) {
+    res.status(400);
+    throw new Error('No files uploaded');
   }
 
-  product.images = [...product.images, ...urls];
-  await product.save();
+  if (!req.files || req.files.length === 0) {
+    res.status(400);
+    throw new Error('No files uploaded');
+  }
 
-  await logActivity(
-    "product_images_add",
-    req.user._id,
-    "Product images added",
-    {
-      productId: product._id,
+  const urls = [];
+  
+  try {
+    // Process uploads sequentially to avoid Cloudinary rate limits
+    for (const file of req.files) {
+      try {
+        const result = await uploader(file.buffer, 'dryfruitjunction/products');
+        urls.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+          alt: file.originalname || `Product image ${Date.now()}`
+        });
+      } catch (uploadError) {
+        console.error(`Failed to upload ${file.originalname}:`, uploadError);
+      }
     }
-  );
 
-  res.status(200).json({
-    success: true,
-    data: product.images,
-  });
+    if (urls.length === 0) {
+      res.status(500);
+      throw new Error('All image uploads failed');
+    }
+
+    product.images = [...product.images, ...urls];
+    await product.save();
+    
+    await logActivity('product_images_add', req.user._id, 'Product images added', { 
+      productId: product._id,
+      imagesCount: urls.length
+    });
+
+    res.status(200).json({
+      success: true,
+      data: product.images,
+      addedCount: urls.length
+    });
+
+  } catch (error) {
+    // Clean up any successfully uploaded images if error occurs
+    if (urls.length > 0) {
+      await Promise.all(
+        urls.map(url => 
+          destroy(url.public_id).catch(cleanupError => 
+            console.error('Cleanup failed:', cleanupError)
+          )
+        )
+      );
+    }
+    res.status(500);
+    throw new Error(`Image processing failed: ${error.message}`);
+  }
 });
 // @desc    Delete product image
 // @route   DELETE /api/products/:id/images

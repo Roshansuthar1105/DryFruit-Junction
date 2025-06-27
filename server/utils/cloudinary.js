@@ -1,5 +1,6 @@
 // utils/cloudinary.js
 const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 const fs = require('fs');
 
 // Configure Cloudinary with your credentials
@@ -10,21 +11,37 @@ cloudinary.config({
 });
 
 // Upload a file to Cloudinary
-const uploadToCloudinary = async (filePath, folder = '') => {
-  try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: folder
-    });
-    // Delete file from local storage after upload
-    fs.unlinkSync(filePath);
-    return result;
-  } catch (error) {
-    // Delete file from local storage if upload fails
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-    throw error;
-  }
+// const uploadToCloudinary = async (filePath, folder = '') => {
+//   try {
+//     const result = await cloudinary.uploader.upload(filePath, {
+//       folder: folder
+//     });
+//     // Delete file from local storage after upload
+//     fs.unlinkSync(filePath);
+//     return result;
+//   } catch (error) {
+//     // Delete file from local storage if upload fails
+//     if (fs.existsSync(filePath)) {
+//       fs.unlinkSync(filePath);
+//     }
+//     throw error;
+//   }
+// };
+const uploadToCloudinary = (buffer, folder = '') => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: folder,
+        resource_type: 'auto'
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
 };
 
 // Delete a file from Cloudinary
